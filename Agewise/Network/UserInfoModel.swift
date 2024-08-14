@@ -12,6 +12,9 @@ struct JoinModel: Decodable {
     let email: String
     let nick: String
 }
+struct EmailValidationModel: Decodable {
+    let message: String
+}
 
 struct LoginModel: Decodable {
     let user_id: String

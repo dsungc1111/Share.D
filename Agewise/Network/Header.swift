@@ -11,6 +11,7 @@ import Alamofire
 
 enum Router {
     case join(query: JoinQuery)
+    case emailValidation(query: EmailValidationQuery)
     case login(query: LoginQuery)
     case fetchProfile
     case editProfile
@@ -27,6 +28,8 @@ extension Router: TargetType {
         switch self {
         case .join:
                 .post
+        case .emailValidation:
+                .post
         case .login:
                 .post
         case .fetchProfile:
@@ -42,6 +45,8 @@ extension Router: TargetType {
         switch self {
         case .join:
             return "/users/join"
+        case .emailValidation:
+            return "/validation/email"
         case .login:
             return "/users/login"
         case .fetchProfile, .editProfile:
@@ -56,6 +61,11 @@ extension Router: TargetType {
     var header: [String : String] {
         switch self {
         case .join:
+            return [
+                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
+            ]
+        case .emailValidation:
             return [
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
@@ -105,6 +115,10 @@ extension Router: TargetType {
             return try? encoder.encode(query)
             
         case .login(let query):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(query)
+            
+        case .emailValidation(let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
             

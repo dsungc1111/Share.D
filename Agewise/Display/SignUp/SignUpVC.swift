@@ -24,31 +24,24 @@ final class SignUpVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        let input = SignUpViewModel.Input(sigInTap: signUpView.signUpButton.rx.tap, emailText: signUpView.emailTextField.rx.text, passwordText: signUpView.passwordTextField.rx.text, nicknameText: signUpView.nicknameTextField.rx.text)
         
         
-        signUpView.signUpButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-                guard let email = owner.signUpView.emailTextField.text else { return }
-                guard let password = owner.signUpView.passwordTextField.text else { return }
-                guard let nickname = owner.signUpView.nicknameTextField.text else { return }
-
-                
-                NetworkManager.join(email: email, password: password, nickname: nickname) { result in
-                    
-                    switch result {
-                    case .success(let value):
-                        print(value)
-                        let vc = SignInVC()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    case .failure(let error):
-                        print(error)
-                    }
+        let output = signUpViewModel.transform(input: input)
+        
+        
+        output.success
+            .bind(with: self) { owner, result in
+                if result == 0 {
+                    let vc = SignInVC()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    print("실패")
                 }
-                
-
             }
             .disposed(by: disposeBag)
+       
+        
         
     }
     

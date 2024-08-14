@@ -14,8 +14,4 @@ final class MainVC: BaseVC {
         print("mainVC임!!")
         
     }
-    
-
-  
-
 }
