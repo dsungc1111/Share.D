@@ -60,22 +60,22 @@ extension Router: TargetType {
     
     var header: [String : String] {
         switch self {
-        case .join:
+        case .join, .emailValidation, .login:
             return [
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-        case .emailValidation:
-            return [
-                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
-                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
-            ]
-        case .login:
-            return [
-                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
-                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
-            ]
+//        case .emailValidation:
+//            return [
+//                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+//                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
+//            ]
+//        case .login:
+//            return [
+////                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
+//                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+//                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
+//            ]
         case .fetchProfile:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
@@ -114,13 +114,15 @@ extension Router: TargetType {
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
             
+        case .emailValidation(let query):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(query)
+            
         case .login(let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
             
-        case .emailValidation(let query):
-            let encoder = JSONEncoder()
-            return try? encoder.encode(query)
+       
             
         default: return nil
         }

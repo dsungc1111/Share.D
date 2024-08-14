@@ -20,8 +20,7 @@ struct LoginModel: Decodable {
     let user_id: String
     let email: String
     let nick: String
-    let profile: String?
+    let profileImage: String?
     let accessToken: String
     let refreshToken: String
-    
 }

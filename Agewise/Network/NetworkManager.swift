@@ -36,7 +36,7 @@ final class NetworkManager {
     
     
     //MARK: - 회원가입
-    static func join(email: String, password: String, nickname: String, completionHandler: @escaping (Result<JoinModel, NetworkError>) -> Void) {
+    func join(email: String, password: String, nickname: String, completionHandler: @escaping (Result<JoinModel, NetworkError>) -> Void) {
         do {
             let query = JoinQuery(email: email, password: password, nick: nickname)
             let request = try Router.join(query: query).asURLRequest()
@@ -55,7 +55,7 @@ final class NetworkManager {
     }
     
     //MARK: - 회원가입 - 이메일중복 확인
-    static func checkEmailValidation(email: String, completionHandler: @escaping (Result<EmailValidationModel, NetworkError>) -> Void) {
+    func checkEmailValidation(email: String, completionHandler: @escaping (Result<EmailValidationModel, NetworkError>) -> Void) {
         
         do {
             let query = EmailValidationQuery(email: email)
@@ -79,7 +79,7 @@ final class NetworkManager {
     }
     
     //MARK: - 로그인
-    static func createLogin(email: String, password: String) {
+    func createLogin(email: String, password: String, completionHandler: @escaping (Result<LoginModel, NetworkError>) -> Void) {
         
         do {
             let query = LoginQuery(email: email, password: password)
@@ -89,16 +89,10 @@ final class NetworkManager {
                 
                 switch response.result {
                 case .success(let value):
-                    
-                    //                    let vc = ProfileViewController()
-                    //                    vc.accessToken = value.accessToken
-                    
-                    UserDefaultManager.shared.accessToken = value.accessToken
-                    UserDefaultManager.shared.refreshToken = value.refreshToken
-                    
-                    print(value)
+                    completionHandler(.success(value))
                 case .failure(let error):
                     print(error)
+                    completionHandler(.failure(NetworkError.unknownResponse))
                 }
             }
         } catch {

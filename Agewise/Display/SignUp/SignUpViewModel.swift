@@ -14,9 +14,9 @@ final class SignUpViewModel {
     
     struct Input {
         let sigInTap: ControlEvent<Void>
-        let emailText: ControlProperty<String?>
-        let passwordText: ControlProperty<String?>
-        let nicknameText: ControlProperty<String?>
+        let emailText: ControlProperty<String>
+        let passwordText: ControlProperty<String>
+        let nicknameText: ControlProperty<String>
     }
     struct Output {
         let success: PublishSubject<Int>
@@ -28,34 +28,31 @@ final class SignUpViewModel {
         
         let success = PublishSubject<Int>()
         
-        let userInfo = Observable.zip(input.emailText, input.passwordText, input.passwordText)
+        let userInfo = Observable.zip(input.emailText, input.passwordText, input.nicknameText)
         
         input.sigInTap
             .withLatestFrom(userInfo)
             .subscribe(with: self, onNext: { owner, result in
                 
-                guard let email = result.0 else { return }
-                guard let password = result.1 else { return }
-                guard let nickname = result.2 else { return }
+                let email = result.0
+                let password = result.1
+                let nickname = result.2
+                // 이메일이 유효할 때만 가입절차 진행
                 
-                NetworkManager.checkEmailValidation(email: email) { result in
-                    
+                NetworkManager.shared.checkEmailValidation(email: result.0) { result in
                     switch result {
                     case .success(let value):
                         print(value)
+                        NetworkManager.shared.join(email: email, password: password, nickname: nickname) { result in
+                            switch result {
+                            case .success(_):
+                                success.onNext(0)
+                            case .failure(_):
+                                success.onNext(1)
+                            }
+                        }
                     case .failure(let error):
                         print(error)
-                    }
-                }
-                
-                
-                NetworkManager.join(email: email, password: password, nickname: nickname) { result in
-                    
-                    switch result {
-                    case .success(let value):
-                        success.onNext(0)
-                    case .failure(let error):
-                        success.onNext(1)
                     }
                 }
             })

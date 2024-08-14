@@ -24,7 +24,7 @@ final class SignUpVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let input = SignUpViewModel.Input(sigInTap: signUpView.signUpButton.rx.tap, emailText: signUpView.emailTextField.rx.text, passwordText: signUpView.passwordTextField.rx.text, nicknameText: signUpView.nicknameTextField.rx.text)
+        let input = SignUpViewModel.Input(sigInTap: signUpView.signUpButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
         
         
         let output = signUpViewModel.transform(input: input)
