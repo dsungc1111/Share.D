@@ -19,14 +19,15 @@ protocol TargetType: URLRequestConvertible {
 }
 
 extension TargetType {
+    
     func asURLRequest() throws -> URLRequest {
-        
         let url = try baseURL.asURL()
         var request = try URLRequest(url: url.appendingPathComponent(path), method: method)
-        
+       
         request.allHTTPHeaderFields = header
         request.httpBody = body
         
         return request
     }
+    
 }

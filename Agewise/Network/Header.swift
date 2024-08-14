@@ -10,6 +10,7 @@ import Alamofire
 
 
 enum Router {
+    case join(query: JoinQuery)
     case login(query: LoginQuery)
     case fetchProfile
     case editProfile
@@ -24,6 +25,8 @@ extension Router: TargetType {
     
     var method: HTTPMethod {
         switch self {
+        case .join:
+                .post
         case .login:
                 .post
         case .fetchProfile:
@@ -37,18 +40,26 @@ extension Router: TargetType {
     
     var path: String {
         switch self {
+        case .join:
+            return "/users/join"
         case .login:
             return "/users/login"
         case .fetchProfile, .editProfile:
-            return baseURL + "/users/me/profile"
+            return  "/users/me/profile"
         case .refresh:
-            return baseURL + "/auth/refresh"
+            return  "/auth/refresh"
+        
         }
     }
 
     
     var header: [String : String] {
         switch self {
+        case .join:
+            return [
+                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
+            ]
         case .login:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
@@ -74,7 +85,6 @@ extension Router: TargetType {
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-          
         }
     }
     
@@ -89,10 +99,14 @@ extension Router: TargetType {
     var body: Data? {
         
         switch self {
-        case .login(let query):
+            
+        case .join(query: let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
             
+        case .login(let query):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(query)
             
         default: return nil
         }

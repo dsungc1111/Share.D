@@ -28,6 +28,8 @@
 		8B32316F2C6C74240095DF0B /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */; };
 		8B3231712C6C74B60095DF0B /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231702C6C74B60095DF0B /* LoginModel.swift */; };
 		8B3231742C6C78080095DF0B /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3231732C6C78080095DF0B /* IQKeyboardManagerSwift */; };
+		8B3231762C6C7AD60095DF0B /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231752C6C7AD60095DF0B /* SignUpViewModel.swift */; };
+		8B3231792C6C9AE70095DF0B /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231782C6C9AE70095DF0B /* MainVC.swift */; };
 		8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */; };
 		8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */; };
 		8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */; };
@@ -53,6 +55,8 @@
 		8B3231692C6C721E0095DF0B /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
 		8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		8B3231702C6C74B60095DF0B /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		8B3231752C6C7AD60095DF0B /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		8B3231782C6C9AE70095DF0B /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		8BC986372C6C0BAA00B69112 /* Agewise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agewise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -96,6 +100,7 @@
 				8B32310A2C6C11F90095DF0B /* OnBoarding */,
 				8B32311B2C6C1FE10095DF0B /* SignIn */,
 				8B3231202C6C22DF0095DF0B /* SignUp */,
+				8B3231772C6C9AD80095DF0B /* Main */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -142,6 +147,7 @@
 			children = (
 				8B3231212C6C22F80095DF0B /* SignUpVC.swift */,
 				8B3231272C6C36660095DF0B /* SignUpView.swift */,
+				8B3231752C6C7AD60095DF0B /* SignUpViewModel.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -156,6 +162,14 @@
 				8B3231702C6C74B60095DF0B /* LoginModel.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		8B3231772C6C9AD80095DF0B /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				8B3231782C6C9AE70095DF0B /* MainVC.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		8BC9862E2C6C0BAA00B69112 = {
@@ -275,6 +289,7 @@
 			files = (
 				8B3231712C6C74B60095DF0B /* LoginModel.swift in Sources */,
 				8B3231682C6C71590095DF0B /* Header.swift in Sources */,
+				8B3231762C6C7AD60095DF0B /* SignUpViewModel.swift in Sources */,
 				8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */,
 				8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */,
 				8B32311D2C6C21700095DF0B /* SignInVC.swift in Sources */,
@@ -285,6 +300,7 @@
 				8B3231262C6C28DA0095DF0B /* SignInView.swift in Sources */,
 				8B3231242C6C28370095DF0B /* LoginTextField.swift in Sources */,
 				8B32312A2C6C44910095DF0B /* SignInViewModel.swift in Sources */,
+				8B3231792C6C9AE70095DF0B /* MainVC.swift in Sources */,
 				8B3231282C6C36660095DF0B /* SignUpView.swift in Sources */,
 				8B32310F2C6C12B90095DF0B /* BaseView.swift in Sources */,
 				8B32310C2C6C12980095DF0B /* OnBoardingView.swift in Sources */,

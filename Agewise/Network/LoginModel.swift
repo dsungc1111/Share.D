@@ -7,6 +7,12 @@
 
 import Foundation
 
+struct JoinModel: Decodable {
+    let user_id: String
+    let email: String
+    let nick: String
+}
+
 struct LoginModel: Decodable {
     let user_id: String
     let email: String
