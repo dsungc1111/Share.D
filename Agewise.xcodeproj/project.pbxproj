@@ -8,9 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		8B3231072C6C0CFF0095DF0B /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231062C6C0CFF0095DF0B /* APIKey.swift */; };
+		8B32310C2C6C12980095DF0B /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32310B2C6C12980095DF0B /* OnBoardingView.swift */; };
+		8B32310F2C6C12B90095DF0B /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32310E2C6C12B90095DF0B /* BaseView.swift */; };
+		8B3231122C6C13820095DF0B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3231112C6C13820095DF0B /* SnapKit */; };
+		8B3231152C6C19300095DF0B /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231142C6C19300095DF0B /* LoginButton.swift */; };
+		8B3231182C6C1F790095DF0B /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3231172C6C1F790095DF0B /* RxCocoa */; };
+		8B32311A2C6C1F790095DF0B /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3231192C6C1F790095DF0B /* RxSwift */; };
+		8B32311D2C6C21700095DF0B /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32311C2C6C21700095DF0B /* SignInVC.swift */; };
+		8B32311F2C6C22580095DF0B /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32311E2C6C22580095DF0B /* BaseVC.swift */; };
+		8B3231222C6C22F80095DF0B /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231212C6C22F80095DF0B /* SignUpVC.swift */; };
+		8B3231242C6C28370095DF0B /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231232C6C28370095DF0B /* LoginTextField.swift */; };
+		8B3231262C6C28DA0095DF0B /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231252C6C28DA0095DF0B /* SignInView.swift */; };
+		8B3231282C6C36660095DF0B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231272C6C36660095DF0B /* SignUpView.swift */; };
+		8B32312A2C6C44910095DF0B /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231292C6C44910095DF0B /* SignInViewModel.swift */; };
+		8B3231652C6C6FCD0095DF0B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */; };
+		8B3231682C6C71590095DF0B /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231672C6C71590095DF0B /* Header.swift */; };
+		8B32316A2C6C721E0095DF0B /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231692C6C721E0095DF0B /* TargetType.swift */; };
+		8B32316D2C6C72380095DF0B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8B32316C2C6C72380095DF0B /* Alamofire */; };
+		8B32316F2C6C74240095DF0B /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */; };
+		8B3231712C6C74B60095DF0B /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231702C6C74B60095DF0B /* LoginModel.swift */; };
+		8B3231742C6C78080095DF0B /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3231732C6C78080095DF0B /* IQKeyboardManagerSwift */; };
 		8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */; };
 		8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */; };
-		8BC9863F2C6C0BAA00B69112 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* ViewController.swift */; };
+		8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */; };
 		8BC986442C6C0BAC00B69112 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BC986432C6C0BAC00B69112 /* Assets.xcassets */; };
 		8BC986472C6C0BAC00B69112 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 8BC986462C6C0BAC00B69112 /* Base */; };
 		8BC9864F2C6C0BC500B69112 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 8BC9864E2C6C0BC500B69112 /* .gitignore */; };
@@ -18,10 +38,25 @@
 
 /* Begin PBXFileReference section */
 		8B3231062C6C0CFF0095DF0B /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
+		8B32310B2C6C12980095DF0B /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
+		8B32310E2C6C12B90095DF0B /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		8B3231142C6C19300095DF0B /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		8B32311C2C6C21700095DF0B /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
+		8B32311E2C6C22580095DF0B /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
+		8B3231212C6C22F80095DF0B /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
+		8B3231232C6C28370095DF0B /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
+		8B3231252C6C28DA0095DF0B /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		8B3231272C6C36660095DF0B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		8B3231292C6C44910095DF0B /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		8B3231672C6C71590095DF0B /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		8B3231692C6C721E0095DF0B /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
+		8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+		8B3231702C6C74B60095DF0B /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		8BC986372C6C0BAA00B69112 /* Agewise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agewise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8BC9863E2C6C0BAA00B69112 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingVC.swift; sourceTree = "<group>"; };
 		8BC986432C6C0BAC00B69112 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8BC986462C6C0BAC00B69112 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8BC986482C6C0BAC00B69112 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,12 +68,96 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B3231742C6C78080095DF0B /* IQKeyboardManagerSwift in Frameworks */,
+				8B32311A2C6C1F790095DF0B /* RxSwift in Frameworks */,
+				8B32316D2C6C72380095DF0B /* Alamofire in Frameworks */,
+				8B3231182C6C1F790095DF0B /* RxCocoa in Frameworks */,
+				8B3231122C6C13820095DF0B /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B3231082C6C104E0095DF0B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */,
+				8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */,
+				8BC986432C6C0BAC00B69112 /* Assets.xcassets */,
+				8BC986452C6C0BAC00B69112 /* LaunchScreen.storyboard */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		8B3231092C6C11AB0095DF0B /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				8B32310A2C6C11F90095DF0B /* OnBoarding */,
+				8B32311B2C6C1FE10095DF0B /* SignIn */,
+				8B3231202C6C22DF0095DF0B /* SignUp */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		8B32310A2C6C11F90095DF0B /* OnBoarding */ = {
+			isa = PBXGroup;
+			children = (
+				8B32310B2C6C12980095DF0B /* OnBoardingView.swift */,
+				8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */,
+			);
+			path = OnBoarding;
+			sourceTree = "<group>";
+		};
+		8B32310D2C6C12B10095DF0B /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				8B32310E2C6C12B90095DF0B /* BaseView.swift */,
+				8B32311E2C6C22580095DF0B /* BaseVC.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		8B3231132C6C19040095DF0B /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				8B3231142C6C19300095DF0B /* LoginButton.swift */,
+				8B3231232C6C28370095DF0B /* LoginTextField.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		8B32311B2C6C1FE10095DF0B /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				8B32311C2C6C21700095DF0B /* SignInVC.swift */,
+				8B3231252C6C28DA0095DF0B /* SignInView.swift */,
+				8B3231292C6C44910095DF0B /* SignInViewModel.swift */,
+			);
+			path = SignIn;
+			sourceTree = "<group>";
+		};
+		8B3231202C6C22DF0095DF0B /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				8B3231212C6C22F80095DF0B /* SignUpVC.swift */,
+				8B3231272C6C36660095DF0B /* SignUpView.swift */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		8B3231662C6C6FD30095DF0B /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */,
+				8B3231672C6C71590095DF0B /* Header.swift */,
+				8B3231692C6C721E0095DF0B /* TargetType.swift */,
+				8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */,
+				8B3231702C6C74B60095DF0B /* LoginModel.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		8BC9862E2C6C0BAA00B69112 = {
 			isa = PBXGroup;
 			children = (
@@ -59,11 +178,11 @@
 		8BC986392C6C0BAA00B69112 /* Agewise */ = {
 			isa = PBXGroup;
 			children = (
-				8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */,
-				8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */,
-				8BC9863E2C6C0BAA00B69112 /* ViewController.swift */,
-				8BC986432C6C0BAC00B69112 /* Assets.xcassets */,
-				8BC986452C6C0BAC00B69112 /* LaunchScreen.storyboard */,
+				8B3231662C6C6FD30095DF0B /* Network */,
+				8B3231132C6C19040095DF0B /* CustomView */,
+				8B32310D2C6C12B10095DF0B /* Base */,
+				8B3231082C6C104E0095DF0B /* App */,
+				8B3231092C6C11AB0095DF0B /* Display */,
 				8BC986482C6C0BAC00B69112 /* Info.plist */,
 				8B3231062C6C0CFF0095DF0B /* APIKey.swift */,
 			);
@@ -86,6 +205,13 @@
 			dependencies = (
 			);
 			name = Agewise;
+			packageProductDependencies = (
+				8B3231112C6C13820095DF0B /* SnapKit */,
+				8B3231172C6C1F790095DF0B /* RxCocoa */,
+				8B3231192C6C1F790095DF0B /* RxSwift */,
+				8B32316C2C6C72380095DF0B /* Alamofire */,
+				8B3231732C6C78080095DF0B /* IQKeyboardManagerSwift */,
+			);
 			productName = Agewise;
 			productReference = 8BC986372C6C0BAA00B69112 /* Agewise.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +240,12 @@
 				Base,
 			);
 			mainGroup = 8BC9862E2C6C0BAA00B69112;
+			packageReferences = (
+				8B3231102C6C13820095DF0B /* XCRemoteSwiftPackageReference "SnapKit" */,
+				8B3231162C6C1F790095DF0B /* XCRemoteSwiftPackageReference "RxSwift" */,
+				8B32316B2C6C72380095DF0B /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8B3231722C6C78080095DF0B /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			productRefGroup = 8BC986382C6C0BAA00B69112 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,10 +273,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BC9863F2C6C0BAA00B69112 /* ViewController.swift in Sources */,
+				8B3231712C6C74B60095DF0B /* LoginModel.swift in Sources */,
+				8B3231682C6C71590095DF0B /* Header.swift in Sources */,
+				8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */,
 				8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */,
+				8B32311D2C6C21700095DF0B /* SignInVC.swift in Sources */,
+				8B3231152C6C19300095DF0B /* LoginButton.swift in Sources */,
+				8B32311F2C6C22580095DF0B /* BaseVC.swift in Sources */,
+				8B32316F2C6C74240095DF0B /* UserDefaultManager.swift in Sources */,
 				8B3231072C6C0CFF0095DF0B /* APIKey.swift in Sources */,
+				8B3231262C6C28DA0095DF0B /* SignInView.swift in Sources */,
+				8B3231242C6C28370095DF0B /* LoginTextField.swift in Sources */,
+				8B32312A2C6C44910095DF0B /* SignInViewModel.swift in Sources */,
+				8B3231282C6C36660095DF0B /* SignUpView.swift in Sources */,
+				8B32310F2C6C12B90095DF0B /* BaseView.swift in Sources */,
+				8B32310C2C6C12980095DF0B /* OnBoardingView.swift in Sources */,
+				8B3231652C6C6FCD0095DF0B /* NetworkManager.swift in Sources */,
+				8B3231222C6C22F80095DF0B /* SignUpVC.swift in Sources */,
 				8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */,
+				8B32316A2C6C721E0095DF0B /* TargetType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +512,69 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8B3231102C6C13820095DF0B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		8B3231162C6C1F790095DF0B /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.7.1;
+			};
+		};
+		8B32316B2C6C72380095DF0B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
+		8B3231722C6C78080095DF0B /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8B3231112C6C13820095DF0B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B3231102C6C13820095DF0B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		8B3231172C6C1F790095DF0B /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B3231162C6C1F790095DF0B /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		8B3231192C6C1F790095DF0B /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B3231162C6C1F790095DF0B /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		8B32316C2C6C72380095DF0B /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B32316B2C6C72380095DF0B /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		8B3231732C6C78080095DF0B /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B3231722C6C78080095DF0B /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8BC9862F2C6C0BAA00B69112 /* Project object */;
 }
