@@ -37,17 +37,19 @@ final class SignUpVC: BaseVC {
             .bind(with: self) { owner, result in
                 
                 owner.signUpView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
-               
+                owner.signUpView.passwordWarningLabel.isHidden = result ? false : true
             }
             .disposed(by: disposeBag)
         
         output.pwValid
             .bind(with: self) { owner, result in
                 owner.signUpView.nicknameTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
+                owner.signUpView.passwordWarningLabel.textColor = result ? .black : .red
+                owner.signUpView.passwordWarningLabel.text = result ? "비밀번호 조건 부합" : "비밀번호 8글자 이상"
             }
             .disposed(by: disposeBag)
         
-        
+        // 차후 닉네임 중복에 관해서 정리
         output.nicknameValid
             .bind(with: self) { owner, result in
                 
@@ -55,7 +57,7 @@ final class SignUpVC: BaseVC {
                 
                 owner.signUpView.signUpButton.setTitleColor( color , for: .normal)
                 owner.signUpView.signUpButton.layer.borderColor = color.cgColor
-                owner.signUpView.signUpButton.isEnabled = false
+                owner.signUpView.signUpButton.isEnabled = result
             }
             .disposed(by: disposeBag)
         

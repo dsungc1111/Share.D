@@ -93,7 +93,7 @@ final class SignUpViewModel: BaseViewModel {
                 NetworkManager.shared.join(email: email, password: password, nickname: nickname) { result in
                     
                     if let statuscode = result {
-                        success.onNext(owner.judgeStatusCode(statusCode: statuscode, title: "회원가입 성공"))
+                        success.onNext(owner.judgeStatusCode(statusCode: statuscode, title: "회원가입 성공!"))
                     }
                 }
             })

@@ -25,7 +25,13 @@ final class SignUpView: BaseView {
     }()
     
     let passwordTextField = LoginTextField(placeholderText: "비밀번호를 입력하세요.")
-    let passwordWarningLabel = UILabel()
+    let passwordWarningLabel = {
+        let label = UILabel()
+        label.text = "비밀번호 8글자 이상"
+        label.textColor = .red
+        label.font = .systemFont(ofSize: 12)
+        return label
+    }()
     
     let nicknameTextField = LoginTextField(placeholderText: "닉네임을 입력하세요.")
     let nicknameWarningLabel = UILabel()
