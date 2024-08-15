@@ -33,6 +33,31 @@ final class SignUpVC: BaseVC {
         let output = signUpViewModel.transform(input: input)
         
         
+        output.emailValid
+            .bind(with: self) { owner, result in
+                
+                owner.signUpView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
+               
+            }
+            .disposed(by: disposeBag)
+        
+        output.pwValid
+            .bind(with: self) { owner, result in
+                owner.signUpView.nicknameTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
+            }
+            .disposed(by: disposeBag)
+        
+        
+        output.nicknameValid
+            .bind(with: self) { owner, result in
+                
+                let color = result ? UIColor.black : UIColor.lightGray
+                
+                owner.signUpView.signUpButton.setTitleColor( color , for: .normal)
+                owner.signUpView.signUpButton.layer.borderColor = color.cgColor
+                owner.signUpView.signUpButton.isEnabled = false
+            }
+            .disposed(by: disposeBag)
         
         output.validation
             .bind(with: self) { owner, value in

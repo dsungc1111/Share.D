@@ -25,6 +25,9 @@ final class SignUpViewModel: BaseViewModel {
     struct Output {
         let success: PublishSubject<String>
         let validation: PublishSubject<String>
+        let emailValid: Observable<Bool>
+        let pwValid: Observable<Bool>
+        let nicknameValid: Observable<Bool>
     }
     
     private let disposeBag = DisposeBag()
@@ -33,6 +36,8 @@ final class SignUpViewModel: BaseViewModel {
         
         let success = PublishSubject<String>()
         let validation = PublishSubject<String>()
+        
+//        let emailValid = Observable.just(false)
         
         var email = ""
         var password = ""
@@ -44,17 +49,26 @@ final class SignUpViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        let emailValid =  input.emailText
+            .map { $0.contains("@") }
+        
         input.passwordText
             .bind(with: self) { owner, value in
                 password = value
             }
             .disposed(by: disposeBag)
         
+        let pwValid = input.passwordText.map { $0.count >= 8 }
+        
         input.nicknameText
             .bind(with: self) { owner, value in
                 nickname = value
             }
             .disposed(by: disposeBag)
+        
+        let nicknameValid = input.nicknameText.map { $0.count >= 2 }
+        
+        
         
         input.validaionTap
             .bind(with: self) { owner, _ in
@@ -85,13 +99,11 @@ final class SignUpViewModel: BaseViewModel {
             })
             .disposed(by: disposeBag)
         
-        return Output(success: success, validation: validation)
+        return Output(success: success, validation: validation, emailValid: emailValid, pwValid: pwValid, nicknameValid: nicknameValid)
     }
     
     // 메시지 전달
-    
 
-    
     override func judgeStatusCode(statusCode: Int, title: String) -> String {
         var message = super.judgeStatusCode(statusCode: statusCode, title: title)
         

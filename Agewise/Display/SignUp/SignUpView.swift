@@ -12,7 +12,12 @@ final class SignUpView: BaseView {
     
     
     let emailTextField = LoginTextField(placeholderText: " 이메일을 입력하세요.")
-    let emailWarningLabel = UILabel()
+    let emailWarningLabel = {
+        let label = UILabel()
+        label.text = "중복확인을 꼭 해주세요"
+        label.font = .systemFont(ofSize: 12)
+        return label
+    }()
     let validaionCheckButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "info.circle.fill"), for: .normal)
@@ -51,13 +56,11 @@ final class SignUpView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(30)
             make.height.equalTo(20)
         }
-        emailWarningLabel.backgroundColor = .systemBlue
         validaionCheckButton.snp.makeConstraints { make in
             make.trailing.equalTo(emailTextField.snp.trailing).inset(10)
             make.top.equalTo(emailTextField.snp.top).inset(17)
             make.size.equalTo(20)
         }
-        
         
         passwordTextField.snp.makeConstraints { make in
             make.top.equalTo(emailWarningLabel.snp.bottom).offset(20)
@@ -69,7 +72,6 @@ final class SignUpView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(30)
             make.height.equalTo(20)
         }
-        passwordWarningLabel.backgroundColor = .systemBlue
         
         nicknameTextField.snp.makeConstraints { make in
             make.top.equalTo(passwordWarningLabel.snp.bottom).offset(20)
@@ -81,7 +83,6 @@ final class SignUpView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(30)
             make.height.equalTo(20)
         }
-        nicknameWarningLabel.backgroundColor = .systemBlue
         
         signUpButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameWarningLabel.snp.bottom).offset(50)
