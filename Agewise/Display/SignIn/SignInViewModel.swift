@@ -21,6 +21,8 @@ final class SignInViewModel {
     
     struct Output {
         let login: PublishSubject<Int>
+        let emailValid: Observable<Bool>
+        let pwValid: Observable<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -29,12 +31,30 @@ final class SignInViewModel {
         
         let userInfo = Observable.zip(input.emailText, input.passwordText)
         
+        
+        var email = ""
+        var password = ""
+        
+        input.emailText
+            .bind(with: self) { owner, value in
+                email = value
+            }
+            .disposed(by: disposeBag)
+        
+        let emailValid =  input.emailText
+            .map { $0.contains("@") }
+        
+        input.passwordText
+            .bind(with: self) { owner, value in
+                password = value
+            }
+            .disposed(by: disposeBag)
+        
+        let pwValid = input.passwordText.map { $0.count >= 8 }
+        
         input.signInTap
-            .withLatestFrom(userInfo)
-            .subscribe(with: self) { owner, result in
-                
-                let email = result.0
-                let password = result.1
+            .subscribe(with: self) { owner, _ in
+               
                 print(email, password)
                 NetworkManager.shared.createLogin(email: email, password: password) { response in
                     switch response {
@@ -49,6 +69,6 @@ final class SignInViewModel {
             }
             .disposed(by: disposeBag)
         
-        return Output(login: login)
+        return Output(login: login, emailValid: emailValid, pwValid: pwValid)
     }
 }

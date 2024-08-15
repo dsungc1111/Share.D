@@ -79,7 +79,4 @@ final class SignUpVC: BaseVC {
             }
             .disposed(by: disposeBag)
     }
-    
-    
-    
 }

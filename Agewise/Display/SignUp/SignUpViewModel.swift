@@ -37,7 +37,7 @@ final class SignUpViewModel: BaseViewModel {
         let success = PublishSubject<String>()
         let validation = PublishSubject<String>()
         
-//        let emailValid = Observable.just(false)
+
         
         var email = ""
         var password = ""
@@ -88,7 +88,6 @@ final class SignUpViewModel: BaseViewModel {
         
         input.sigUpTap
             .subscribe(with: self, onNext: { owner, _ in
-                // 이메일이 유효할 때만 가입절차 진행
                 
                 NetworkManager.shared.join(email: email, password: password, nickname: nickname) { result in
                     
