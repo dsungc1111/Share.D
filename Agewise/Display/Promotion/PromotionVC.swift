@@ -17,6 +17,8 @@ final class PromotionVC: BaseVC {
     
     let data = [1,2,3,4,4,5]
     
+    let temp = [1,2,3,4,5,6,7,8,9]
+    
     override func loadView() {
         view = promotionView
     }
@@ -28,16 +30,25 @@ final class PromotionVC: BaseVC {
         
         promotionView.categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
         
+        promotionView.trendCollectionView.register(TrendCollectionViewCell.self, forCellWithReuseIdentifier: TrendCollectionViewCell.identifier)
+        
         let aa = Observable.just(data)
         
         
         aa
             .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (row, element, cell) in
-                
-                
-                
             }
             .disposed(by: disposeBag)
         
+        let tempp = Observable.just(temp)
+        
+        tempp
+            .bind(to: promotionView.trendCollectionView.rx.items(cellIdentifier: TrendCollectionViewCell.identifier, cellType: TrendCollectionViewCell.self)) { (row, element, cell) in
+                
+                print(element)
+                cell.label.text = "df"
+                
+            }
+            .disposed(by: disposeBag)
     }
 }

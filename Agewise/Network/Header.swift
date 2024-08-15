@@ -65,17 +65,6 @@ extension Router: TargetType {
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-//        case .emailValidation:
-//            return [
-//                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
-//                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
-//            ]
-//        case .login:
-//            return [
-////                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-//                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
-//                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
-//            ]
         case .fetchProfile:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,

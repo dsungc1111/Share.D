@@ -15,7 +15,6 @@ struct JoinModel: Decodable {
 struct EmailValidationModel: Decodable {
     let message: String
 }
-
 struct LoginModel: Decodable {
     let user_id: String
     let email: String

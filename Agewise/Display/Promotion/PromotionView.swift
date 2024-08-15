@@ -43,11 +43,25 @@ final class PromotionView: BaseView {
     
     let stateLabel = {
         let label = UILabel()
-        label.text = "나이대를 선택해 트렌드를 알아봐요!"
+        label.text = "카테고리를 선택해주세요!"
         label.textAlignment = .center
         return label
     }()
-  
+    
+    let trendCollectionView = UICollectionView(frame: .zero, collectionViewLayout: trendCollectionViewLayout())
+    
+    private static func trendCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let sectionSpacing: CGFloat = 10
+        let cellSpacing: CGFloat = 10
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 70, height: 70)
+        layout.minimumInteritemSpacing = cellSpacing
+        layout.minimumLineSpacing = cellSpacing
+        layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: 2*sectionSpacing, bottom: sectionSpacing, right: 2*sectionSpacing)
+        return layout
+    }
+    
     
     override func configureHierarchy() {
         addSubview(scrollView)
@@ -55,17 +69,19 @@ final class PromotionView: BaseView {
         contentView.addSubview(adCollectionView)
         contentView.addSubview(categoryCollectionView)
         contentView.addSubview(stateLabel)
+        contentView.addSubview(trendCollectionView)
     }
     
     override func configureLayout() {
         scrollView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.edges.equalTo(safeAreaLayoutGuide)
+            
         }
         contentView.snp.makeConstraints { make in
             make.width.equalTo(scrollView.snp.width)
             make.verticalEdges.equalTo(scrollView)
         }
+        
         adCollectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(200)
@@ -84,5 +100,14 @@ final class PromotionView: BaseView {
             make.height.equalTo(30)
         }
         stateLabel.backgroundColor = .lightGray
+        
+        trendCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(stateLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.height.equalTo(300)
+            make.bottom.equalTo(contentView.snp.bottom)
+
+        }
+        trendCollectionView.backgroundColor = .lightGray
     }
 }

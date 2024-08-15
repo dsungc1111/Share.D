@@ -26,10 +26,7 @@ enum NetworkError: Error {
     case unknownResponse
     case statusError
 }
-enum NetworkResult<T> {
-    case success(T)        // 성공적으로 요청이 완료된 경우, T는 성공 시 반환되는 데이터 타입
-    case failure(Error)    // 요청이 실패한 경우, Error 타입의 오류 정보를 반환
-}
+
 
 
 final class NetworkManager {
@@ -110,5 +107,10 @@ final class NetworkManager {
    
         
     }
+    
+}
+
+//MARK: - 상품 api 활용
+extension NetworkManager {
     
 }
