@@ -26,6 +26,10 @@ enum NetworkError: Error {
     case unknownResponse
     case statusError
 }
+enum NetworkResult<T> {
+    case success(T)        // 성공적으로 요청이 완료된 경우, T는 성공 시 반환되는 데이터 타입
+    case failure(Error)    // 요청이 실패한 경우, Error 타입의 오류 정보를 반환
+}
 
 
 final class NetworkManager {
@@ -36,23 +40,31 @@ final class NetworkManager {
     
     
     //MARK: - 회원가입
-    func join(email: String, password: String, nickname: String, completionHandler: @escaping (Result<JoinModel, NetworkError>) -> Void) {
+    func join(email: String, password: String, nickname: String, completionHandler: @escaping (Int?) -> Void) {
         do {
             let query = JoinQuery(email: email, password: password, nick: nickname)
             let request = try Router.join(query: query).asURLRequest()
             
             AF.request(request).responseDecodable(of: JoinModel.self) { response in
+                
                 switch response.result {
                 case .success(let value):
-                    completionHandler(.success(value))
+                    print(value)
+                    guard let responseStatusCode = response.response?.statusCode else { return }
+                    completionHandler(responseStatusCode)
                 case .failure( _):
-                    completionHandler(.failure(NetworkError.invalidURL))
+                    guard let responseStatusCode = response.response?.statusCode else { return }
+                    completionHandler(responseStatusCode)
                 }
             }
         } catch {
-            print("터져버림")
+            completionHandler(500)
         }
     }
+    
+    
+    
+    
     
     //MARK: - 회원가입 - 이메일중복 확인
     func checkEmailValidation(email: String, completionHandler: @escaping (Result<EmailValidationModel, NetworkError>) -> Void) {
@@ -66,6 +78,7 @@ final class NetworkManager {
                 
                 switch response.result {
                 case .success(let value):
+                    print(value)
                     completionHandler(.success(value))
                 case .failure(let error):
                     print(error)

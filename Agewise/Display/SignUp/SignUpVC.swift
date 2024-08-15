@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class SignUpVC: BaseVC {
     
@@ -17,6 +18,8 @@ final class SignUpVC: BaseVC {
     
     private let disposeBag = DisposeBag()
     
+    private var showToast: (() -> Void)?
+    
     override func loadView() {
         view = signUpView
     }
@@ -24,25 +27,30 @@ final class SignUpVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let input = SignUpViewModel.Input(sigInTap: signUpView.signUpButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
+        let input = SignUpViewModel.Input(sigUpTap: signUpView.signUpButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
         
         
         let output = signUpViewModel.transform(input: input)
         
         
+        
+        
+        
+        
+        
+        
+        
+        
         output.success
             .bind(with: self) { owner, result in
-                if result == 0 {
+                if result == "회원가입 성공!" {
                     let vc = SignInVC()
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    owner.navigationController?.pushViewController(vc, animated: true)
                 } else {
-                    print("실패")
+                    owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }
             }
             .disposed(by: disposeBag)
-       
-        
-        
     }
     
     
