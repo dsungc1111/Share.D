@@ -27,18 +27,18 @@ final class SignUpVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let input = SignUpViewModel.Input(sigUpTap: signUpView.signUpButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
+        let input = SignUpViewModel.Input(sigUpTap: signUpView.signUpButton.rx.tap, validaionTap: signUpView.validaionCheckButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
         
         
         let output = signUpViewModel.transform(input: input)
         
         
         
-        
-        
-        
-        
-        
+        output.validation
+            .bind(with: self) { owner, value in
+                owner.signUpView.emailWarningLabel.text = value
+            }
+            .disposed(by: disposeBag)
         
         
         output.success

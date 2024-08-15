@@ -17,12 +17,14 @@ final class SignUpViewModel: BaseViewModel {
     
     struct Input {
         let sigUpTap: ControlEvent<Void>
+        let validaionTap: ControlEvent<Void>
         let emailText: ControlProperty<String>
         let passwordText: ControlProperty<String>
         let nicknameText: ControlProperty<String>
     }
     struct Output {
         let success: PublishSubject<String>
+        let validation: PublishSubject<String>
     }
     
     private let disposeBag = DisposeBag()
@@ -30,6 +32,7 @@ final class SignUpViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         
         let success = PublishSubject<String>()
+        let validation = PublishSubject<String>()
         
         var email = ""
         var password = ""
@@ -53,22 +56,21 @@ final class SignUpViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        if email.contains("@") {
-            NetworkManager.shared.checkEmailValidation(email: email) { result in
-                switch result {
-                case .success(let value):
-                    print("value =", value)
-                        
-                case .failure(let error):
-                    print("error =",error)
+        input.validaionTap
+            .bind(with: self) { owner, _ in
+                
+                if email.contains("@") {
+                    NetworkManager.shared.checkEmailValidation(email: email) { result in
+                        if let statuscode = result {
+                            validation.onNext(owner.judgeStatusCode(statusCode: statuscode, title: "사용 가능한 이메일입니다."))
+                        }
+                    }
+                } else {
+                    validation.onNext("email 형식을 지켜주세요 - @필수")
                 }
             }
-        } else {
-            success.onNext("email 형식을 지켜주세요 - @필수")
-        }
-        
+            .disposed(by: disposeBag)
+
         
         input.sigUpTap
             .subscribe(with: self, onNext: { owner, _ in
@@ -77,23 +79,25 @@ final class SignUpViewModel: BaseViewModel {
                 NetworkManager.shared.join(email: email, password: password, nickname: nickname) { result in
                     
                     if let statuscode = result {
-                        success.onNext(owner.judgeStatusCode(statusCode: statuscode))
+                        success.onNext(owner.judgeStatusCode(statusCode: statuscode, title: "회원가입 성공"))
                     }
                 }
             })
             .disposed(by: disposeBag)
         
-        return Output(success: success)
+        return Output(success: success, validation: validation)
     }
     
     // 메시지 전달
-    override func judgeStatusCode(statusCode: Int) -> String {
-        
-        var message = super.judgeStatusCode(statusCode: statusCode)
+    
+
+    
+    override func judgeStatusCode(statusCode: Int, title: String) -> String {
+        var message = super.judgeStatusCode(statusCode: statusCode, title: title)
         
         switch statusCode {
         case 200 :
-            message = "회원가입 성공!"
+            message = title
         case 400:
             message = "필수값을 채워주세요!"
         case 409:

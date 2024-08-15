@@ -61,13 +61,8 @@ final class NetworkManager {
             completionHandler(500)
         }
     }
-    
-    
-    
-    
-    
     //MARK: - 회원가입 - 이메일중복 확인
-    func checkEmailValidation(email: String, completionHandler: @escaping (Result<EmailValidationModel, NetworkError>) -> Void) {
+    func checkEmailValidation(email: String, completionHandler: @escaping (Int?) -> Void) {
         
         do {
             let query = EmailValidationQuery(email: email)
@@ -79,10 +74,11 @@ final class NetworkManager {
                 switch response.result {
                 case .success(let value):
                     print(value)
-                    completionHandler(.success(value))
+                    guard let responseStatusCode = response.response?.statusCode else { return }
+                    completionHandler(responseStatusCode)
                 case .failure(let error):
-                    print(error)
-                    completionHandler(.failure(NetworkError.invalidURL))
+                    guard let responseStatusCode = response.response?.statusCode else { return }
+                    completionHandler(responseStatusCode)
                 }
             }
             

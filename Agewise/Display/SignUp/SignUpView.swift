@@ -13,6 +13,11 @@ final class SignUpView: BaseView {
     
     let emailTextField = LoginTextField(placeholderText: " 이메일을 입력하세요.")
     let emailWarningLabel = UILabel()
+    let validaionCheckButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "info.circle.fill"), for: .normal)
+        return btn
+    }()
     
     let passwordTextField = LoginTextField(placeholderText: "비밀번호를 입력하세요.")
     let passwordWarningLabel = UILabel()
@@ -26,6 +31,7 @@ final class SignUpView: BaseView {
         
         addSubview(emailTextField)
         addSubview(emailWarningLabel)
+        addSubview(validaionCheckButton)
         addSubview(passwordTextField)
         addSubview(passwordWarningLabel)
         addSubview(nicknameTextField)
@@ -46,6 +52,12 @@ final class SignUpView: BaseView {
             make.height.equalTo(20)
         }
         emailWarningLabel.backgroundColor = .systemBlue
+        validaionCheckButton.snp.makeConstraints { make in
+            make.trailing.equalTo(emailTextField.snp.trailing).inset(10)
+            make.top.equalTo(emailTextField.snp.top).inset(17)
+            make.size.equalTo(20)
+        }
+        
         
         passwordTextField.snp.makeConstraints { make in
             make.top.equalTo(emailWarningLabel.snp.bottom).offset(20)

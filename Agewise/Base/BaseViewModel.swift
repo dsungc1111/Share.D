@@ -11,7 +11,7 @@ import Foundation
 class BaseViewModel {
     
     
-    func judgeStatusCode(statusCode: Int) -> String {
+    func judgeStatusCode(statusCode: Int, title: String) -> String {
         
         switch statusCode {
         case 420 :
