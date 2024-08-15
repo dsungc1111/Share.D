@@ -12,17 +12,37 @@ import RxSwift
 final class CategoryCollectionViewCell: UICollectionViewCell {
     
     
+    enum CategoryLogoImage: String, CaseIterable {
+        case teen
+        case graduation
+        case developer
+    }
+    
+    enum CategoryTitle: String, CaseIterable {
+        case teen = "10대"
+        case graduation = "20대"
+        case developer = "30대"
+        case parent = "40대"
+        case l = "50대"
+        case grand = "60대+"
+    }
+    
     let button = {
         let btn = UIButton()
-        btn.setTitle("10대", for: .normal)
+        btn.contentMode = .center
         return btn
+    }()
+    let label = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 12)
+        label.textAlignment = .center
+        return label
     }()
     
     var disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemPink
         configureHierarchy()
         configureLayout()
     }
@@ -30,27 +50,34 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    
-//    override func layoutSubviews() {
-//        button.layer.cornerRadius = 40
-//    }
-//    
+ 
     override func prepareForReuse() {
         disposeBag = DisposeBag()
     }
     
     func configureHierarchy() {
         contentView.addSubview(button)
+        contentView.addSubview(label)
     }
     
     func configureLayout() {
         button.snp.makeConstraints { make in
-            make.edges.equalTo(contentView.safeAreaLayoutGuide)
+            make.edges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
         }
-        button.layer.cornerRadius = frame.width/2
+        label.snp.makeConstraints { make in
+            make.top.equalTo(button.snp.bottom)
+            make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide)
+        }
+//        button.layer.cornerRadius = frame.width/2
         clipsToBounds = true
-        layer.cornerRadius = frame.width/2
+//        layer.cornerRadius = frame.width/2
     }
     
+    func cellConfiguration(item: Int) {
+        
+        if item < 3 {
+            button.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
+        }
+        label.text = CategoryTitle.allCases[item].rawValue
+    }
 }

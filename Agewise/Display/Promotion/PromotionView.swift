@@ -34,7 +34,7 @@ final class PromotionView: BaseView {
         let sectionSpacing: CGFloat = 10
         let cellSpacing: CGFloat = 10
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 70, height: 70)
+        layout.itemSize = CGSize(width: 90, height: 90)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: 2*sectionSpacing, bottom: sectionSpacing, right: 2*sectionSpacing)
@@ -52,16 +52,29 @@ final class PromotionView: BaseView {
     
     private static func trendCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        let sectionSpacing: CGFloat = 10
         let cellSpacing: CGFloat = 10
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 70, height: 70)
+        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: 150, height: 50)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
-        layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: 2*sectionSpacing, bottom: sectionSpacing, right: 2*sectionSpacing)
+        layout.sectionInset = UIEdgeInsets(top: cellSpacing, left: cellSpacing, bottom: cellSpacing, right: cellSpacing)
         return layout
     }
     
+    override init(frame: CGRect) {
+          super.init(frame: frame)
+        
+        categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
+        categoryCollectionView.showsVerticalScrollIndicator = false
+        
+        trendCollectionView.register(TrendCollectionViewCell.self, forCellWithReuseIdentifier: TrendCollectionViewCell.identifier)
+        trendCollectionView.showsVerticalScrollIndicator = false
+      }
+      
+      @available(*, unavailable)
+      required init?(coder: NSCoder) {
+          fatalError("init(coder:) has not been implemented")
+      }
     
     override func configureHierarchy() {
         addSubview(scrollView)
@@ -92,7 +105,7 @@ final class PromotionView: BaseView {
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(adCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
-            make.height.equalTo(180)
+            make.height.equalTo(210)
         }
         stateLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)

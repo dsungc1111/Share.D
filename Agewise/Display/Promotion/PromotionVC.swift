@@ -28,15 +28,14 @@ final class PromotionVC: BaseVC {
         super.viewDidLoad()
         print("mainVC임!!")
         
-        promotionView.categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
-        
-        promotionView.trendCollectionView.register(TrendCollectionViewCell.self, forCellWithReuseIdentifier: TrendCollectionViewCell.identifier)
         
         let aa = Observable.just(data)
         
         
         aa
-            .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (row, element, cell) in
+            .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (item, element, cell) in
+                
+                cell.cellConfiguration(item: item)
             }
             .disposed(by: disposeBag)
         
