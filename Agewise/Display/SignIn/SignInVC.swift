@@ -52,7 +52,7 @@ final class SignInVC: BaseVC {
             .bind(with: self) { owner, result in
                 
                 if result == 0 {
-                    let vc = MainVC()
+                    let vc = PromotionVC()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 } else {
                     print("로그인 불가")
