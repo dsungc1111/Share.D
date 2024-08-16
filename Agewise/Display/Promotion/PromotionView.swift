@@ -19,11 +19,9 @@ final class PromotionView: BaseView {
         let layout = UICollectionViewFlowLayout()
         let sectionSpacing: CGFloat = 10
         let cellSpacing: CGFloat = 10
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 56, height: 56)
-        layout.minimumInteritemSpacing = cellSpacing
-        layout.minimumLineSpacing = cellSpacing
-        layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: 0)
+        let width = UIScreen.main.bounds.width
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: width, height: 200)
         return layout
     }
   
@@ -64,6 +62,9 @@ final class PromotionView: BaseView {
     override init(frame: CGRect) {
           super.init(frame: frame)
         
+        adCollectionView.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
+        adCollectionView.showsHorizontalScrollIndicator = false
+        
         categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
         categoryCollectionView.showsVerticalScrollIndicator = false
         
@@ -100,13 +101,15 @@ final class PromotionView: BaseView {
             make.height.equalTo(200)
         }
         adCollectionView.layer.cornerRadius = 15
-        adCollectionView.backgroundColor = .lightGray
+        
         
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(adCollectionView.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(210)
         }
+        categoryCollectionView.layer.borderWidth = 1
+        categoryCollectionView.layer.cornerRadius = 10
         stateLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)

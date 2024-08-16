@@ -72,7 +72,7 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
             make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide)
         }
 //        button.layer.cornerRadius = frame.width/2
-        clipsToBounds = true
+//        clipsToBounds = true
 //        layer.cornerRadius = frame.width/2
     }
     

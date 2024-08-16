@@ -39,6 +39,9 @@
 		8B32318A2C6E19B40095DF0B /* QuestionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231892C6E19B40095DF0B /* QuestionVC.swift */; };
 		8B32318E2C6E297A0095DF0B /* ProductModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32318D2C6E297A0095DF0B /* ProductModel.swift */; };
 		8B3231912C6E2BCE0095DF0B /* TrendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231902C6E2BCE0095DF0B /* TrendCollectionViewCell.swift */; };
+		8B3231932C6F2A2A0095DF0B /* PromotionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231922C6F2A2A0095DF0B /* PromotionViewModel.swift */; };
+		8B3231962C6F63320095DF0B /* AdCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231952C6F63320095DF0B /* AdCollectionViewCell.swift */; };
+		8B3231992C6F72C00095DF0B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3231982C6F72C00095DF0B /* Kingfisher */; };
 		8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */; };
 		8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */; };
 		8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */; };
@@ -74,6 +77,8 @@
 		8B3231892C6E19B40095DF0B /* QuestionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionVC.swift; sourceTree = "<group>"; };
 		8B32318D2C6E297A0095DF0B /* ProductModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductModel.swift; sourceTree = "<group>"; };
 		8B3231902C6E2BCE0095DF0B /* TrendCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B3231922C6F2A2A0095DF0B /* PromotionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionViewModel.swift; sourceTree = "<group>"; };
+		8B3231952C6F63320095DF0B /* AdCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BC986372C6C0BAA00B69112 /* Agewise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agewise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +96,7 @@
 			files = (
 				8B32317E2C6D9E220095DF0B /* Toast in Frameworks */,
 				8B3231742C6C78080095DF0B /* IQKeyboardManagerSwift in Frameworks */,
+				8B3231992C6F72C00095DF0B /* Kingfisher in Frameworks */,
 				8B32311A2C6C1F790095DF0B /* RxSwift in Frameworks */,
 				8B32316D2C6C72380095DF0B /* Alamofire in Frameworks */,
 				8B3231182C6C1F790095DF0B /* RxCocoa in Frameworks */,
@@ -187,10 +193,12 @@
 		8B3231772C6C9AD80095DF0B /* Promotion */ = {
 			isa = PBXGroup;
 			children = (
+				8B3231942C6F63120095DF0B /* Advertisement */,
 				8B3231812C6E04AD0095DF0B /* Category */,
 				8B32318F2C6E2BC20095DF0B /* Trend */,
 				8B32317F2C6DFEA80095DF0B /* PromotionView.swift */,
 				8B3231782C6C9AE70095DF0B /* PromotionVC.swift */,
+				8B3231922C6F2A2A0095DF0B /* PromotionViewModel.swift */,
 			);
 			path = Promotion;
 			sourceTree = "<group>";
@@ -235,6 +243,14 @@
 				8B3231902C6E2BCE0095DF0B /* TrendCollectionViewCell.swift */,
 			);
 			path = Trend;
+			sourceTree = "<group>";
+		};
+		8B3231942C6F63120095DF0B /* Advertisement */ = {
+			isa = PBXGroup;
+			children = (
+				8B3231952C6F63320095DF0B /* AdCollectionViewCell.swift */,
+			);
+			path = Advertisement;
 			sourceTree = "<group>";
 		};
 		8BC9862E2C6C0BAA00B69112 = {
@@ -292,6 +308,7 @@
 				8B32316C2C6C72380095DF0B /* Alamofire */,
 				8B3231732C6C78080095DF0B /* IQKeyboardManagerSwift */,
 				8B32317D2C6D9E220095DF0B /* Toast */,
+				8B3231982C6F72C00095DF0B /* Kingfisher */,
 			);
 			productName = Agewise;
 			productReference = 8BC986372C6C0BAA00B69112 /* Agewise.app */;
@@ -327,6 +344,7 @@
 				8B32316B2C6C72380095DF0B /* XCRemoteSwiftPackageReference "Alamofire" */,
 				8B3231722C6C78080095DF0B /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				8B32317C2C6D9E220095DF0B /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				8B3231972C6F72C00095DF0B /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 8BC986382C6C0BAA00B69112 /* Products */;
 			projectDirPath = "";
@@ -362,10 +380,12 @@
 				8B3231862C6E06A50095DF0B /* Reusable.swift in Sources */,
 				8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */,
 				8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */,
+				8B3231932C6F2A2A0095DF0B /* PromotionViewModel.swift in Sources */,
 				8B32311D2C6C21700095DF0B /* SignInVC.swift in Sources */,
 				8B3231152C6C19300095DF0B /* LoginButton.swift in Sources */,
 				8B32311F2C6C22580095DF0B /* BaseVC.swift in Sources */,
 				8B32316F2C6C74240095DF0B /* UserDefaultManager.swift in Sources */,
+				8B3231962C6F63320095DF0B /* AdCollectionViewCell.swift in Sources */,
 				8B3231072C6C0CFF0095DF0B /* APIKey.swift in Sources */,
 				8B3231262C6C28DA0095DF0B /* SignInView.swift in Sources */,
 				8B3231242C6C28370095DF0B /* LoginTextField.swift in Sources */,
@@ -646,6 +666,14 @@
 				minimumVersion = 5.1.1;
 			};
 		};
+		8B3231972C6F72C00095DF0B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -678,6 +706,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B32317C2C6D9E220095DF0B /* XCRemoteSwiftPackageReference "Toast-Swift" */;
 			productName = Toast;
+		};
+		8B3231982C6F72C00095DF0B /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B3231972C6F72C00095DF0B /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
