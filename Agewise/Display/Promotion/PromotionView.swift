@@ -14,6 +14,23 @@ final class PromotionView: BaseView {
     let contentView = UIView()
     
     
+    private let hotDealLabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 16)
+        let title = "이주의 HOT딜 - 추천상품"
+        let highlighted = "HOT"
+        let attributedTitle = NSMutableAttributedString(string: title)
+        
+        if let range = title.range(of: highlighted) {
+            let nsRange = NSRange(range, in: title)
+            attributedTitle.addAttribute(.foregroundColor, value: UIColor.systemRed, range: nsRange)
+            attributedTitle.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 20), range: nsRange)
+        }
+        label.attributedText = attributedTitle
+        label.textAlignment = .center
+        return label
+    }()
+    
     let adCollectionView = UICollectionView(frame: .zero, collectionViewLayout: adCollectionViewLayout())
     private static func adCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
@@ -41,7 +58,7 @@ final class PromotionView: BaseView {
     
     let stateLabel = {
         let label = UILabel()
-        label.text = "카테고리를 선택해주세요!"
+        label.text = "연령별 추천상품"
         label.textAlignment = .center
         return label
     }()
@@ -80,6 +97,7 @@ final class PromotionView: BaseView {
     override func configureHierarchy() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
+        contentView.addSubview(hotDealLabel)
         contentView.addSubview(adCollectionView)
         contentView.addSubview(categoryCollectionView)
         contentView.addSubview(stateLabel)
@@ -96,34 +114,35 @@ final class PromotionView: BaseView {
             make.verticalEdges.equalTo(scrollView)
         }
         
-        adCollectionView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(200)
+        hotDealLabel.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(20)
         }
-        adCollectionView.layer.cornerRadius = 15
         
-        
-        categoryCollectionView.snp.makeConstraints { make in
+        adCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(hotDealLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(300)
+        }
+        stateLabel.snp.makeConstraints { make in
             make.top.equalTo(adCollectionView.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.height.equalTo(30)
+        }
+        categoryCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(stateLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(210)
         }
         categoryCollectionView.layer.borderWidth = 1
         categoryCollectionView.layer.cornerRadius = 10
-        stateLabel.snp.makeConstraints { make in
-            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
-            make.height.equalTo(30)
-        }
-        stateLabel.backgroundColor = .lightGray
+        
         
         trendCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(stateLabel.snp.bottom).offset(10)
+            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
             make.height.equalTo(300)
             make.bottom.equalTo(contentView.snp.bottom)
-
         }
-        trendCollectionView.backgroundColor = .lightGray
     }
 }

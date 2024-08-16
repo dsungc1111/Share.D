@@ -12,7 +12,7 @@ final class AdCollectionViewCell: UICollectionViewCell {
     
     let productImage = {
         let image = UIImageView()
-        image.contentMode = .scaleToFill
+        image.contentMode = .scaleAspectFill
         return image
     }()
     

@@ -13,11 +13,14 @@ final class TrendCollectionViewCell: UICollectionViewCell {
     
     var disposeBag = DisposeBag()
     
-    let label = UILabel()
+    let presentLabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemPink
         configureHierarchy()
         configureLayout()
     }
@@ -31,11 +34,11 @@ final class TrendCollectionViewCell: UICollectionViewCell {
     }
     
     func configureHierarchy() {
-        contentView.addSubview(label)
+        contentView.addSubview(presentLabel)
     }
     
     func configureLayout() {
-        label.snp.makeConstraints { make in
+        presentLabel.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
     }
