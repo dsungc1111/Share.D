@@ -30,6 +30,8 @@ final class PromotionVC: BaseVC {
     
     override func bind() {
         
+        let cellViewModel = CategoryCellVeiwModel()
+        
         let input = PromotionViewModel.Input(adTrigger: Observable.just(()))
         
         
@@ -50,7 +52,15 @@ final class PromotionVC: BaseVC {
         output.ageList
             .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (item, element, cell) in
                 
+                
                 cell.cellConfiguration(item: item)
+                
+                
+                let cellInput = CategoryCellVeiwModel.Input(itemTap: cell.ageButton.rx.tap, searchWord: Observable.just(element))
+                
+                let cellOutput = cellViewModel.transform(input: cellInput)
+                
+                print(cellOutput.aa)
                 
                 
             }
@@ -60,7 +70,11 @@ final class PromotionVC: BaseVC {
         output.presentList
             .bind(to: promotionView.trendCollectionView.rx.items(cellIdentifier: TrendCollectionViewCell.identifier, cellType: TrendCollectionViewCell.self)) { (row, element, cell) in
                 
-                cell.presentLabel.text = element
+                cell.presentButton.setTitle(element, for: .normal)
+                
+                let cellInput = CategoryCellVeiwModel.Input(itemTap: cell.presentButton.rx.tap, searchWord: Observable.just(element))
+                
+                let cellOutput = cellViewModel.transform(input: cellInput)
                 
             }
             .disposed(by: disposeBag)

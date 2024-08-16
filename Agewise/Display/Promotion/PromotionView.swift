@@ -34,8 +34,6 @@ final class PromotionView: BaseView {
     let adCollectionView = UICollectionView(frame: .zero, collectionViewLayout: adCollectionViewLayout())
     private static func adCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        let sectionSpacing: CGFloat = 10
-        let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: width, height: 200)

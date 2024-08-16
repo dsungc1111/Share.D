@@ -30,12 +30,12 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
         case grand = "60대+"
     }
     
-    let button = {
+    let ageButton = {
         let btn = UIButton()
         btn.contentMode = .center
         return btn
     }()
-    let label = {
+    let ageLabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 12)
         label.textAlignment = .center
@@ -59,16 +59,16 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     func configureHierarchy() {
-        contentView.addSubview(button)
-        contentView.addSubview(label)
+        contentView.addSubview(ageButton)
+        contentView.addSubview(ageLabel)
     }
     
     func configureLayout() {
-        button.snp.makeConstraints { make in
+        ageButton.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
         }
-        label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom)
+        ageLabel.snp.makeConstraints { make in
+            make.top.equalTo(ageButton.snp.bottom)
             make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide)
         }
 //        button.layer.cornerRadius = frame.width/2
@@ -79,8 +79,8 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     func cellConfiguration(item: Int) {
         
         
-        button.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
+        ageButton.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
         
-        label.text = CategoryTitle.allCases[item].rawValue
+        ageLabel.text = CategoryTitle.allCases[item].rawValue
     }
 }
