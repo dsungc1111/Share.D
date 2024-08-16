@@ -14,8 +14,11 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     
     enum CategoryLogoImage: String, CaseIterable {
         case teen
-        case graduation
-        case developer
+        case worker
+        case main
+        case parent
+        case elderly1
+        case elderly2
     }
     
     enum CategoryTitle: String, CaseIterable {
@@ -75,9 +78,9 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     
     func cellConfiguration(item: Int) {
         
-        if item < 3 {
-            button.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
-        }
+        
+        button.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
+        
         label.text = CategoryTitle.allCases[item].rawValue
     }
 }
