@@ -9,10 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class CategoryCellVeiwModel: UICollectionViewCell {
- 
-    
-    
+final class CategoryCellVeiwModel {
     
     struct Input {
         let itemTap: ControlEvent<Void>
@@ -20,12 +17,15 @@ final class CategoryCellVeiwModel: UICollectionViewCell {
     }
     
     struct Output {
-        let aa: String
+        let selectedList: PublishSubject<[ProductDetail]>
     }
     
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output{
+    
+        
+        let selectedList = PublishSubject<[ProductDetail]>()
         
         input.itemTap
             .withLatestFrom(input.searchWord)
@@ -34,10 +34,16 @@ final class CategoryCellVeiwModel: UICollectionViewCell {
                 NetworkManager.shared.naverAPI(query: value + "선물")
             }
             .bind(with: self) { owner, result in
-                print(result)
+                print("진행")
+                switch result {
+                case .success(let value):
+                    selectedList.onNext(value.items)
+                case .failure(_):
+                    print("실패")
+                }
             }
             .disposed(by: disposeBag)
         
-        return Output(aa: "dfdfd")
+        return Output(selectedList: selectedList)
     }
 }

@@ -23,7 +23,6 @@ final class PromotionVC: BaseVC {
         view = promotionView
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -59,8 +58,16 @@ final class PromotionVC: BaseVC {
                 let cellInput = CategoryCellVeiwModel.Input(itemTap: cell.ageButton.rx.tap, searchWord: Observable.just(element))
                 
                 let cellOutput = cellViewModel.transform(input: cellInput)
-                
-                print(cellOutput.aa)
+  
+                cellOutput.selectedList
+                    .bind(with: self) { owner, result in
+                        
+                        let vc = ProductVC()
+                        vc.productList = result
+                        vc.navigationItem.title = "결과"
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    .disposed(by: cell.disposeBag)
                 
                 
             }
@@ -76,6 +83,17 @@ final class PromotionVC: BaseVC {
                 
                 let cellOutput = cellViewModel.transform(input: cellInput)
                 
+                cellOutput.selectedList
+                    .bind(with: self) { owner, result in
+                        
+                        let vc = ProductVC()
+                        vc.navigationItem.title = "결과"
+                        vc.productList = result
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                        
+                    }
+                    .disposed(by: cell.disposeBag)
+               
             }
             .disposed(by: disposeBag)
     }

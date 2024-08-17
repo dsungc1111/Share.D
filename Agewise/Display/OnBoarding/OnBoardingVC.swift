@@ -25,7 +25,7 @@ final class OnBoardingVC: BaseVC {
         
         onBoardingView.loginButton.rx.tap
             .bind(with: self) { owner, _ in
-                let vc = SignInVC()
+                let vc = LoginVC()
                 vc.navigationItem.title = "로그인"
                 owner.navigationController?.pushViewController(vc, animated: true)
             }

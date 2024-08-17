@@ -9,29 +9,33 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class SignInVC: BaseVC {
+final class LoginVC: BaseVC {
     
-    private let signInView = SignInView()
+    private let loginView = LoginView()
     
-    private let signInViewModel = SignInViewModel()
+    private let loginViewModel = LoginViewModel()
     
     private let disposeBag = DisposeBag()
     
     override func loadView() {
-        view = signInView
+        view = loginView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let input = SignInViewModel.Input(signInTap: signInView.signInButton.rx.tap, emailText: signInView.emailTextField.rx.text.orEmpty, passwordText: signInView.passwordTextField.rx.text.orEmpty)
+    }
+    
+    override func bind() {
         
-        let output = signInViewModel.transform(input: input)
+        let input = LoginViewModel.Input(signInTap: loginView.signInButton.rx.tap, emailText: loginView.emailTextField.rx.text.orEmpty, passwordText: loginView.passwordTextField.rx.text.orEmpty)
+        
+        let output = loginViewModel.transform(input: input)
         
         
         output.emailValid
             .bind(with: self) { owner, result in
-                owner.signInView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
+                owner.loginView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
                 
             }
             .disposed(by: disposeBag)
@@ -41,9 +45,9 @@ final class SignInVC: BaseVC {
                 
                 let color = result ? UIColor.black : UIColor.lightGray
                 
-                owner.signInView.signInButton.setTitleColor( color , for: .normal)
-                owner.signInView.signInButton.layer.borderColor = color.cgColor
-                owner.signInView.signInButton.isEnabled = result
+                owner.loginView.signInButton.setTitleColor( color , for: .normal)
+                owner.loginView.signInButton.layer.borderColor = color.cgColor
+                owner.loginView.signInButton.isEnabled = result
             }
             .disposed(by: disposeBag)
             
@@ -59,11 +63,5 @@ final class SignInVC: BaseVC {
                 }
             }
             .disposed(by: disposeBag)
-        
-        
     }
-    
-    
-    
-    
 }

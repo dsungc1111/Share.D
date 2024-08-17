@@ -71,7 +71,7 @@ final class SignUpVC: BaseVC {
         output.success
             .bind(with: self) { owner, result in
                 if result == "회원가입 성공!" {
-                    let vc = SignInVC()
+                    let vc = LoginVC()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 } else {
                     owner.view.makeToast(result, duration: 2.0, position: .bottom)

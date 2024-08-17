@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class SignInViewModel {
+final class LoginViewModel {
     
     private let disposeBag = DisposeBag()
     
@@ -29,9 +29,9 @@ final class SignInViewModel {
         
         let login = PublishSubject<Int>()
         
-        let userInfo = Observable.zip(input.emailText, input.passwordText)
-        
-        
+//        let userInfo = Observable.zip(input.emailText, input.passwordText)
+//        
+//        
         var email = ""
         var password = ""
         

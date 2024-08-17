@@ -23,3 +23,16 @@ struct LoginModel: Decodable {
     let accessToken: String
     let refreshToken: String
 }
+
+struct LoginQuery: Encodable {
+    let email: String
+    let password: String
+}
+struct JoinQuery: Encodable {
+    let email: String
+    let password: String
+    let nick: String
+}
+struct EmailValidationQuery: Encodable {
+    let email: String
+}

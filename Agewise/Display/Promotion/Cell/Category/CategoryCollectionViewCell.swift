@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 
-final class CategoryCollectionViewCell: UICollectionViewCell {
+final class CategoryCollectionViewCell: BaseCollectionViewCell {
     
     
     enum CategoryLogoImage: String, CaseIterable {
@@ -44,26 +44,18 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     
     var disposeBag = DisposeBag()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configureHierarchy()
-        configureLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+ 
  
     override func prepareForReuse() {
         disposeBag = DisposeBag()
     }
     
-    func configureHierarchy() {
+    override func configureHierarchy() {
         contentView.addSubview(ageButton)
         contentView.addSubview(ageLabel)
     }
     
-    func configureLayout() {
+    override func configureLayout() {
         ageButton.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
         }
@@ -77,7 +69,6 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     func cellConfiguration(item: Int) {
-        
         
         ageButton.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
         

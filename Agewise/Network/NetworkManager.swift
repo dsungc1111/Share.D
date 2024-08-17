@@ -9,26 +9,6 @@ import Foundation
 import Alamofire
 import RxSwift
 
-struct LoginQuery: Encodable {
-    let email: String
-    let password: String
-}
-struct JoinQuery: Encodable {
-    let email: String
-    let password: String
-    let nick: String
-}
-struct EmailValidationQuery: Encodable {
-    let email: String
-}
-
-enum NetworkError: Error {
-    case invalidURL
-    case unknownResponse
-    case statusError
-}
-
-
 
 final class NetworkManager {
     
@@ -109,22 +89,6 @@ final class NetworkManager {
         
     }
     
-}
-
-struct Product: Decodable {
-    let total: Int
-    let start: Int
-    let display: Int
-    var items: [ProductDetail]
-}
-
-struct ProductDetail: Decodable {
-    var title: String
-    let link: String
-    let mallName: String
-    let image: String
-    let lprice: String
-    let productId: String
 }
 
 //MARK: - 상품 api 활용
