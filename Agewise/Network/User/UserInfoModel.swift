@@ -23,6 +23,22 @@ struct LoginModel: Decodable {
     let accessToken: String
     let refreshToken: String
 }
+struct RefreshModel: Decodable {
+    let accessToken: String
+}
+struct ProfileModel: Decodable {
+    let id: String
+    let email: String
+    let nick: String
+    
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "user_id"
+        case email
+        case nick
+    }
+}
+
 
 struct LoginQuery: Encodable {
     let email: String

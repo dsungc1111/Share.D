@@ -10,5 +10,15 @@ import Foundation
 
 final class QuestionVC: BaseVC {
     
+    var accessToken = ""
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        accessToken = UserDefaultManager.shared.accessToken
+        
+        print(accessToken)
+        
+        NetworkManager.shared.fetchProfile()
+    }
 }

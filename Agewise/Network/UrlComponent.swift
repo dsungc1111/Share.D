@@ -13,9 +13,10 @@ enum Router {
     case join(query: JoinQuery)
     case emailValidation(query: EmailValidationQuery)
     case login(query: LoginQuery)
+    case refresh
     case fetchProfile
     case editProfile
-    case refresh
+    
 }
 
 extension Router: TargetType {
@@ -32,12 +33,13 @@ extension Router: TargetType {
                 .post
         case .login:
                 .post
+        case .refresh:
+                .get
         case .fetchProfile:
                 .get
         case .editProfile:
                 .put
-        case .refresh:
-                .get
+        
         }
     }
     
@@ -49,11 +51,10 @@ extension Router: TargetType {
             return "/validation/email"
         case .login:
             return "/users/login"
-        case .fetchProfile, .editProfile:
-            return  "/users/me/profile"
         case .refresh:
             return  "/auth/refresh"
-        
+        case .fetchProfile, .editProfile:
+            return  "/users/me/profile"
         }
     }
 

@@ -5,9 +5,10 @@
 //  Created by 최대성 on 8/14/24.
 //
 
-import Foundation
+import UIKit
 import Alamofire
 import RxSwift
+
 
 
 final class NetworkManager {
@@ -61,7 +62,7 @@ final class NetworkManager {
             }
             
         } catch {
-            
+            print("에러")
         }
     }
     
@@ -85,15 +86,74 @@ final class NetworkManager {
         } catch {
             print(error)
         }
-   
-        
     }
     
+    //MARK: - 리프레시
+    func refreshToken() {
+        do {
+            let request = try Router.refresh.asURLRequest()
+            AF.request(request).responseDecodable(of: RefreshModel.self) { response in
+                
+                guard let statusCode = response.response?.statusCode else { return }
+                
+                print("리프레쉬 statusCdoe =", statusCode)
+                
+                if response.response?.statusCode == 418 {
+                    
+                    let vc = QuestionVC()
+                    vc.expiredToken()
+                   
+                }
+                switch response.result {
+                case .success(let value):
+                    print("refresh완료")
+                    UserDefaults.standard.setValue(value.accessToken, forKey: UserDefaultManager.shared.accessToken)
+                    NetworkManager.shared.fetchProfile()
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        } catch {
+            
+        }
+    }
+    //MARK: - 프로필 조회
+    func fetchProfile() {
+        
+        do {
+            let request = try Router.fetchProfile.asURLRequest()
+            
+            AF.request(request).responseDecodable(of: ProfileModel.self) { response in
+                
+                guard let responseCode = response.response?.statusCode else { return }
+                
+                print(responseCode)
+                
+                if responseCode == 419 {
+                    print("토큰만료하여 리푸레쉬토근해야합니다")
+                    NetworkManager.shared.refreshToken()
+                } else if responseCode == 401 {
+                    print("인증할 수 없는 토큰입니다.")
+                } else if responseCode == 403 {
+                    print("접근권한 XX")
+                } else {
+                    print("ok")
+                    switch response.result {
+                    case .success(let value):
+                        print(value)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        } catch {
+            print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
+        }
+    }
 }
 
 //MARK: - 상품 api 활용
 extension NetworkManager {
-    
     
     func naverAPI(query: String, page: Int) -> Single<Result<Product, NetworkError>> {
         
@@ -120,19 +180,11 @@ extension NetworkManager {
                     switch response.result {
                     case .success(let value):
                         observer(.success(.success(value)))
-                    case .failure(let error):
+                    case .failure(_):
                         observer(.success(.failure(.unknownResponse)))
                     }
-                    
                 }
-            
             return Disposables.create()
         }
-        
-        
-      
-        
-      
     }
-    
 }

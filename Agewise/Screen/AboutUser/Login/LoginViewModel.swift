@@ -28,10 +28,7 @@ final class LoginViewModel {
     func transform(input: Input) -> Output {
         
         let login = PublishSubject<Int>()
-        
-//        let userInfo = Observable.zip(input.emailText, input.passwordText)
-//        
-//        
+
         var email = ""
         var password = ""
         
@@ -55,7 +52,6 @@ final class LoginViewModel {
         input.signInTap
             .subscribe(with: self) { owner, _ in
                
-                print(email, password)
                 NetworkManager.shared.createLogin(email: email, password: password) { response in
                     switch response {
                     case .success(let value):

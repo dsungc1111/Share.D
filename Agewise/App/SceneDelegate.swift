@@ -37,12 +37,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
-        setTabBarController(scene: scene)
-//        window = UIWindow(windowScene: scene)
-//        
-//        let vc = UINavigationController(rootViewController: PromotionVC())
-//        window?.rootViewController = vc
-//        window?.makeKeyAndVisible()
+        
+        
+        let access = UserDefaultManager.shared.accessToken
+        window = UIWindow(windowScene: scene)
+        
+        let vc = UINavigationController(rootViewController: OnBoardingVC())
+        window?.rootViewController = vc
+        window?.makeKeyAndVisible()
+        if access == "" {
+            
+        } else {
+            setTabBarController(scene: scene)
+        }
+        
+       
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
