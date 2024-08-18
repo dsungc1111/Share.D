@@ -95,12 +95,14 @@ final class NetworkManager {
 extension NetworkManager {
     
     
-    func naverAPI(query: String) -> Single<Result<Product, NetworkError>> {
+    func naverAPI(query: String, page: Int) -> Single<Result<Product, NetworkError>> {
         
         let url = "https://openapi.naver.com/v1/search/shop.json"
         
         let param: Parameters = [
-            "query" : query
+            "query" : query,
+            "page" : page,
+            "display" : 40
         ]
         
         let header: HTTPHeaders = [
@@ -116,13 +118,9 @@ extension NetworkManager {
                 .responseDecodable(of: Product.self) { response in
                     
                     switch response.result {
-                        
                     case .success(let value):
-                        print("메서드 진행중")
                         observer(.success(.success(value)))
                     case .failure(let error):
-                        print("메서드 실패임")
-                        print(error)
                         observer(.success(.failure(.unknownResponse)))
                     }
                     

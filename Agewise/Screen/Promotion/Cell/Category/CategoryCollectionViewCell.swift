@@ -64,9 +64,6 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(ageButton.snp.bottom)
             make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide)
         }
-//        button.layer.cornerRadius = frame.width/2
-//        clipsToBounds = true
-//        layer.cornerRadius = frame.width/2
     }
     
     func cellConfiguration(item: Int) {

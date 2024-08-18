@@ -52,7 +52,7 @@ final class PromotionViewModel {
         input.adTrigger
             .map { "핫딜" }
             .flatMap { value in
-                NetworkManager.shared.naverAPI(query: value)
+                NetworkManager.shared.naverAPI(query: value, page: 1)
             }
             .subscribe(with: self) { owner, result in
                 

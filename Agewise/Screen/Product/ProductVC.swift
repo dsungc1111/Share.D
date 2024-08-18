@@ -8,7 +8,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import Kingfisher
 
 final class ProductVC: BaseVC {
 
@@ -18,8 +17,6 @@ final class ProductVC: BaseVC {
     
     private let disposeBag = DisposeBag()
     
-    var productList: [ProductDetail]?
-    
     var searchItem = ""
     
     override func loadView() {
@@ -28,27 +25,32 @@ final class ProductVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(searchItem)
+        
     }
     
     override func bind() {
         
-        guard let list = productList else { return }
         
-        let input = ProductViewModel.Input(list: Observable.just(list))
         
+        let loadMoreTrigger = PublishSubject<Void>()
+        
+        productView.collectionView.rx.prefetchItems
+            .bind(with: self, onNext: { owner, indexPaths in
+                guard let lastIndexPath = indexPaths.last else { return }
+                if lastIndexPath.row >= self.productView.collectionView.numberOfItems(inSection: 0) - 1 {
+                    loadMoreTrigger.onNext(())
+                }
+            })
+               .disposed(by: disposeBag)
+           
+        let input = ProductViewModel.Input(searchItem: Observable.just(searchItem), loadMore: loadMoreTrigger)
+      
         let output = productViewModel.transform(input: input)
         
-        output.list
+        output.searchList
             .bind(to: productView.collectionView.rx.items(cellIdentifier: ProductCollectionViewCell.identifier, cellType: ProductCollectionViewCell.self)) { (row, element, cell) in
                 
-                let image = URL(string: element.image)
-                
-                cell.companyNameLabel.text = element.mallName
-                cell.imageView.kf.setImage(with: image)
-                cell.priceLabel.text = (Int(element.lprice)?.formatted() ?? "0") + "원"
-                cell.productNameLabel.text = element.title.removeHtmlTag
-                
+                cell.configureCell(element: element)
             }
             .disposed(by: disposeBag)
     }

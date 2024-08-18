@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class ProductCollectionViewCell: BaseCollectionViewCell {
     
@@ -43,6 +44,13 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
+    override func prepareForReuse() {
+        imageView.image = nil
+        companyNameLabel.text = nil
+        productNameLabel.text = nil
+        priceLabel.text = nil
+    }
+    
     override func configureHierarchy() {
         contentView.addSubview(imageView)
         contentView.addSubview(companyNameLabel)
@@ -76,5 +84,16 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         }
     }
    
+    func configureCell(element: ProductDetail) {
+        
+        priceLabel.text = (Int(element.lprice)?.formatted() ?? "0") + "원"
+        productNameLabel.text = element.title.removeHtmlTag
+        priceLabel.text = Int(element.lprice)?.formatted()
+        
+        let image = URL(string: element.image)
+        
+        imageView.kf.setImage(with: image)
+        
+    }
     
 }

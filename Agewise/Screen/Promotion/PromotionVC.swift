@@ -65,7 +65,6 @@ final class PromotionVC: BaseVC {
             .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (item, element, cell) in
                 
                 cell.cellConfiguration(item: item)
-                
             }
             .disposed(by: disposeBag)
         
