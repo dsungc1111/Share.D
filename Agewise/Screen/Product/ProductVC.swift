@@ -30,8 +30,6 @@ final class ProductVC: BaseVC {
     
     override func bind() {
         
-        
-        
         let loadMoreTrigger = PublishSubject<Void>()
         
         productView.collectionView.rx.prefetchItems
@@ -50,9 +48,21 @@ final class ProductVC: BaseVC {
         output.searchList
             .bind(to: productView.collectionView.rx.items(cellIdentifier: ProductCollectionViewCell.identifier, cellType: ProductCollectionViewCell.self)) { (row, element, cell) in
                 
+//                let vc = ProductDetailVC()
+//                vc.product = element
                 cell.configureCell(element: element)
+//                self?.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        let a = productView.collectionView.rx.modelSelected(ProductDetail.self)
+        
+        a.bind(with: self) { owner, result in
+            let vc = ProductDetailVC()
+            vc.product = result
+            owner.navigationController?.pushViewController(vc, animated: true)
+        }
+        .disposed(by: disposeBag)
     }
     
     
