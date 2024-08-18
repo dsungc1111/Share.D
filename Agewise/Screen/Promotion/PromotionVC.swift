@@ -29,13 +29,26 @@ final class PromotionVC: BaseVC {
     
     override func bind() {
         
-        let cellViewModel = CategoryCellVeiwModel()
-        
-        let input = PromotionViewModel.Input(adTrigger: Observable.just(()))
+        let input = PromotionViewModel.Input(adTrigger: Observable.just(()), categoryTap: promotionView.categoryCollectionView.rx.modelSelected(String.self), trendTap: promotionView.trendCollectionView.rx.modelSelected(String.self))
         
         
         let output = promotionViewModel.transform(input: input)
         
+        output.categoryTap
+            .bind(with: self) { owner, result in
+                let vc = ProductVC()
+                vc.searchItem = result
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.trendTap
+            .bind(with: self) { owner, result in
+                let vc = ProductVC()
+                vc.searchItem = result
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
         
         
         output.adList
@@ -51,24 +64,7 @@ final class PromotionVC: BaseVC {
         output.ageList
             .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (item, element, cell) in
                 
-                
                 cell.cellConfiguration(item: item)
-                
-                
-                let cellInput = CategoryCellVeiwModel.Input(itemTap: cell.ageButton.rx.tap, searchWord: Observable.just(element))
-                
-                let cellOutput = cellViewModel.transform(input: cellInput)
-  
-                cellOutput.selectedList
-                    .bind(with: self) { owner, result in
-                        
-                        let vc = ProductVC()
-                        vc.productList = result
-                        vc.navigationItem.title = "결과"
-                        owner.navigationController?.pushViewController(vc, animated: true)
-                    }
-                    .disposed(by: cell.disposeBag)
-                
                 
             }
             .disposed(by: disposeBag)
@@ -79,21 +75,6 @@ final class PromotionVC: BaseVC {
                 
                 cell.presentButton.setTitle(element, for: .normal)
                 
-                let cellInput = CategoryCellVeiwModel.Input(itemTap: cell.presentButton.rx.tap, searchWord: Observable.just(element))
-                
-                let cellOutput = cellViewModel.transform(input: cellInput)
-                
-                cellOutput.selectedList
-                    .bind(with: self) { owner, result in
-                        
-                        let vc = ProductVC()
-                        vc.navigationItem.title = "결과"
-                        vc.productList = result
-                        owner.navigationController?.pushViewController(vc, animated: true)
-                        
-                    }
-                    .disposed(by: cell.disposeBag)
-               
             }
             .disposed(by: disposeBag)
     }

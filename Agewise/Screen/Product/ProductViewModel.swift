@@ -7,7 +7,7 @@
 
 import Foundation
 import RxSwift
-//import RxCocoa
+import RxCocoa
 
 final class ProductViewModel {
     
@@ -19,11 +19,9 @@ final class ProductViewModel {
         let list: Observable<[ProductDetail]>
     }
     
+    private var page = 1
+    
     func transform(input: Input) -> Output {
-        
-        
-        
-        
         
         return Output(list: input.list)
     }

@@ -14,14 +14,14 @@ enum NetworkError: Error {
     case statusError
 }
 
-struct Product: Decodable {
+struct Product: Decodable, Hashable {
     let total: Int
     let start: Int
     let display: Int
     var items: [ProductDetail]
 }
 
-struct ProductDetail: Decodable {
+struct ProductDetail: Decodable, Hashable {
     var title: String
     let link: String
     let mallName: String

@@ -15,8 +15,9 @@ final class TrendCollectionViewCell: UICollectionViewCell {
     
     let presentButton = {
         let btn = UIButton()
-        btn.setTitleColor(.black, for: .normal)
         btn.titleLabel?.textAlignment = .center
+        btn.isEnabled = false
+        btn.setTitleColor(.black, for: .normal)
         return btn
     }()
     

@@ -33,6 +33,7 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
     let ageButton = {
         let btn = UIButton()
         btn.contentMode = .center
+        btn.isEnabled = false
         return btn
     }()
     let ageLabel = {

@@ -20,19 +20,20 @@ final class ProductVC: BaseVC {
     
     var productList: [ProductDetail]?
     
+    var searchItem = ""
+    
     override func loadView() {
         view = productView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(searchItem)
     }
     
     override func bind() {
         
         guard let list = productList else { return }
-        
         
         let input = ProductViewModel.Input(list: Observable.just(list))
         
@@ -48,11 +49,9 @@ final class ProductVC: BaseVC {
                 cell.priceLabel.text = (Int(element.lprice)?.formatted() ?? "0") + "원"
                 cell.productNameLabel.text = element.title.removeHtmlTag
                 
-                
             }
             .disposed(by: disposeBag)
-        
-      
-        
     }
+    
+    
 }

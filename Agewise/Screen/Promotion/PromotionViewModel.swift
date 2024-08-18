@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 final class PromotionViewModel {
     
@@ -28,12 +29,16 @@ final class PromotionViewModel {
     
     struct Input {
         let adTrigger: Observable<Void>
+        let categoryTap: ControlEvent<String>
+        let trendTap: ControlEvent<String>
     }
     
     struct Output {
         let adList: PublishSubject<[ProductDetail]>
         let ageList: PublishSubject<[String]>
         let presentList: PublishSubject<[String]>
+        let categoryTap: ControlEvent<String>
+        let trendTap: ControlEvent<String>
     }
     
     private let disposeBag = DisposeBag()
@@ -67,8 +72,8 @@ final class PromotionViewModel {
             }
             .disposed(by: disposeBag)
         
-       
-        return Output(adList: adList, ageList: ageList, presentList: presentList)
+        
+        return Output(adList: adList, ageList: ageList, presentList: presentList, categoryTap: input.categoryTap, trendTap: input.trendTap)
     }
     
 }
