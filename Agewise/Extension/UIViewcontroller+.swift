@@ -21,9 +21,6 @@ extension UIViewController {
         sceneDelegate?.window?.makeKeyAndVisible()
     }
     
-    
-    
-    
     func expiredToken() {
         
         let alert = UIAlertController(title: "로그인 만료", message: "계정 정보 만료", preferredStyle: .alert)

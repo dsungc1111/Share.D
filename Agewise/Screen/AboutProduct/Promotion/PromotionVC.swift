@@ -25,6 +25,8 @@ final class PromotionVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NetworkManager.shared.fetchProfile()
     }
     
     override func bind() {

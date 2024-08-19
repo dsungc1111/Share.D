@@ -78,7 +78,6 @@ final class NetworkManager {
                 switch response.result {
                 case .success(let value):
                     completionHandler(.success(value))
-                    
                 case .failure(let error):
                     print(error)
                     completionHandler(.failure(NetworkError.unknownResponse))
@@ -100,9 +99,13 @@ final class NetworkManager {
                 print("리프레쉬 statusCdoe =", statusCode)
                 
                 if response.response?.statusCode == 418 {
+                    // 리프레시 토큰 만료 > 다시 로그인 필요
+                    for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                        UserDefaults.standard.removeObject(forKey: key.description)
+                    }
                     
                     if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                    let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                       let sceneDelegate = windowScene.delegate as? SceneDelegate,
                        let window = sceneDelegate.window {
                         
                         let onboardingVC = OnBoardingVC()
@@ -110,14 +113,13 @@ final class NetworkManager {
                         window.rootViewController = navController
                         window.makeKeyAndVisible()
                     }
-                    
-                    
                 }
                 switch response.result {
                 case .success(let value):
                     print("refresh완료")
-                    UserDefaults.standard.setValue(value.accessToken, forKey: UserDefaultManager.shared.accessToken)
-                    NetworkManager.shared.fetchProfile()
+//                    UserDefaults.standard.setValue(value.accessToken, forKey: UserDefaultManager.shared.accessToken)
+                    UserDefaultManager.shared.accessToken = value.accessToken
+                    self.fetchProfile()
                 case .failure(let error):
                     print(error)
                 }
@@ -127,6 +129,8 @@ final class NetworkManager {
         }
     }
     //MARK: - 프로필 조회
+    // 액세스 토큰 만료되면 > 리프레시 토큰을 액세스 토큰에 넣어주고
+    // 액세스 토큰이 만료되면 > 처음 시작 화면으로
     func fetchProfile() {
         
         do {
@@ -136,7 +140,7 @@ final class NetworkManager {
                 
                 guard let responseCode = response.response?.statusCode else { return }
                 
-                print(responseCode)
+                print("프로필 조회 = ", responseCode)
                 
                 if responseCode == 419 {
                     print("토큰만료하여 리푸레쉬토근해야합니다")
