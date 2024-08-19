@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import RxSwift
 
-class ProductDetailVC: BaseVC {
+final class ProductDetailVC: BaseVC {
 
     var product: ProductDetail?
     
     private let productDetailView = ProductDetailView()
+    
+    private let disposeBag = DisposeBag()
     
     override func loadView() {
         view = productDetailView
@@ -26,6 +29,15 @@ class ProductDetailVC: BaseVC {
     override func configureNavigationBar() {
         let rightBarButton = UIBarButtonItem(title: "👉 질문하기", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = rightBarButton
+        
+        
+        rightBarButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("질문하기 go!")
+                let vc = QuestionVC()
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func configureWebview() {

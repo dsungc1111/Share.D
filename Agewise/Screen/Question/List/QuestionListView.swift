@@ -1,5 +1,5 @@
 //
-//  QuestionView.swift
+//  QuestionListView.swift
 //  Agewise
 //
 //  Created by 최대성 on 8/18/24.
@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class QuestionView: BaseView {
+final class QuestionListView: BaseView {
     
     
     
