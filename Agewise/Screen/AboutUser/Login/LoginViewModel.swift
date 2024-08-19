@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class LoginViewModel {
+final class LoginViewModel: BaseViewModel {
     
     private let disposeBag = DisposeBag()
     
@@ -20,15 +20,15 @@ final class LoginViewModel {
     }
     
     struct Output {
-        let login: PublishSubject<Int>
+        let success: PublishSubject<String>
         let emailValid: Observable<Bool>
         let pwValid: Observable<Bool>
     }
     
     func transform(input: Input) -> Output {
         
-        let login = PublishSubject<Int>()
-
+        let success = PublishSubject<String>()
+        
         var email = ""
         var password = ""
         
@@ -52,19 +52,29 @@ final class LoginViewModel {
         input.signInTap
             .subscribe(with: self) { owner, _ in
                
-                NetworkManager.shared.createLogin(email: email, password: password) { response in
-                    switch response {
-                    case .success(let value):
-                        UserDefaultManager.shared.accessToken = value.accessToken
-                        UserDefaultManager.shared.refreshToken = value.refreshToken
-                        login.onNext(0)
-                    case .failure(_):
-                        login.onNext(1)
-                    }
+                NetworkManager.shared.createLogin(email: email, password: password) { result in
+                    success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.login.rawValue))
                 }
             }
             .disposed(by: disposeBag)
         
-        return Output(login: login, emailValid: emailValid, pwValid: pwValid)
+        return Output(success: success, emailValid: emailValid, pwValid: pwValid)
+    }
+    
+    override func judgeStatusCode(statusCode: Int, title: String) -> String {
+        var message = super.judgeStatusCode(statusCode: statusCode, title: title)
+        
+        switch statusCode {
+        case 200 :
+            message = title
+        case 400:
+            message = "필수값을 채워주세요!"
+        case 409:
+            message = "이미 가입한 유저에요!"
+        default:
+            message = "기타 에러"
+        }
+        
+        return message
     }
 }

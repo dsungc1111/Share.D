@@ -19,7 +19,7 @@ final class NetworkManager {
     
     //MARK: - POST
     //MARK: - 회원가입
-    func join(email: String, password: String, nickname: String, completionHandler: @escaping (Int?) -> Void) {
+    func join(email: String, password: String, nickname: String, completionHandler: @escaping (Int) -> Void) {
         do {
             let query = JoinQuery(email: email, password: password, nick: nickname)
             let request = try Router.join(query: query).asURLRequest()
@@ -41,7 +41,7 @@ final class NetworkManager {
         }
     }
     //MARK: - 회원가입 - 이메일중복 확인
-    func checkEmailValidation(email: String, completionHandler: @escaping (Int?) -> Void) {
+    func checkEmailValidation(email: String, completionHandler: @escaping (Int) -> Void) {
         
         do {
             let query = EmailValidationQuery(email: email)
@@ -50,24 +50,24 @@ final class NetworkManager {
             
             AF.request(request).responseDecodable(of: EmailValidationModel.self) { response in
                 
+                
+                guard let responseStatusCode = response.response?.statusCode else { return }
+                
                 switch response.result {
                 case .success(let value):
                     print(value)
-                    guard let responseStatusCode = response.response?.statusCode else { return }
                     completionHandler(responseStatusCode)
                 case .failure(_):
-                    guard let responseStatusCode = response.response?.statusCode else { return }
                     completionHandler(responseStatusCode)
                 }
             }
-            
         } catch {
-            print("에러")
+            completionHandler(500)
         }
     }
     
     //MARK: - 로그인
-    func createLogin(email: String, password: String, completionHandler: @escaping (Result<LoginModel, NetworkError>) -> Void) {
+    func createLogin(email: String, password: String, completionHandler: @escaping (Int) -> Void) {
         
         do {
             let query = LoginQuery(email: email, password: password)
@@ -75,21 +75,25 @@ final class NetworkManager {
             
             AF.request(request).responseDecodable(of: LoginModel.self) { response in
                 
+                guard let responseStatusCode = response.response?.statusCode else { return }
+                
                 switch response.result {
                 case .success(let value):
-                    completionHandler(.success(value))
-                case .failure(let error):
-                    print(error)
-                    completionHandler(.failure(NetworkError.unknownResponse))
+                    print(value)
+                    UserDefaultManager.shared.accessToken = value.accessToken
+                    UserDefaultManager.shared.refreshToken = value.refreshToken
+                    completionHandler(responseStatusCode)
+                case .failure(_):
+                    completionHandler(responseStatusCode)
                 }
             }
         } catch {
-            print(error)
+            completionHandler(500)
         }
     }
     
     //MARK: - 포스트 작성
-    func writePost(query: PostQuery) {
+    func writePost(query: PostQuery, completionHandler: @escaping (Int) -> Void) {
         do {
             let request = try Router.postQuestion(query: query).asURLRequest()
             
@@ -99,27 +103,20 @@ final class NetworkManager {
                 
                 print("포스트 작성 = ", responseCode)
                 
-                if responseCode == 419 {
-                    print("토큰만료하여 리푸레쉬토근해야합니다")
-                   self.refreshToken()
-                } else if responseCode == 401 {
-                    print("인증할 수 없는 토큰입니다.")
-                } else if responseCode == 403 {
-                    print("접근권한 XX")
-                } else if responseCode == 410 {
-                    print("생성된 게시글 XX")
-                } else {
-                    print("ok")
-                    switch response.result {
-                    case .success(let value):
-                        print(value, "포스트 올라감.")
-                    case .failure(let error):
-                        print(error)
-                    }
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    
+                    completionHandler(responseCode)
+                case .failure(_):
+//                    guard let responseStatusCode = response.response?.statusCode else { return }
+                    completionHandler(responseCode)
                 }
+                
             }
         } catch {
             print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
+            completionHandler(500)
         }
     }
     
@@ -139,21 +136,19 @@ final class NetworkManager {
                     for key in UserDefaults.standard.dictionaryRepresentation().keys {
                         UserDefaults.standard.removeObject(forKey: key.description)
                     }
-                    
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let sceneDelegate = windowScene.delegate as? SceneDelegate,
-                       let window = sceneDelegate.window {
-                        
+//                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+//                       let sceneDelegate = windowScene.delegate as? SceneDelegate,
+//                       let window = sceneDelegate.window {
+//                        
                         let onboardingVC = OnBoardingVC()
                         onboardingVC.expiredToken(title: "로그인 만료")
-                        let navController = UINavigationController(rootViewController: onboardingVC)
-                        window.rootViewController = navController
-                        window.makeKeyAndVisible()
-                    }
+//                        let navController = UINavigationController(rootViewController: onboardingVC)
+//                        window.rootViewController = navController
+//                        window.makeKeyAndVisible()
+//                    }
                 }
                 switch response.result {
                 case .success(let value):
-                    print("refresh완료")
                     UserDefaultManager.shared.accessToken = value.accessToken
                     self.fetchProfile()
                 case .failure(let error):
@@ -255,7 +250,6 @@ extension NetworkManager {
         ]
         
         return Single.create { observer -> Disposable in
-            
             
             AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
                 .validate(statusCode: 200..<300)

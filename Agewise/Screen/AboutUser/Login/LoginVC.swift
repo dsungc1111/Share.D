@@ -17,6 +17,8 @@ final class LoginVC: BaseVC {
     
     private let disposeBag = DisposeBag()
     
+    var showToast: (() -> Void)?
+    
     override func loadView() {
         view = loginView
     }
@@ -51,14 +53,15 @@ final class LoginVC: BaseVC {
             }
             .disposed(by: disposeBag)
             
-        
-        output.login
+    
+        output.success
             .bind(with: self) { owner, result in
                 
-                if result == 0 {
+                if result == SuccessKeyword.login.rawValue {
                     self.resetViewWithoutNavigation(vc: TabBarController())
                 } else {
-                    print("로그인 불가")
+                    print("여기임?")
+                    owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }
             }
             .disposed(by: disposeBag)

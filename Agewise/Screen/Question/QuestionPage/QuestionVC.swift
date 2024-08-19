@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class QuestionVC: BaseVC {
 
@@ -21,6 +22,8 @@ final class QuestionVC: BaseVC {
     private let questionViewModel = QuestionViewModel()
     
     private let disposeBag = DisposeBag()
+    
+    private var showToast: (() -> Void)?
     
     override func loadView() {
         view = questionView
@@ -41,7 +44,7 @@ final class QuestionVC: BaseVC {
         
         questionView.configureView(product: product)
         
-        let a = questionView.textView.rx.text.orEmpty
+        
         
         let input = QuestionViewModel.Input(saveTap: questionView.saveButton.rx.tap, question: questionView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
         
@@ -51,6 +54,19 @@ final class QuestionVC: BaseVC {
             .bind(with: self) { owner, result in
                 owner.questionView.saveButton.isEnabled = result
                 owner.questionView.saveButton.backgroundColor = result ? .black : .lightGray
+            }
+            .disposed(by: disposeBag)
+        
+        
+        output.success
+            .bind(with: self) { owner, result in
+                if result == SuccessKeyword.post.rawValue {
+                   print("업로드 성공")
+                } else if result == SuccessKeyword.accessError.rawValue {
+                    self.expiredToken(title: "로그인 화면으로 돌아감.")
+                } else {
+                    owner.view.makeToast(result, duration: 2.0, position: .bottom)
+                }
             }
             .disposed(by: disposeBag)
     }

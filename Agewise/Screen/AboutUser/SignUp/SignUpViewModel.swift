@@ -75,25 +75,23 @@ final class SignUpViewModel: BaseViewModel {
                 
                 if email.contains("@") {
                     NetworkManager.shared.checkEmailValidation(email: email) { result in
-                        if let statuscode = result {
-                            validation.onNext(owner.judgeStatusCode(statusCode: statuscode, title: "사용 가능한 이메일입니다."))
-                        }
+                        
+                        validation.onNext(owner.judgeStatusCode(statusCode: result, title: "사용 가능한 이메일입니다."))
+                        
                     }
                 } else {
                     validation.onNext("email 형식을 지켜주세요 - @필수")
                 }
             }
             .disposed(by: disposeBag)
-
+        
         
         input.sigUpTap
             .subscribe(with: self, onNext: { owner, _ in
                 
                 NetworkManager.shared.join(email: email, password: password, nickname: nickname) { result in
                     
-                    if let statuscode = result {
-                        success.onNext(owner.judgeStatusCode(statusCode: statuscode, title: "회원가입 성공!"))
-                    }
+                    success.onNext(owner.judgeStatusCode(statusCode: result, title: "회원가입 성공!"))
                 }
             })
             .disposed(by: disposeBag)

@@ -9,6 +9,13 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+enum SuccessKeyword: String {
+    case signUp = "회원가입 성공!"
+    case login = "로그인 성공!"
+    case post = "업로드 성공!"
+    case accessError =  "접근권한이 없습니다."
+}
+
 final class QuestionViewModel: BaseViewModel {
     
     
@@ -20,13 +27,15 @@ final class QuestionViewModel: BaseViewModel {
     }
     struct Output {
         let result: Observable<Bool>
+        let success: PublishSubject<String>
     }
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         
+        let success = PublishSubject<String>()
         
-       let result = input.question
+        let result = input.question
             .map { $0.count != 0 }
         
         
@@ -40,13 +49,33 @@ final class QuestionViewModel: BaseViewModel {
                 let text = result.1
                 let category = result.2
                 
-                
                 let save = PostQuery(title: product.title, content: text, content1: product.lprice, content2: product.mallName, content3: product.productId, product_id: category + "선물용" , files: [product.image])
-                NetworkManager.shared.writePost(query: save)
                 
+                NetworkManager.shared.writePost(query: save) { result in
+                    
+                    success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
+                    
+                }
             }
             .disposed(by: disposeBag)
         
-        return Output(result: result)
+        return Output(result: result, success: success)
+    }
+    
+    override func judgeStatusCode(statusCode: Int, title: String) -> String {
+        var message = super.judgeStatusCode(statusCode: statusCode, title: title)
+        
+        switch statusCode {
+        case 200 :
+            message = title
+        case 401:
+            message = "유효하지 않은 액세스 토큰"
+        case 410:
+            message = "생성된 게시글 X" // DB서버 장애로 게시글이 저장되지 않았을 때
+        default:
+            message = "기타 에러"
+        }
+        
+        return message
     }
 }
