@@ -24,6 +24,4 @@ class BaseViewModel {
             return "기타 에러 - 사전 정의 X"
         }
     }
-    
-    
 }

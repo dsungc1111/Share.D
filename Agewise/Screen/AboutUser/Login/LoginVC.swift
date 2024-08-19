@@ -56,8 +56,7 @@ final class LoginVC: BaseVC {
             .bind(with: self) { owner, result in
                 
                 if result == 0 {
-                    let vc = PromotionVC()
-                    owner.navigationController?.pushViewController(vc, animated: true)
+                    self.resetView(vc: TabBarController())
                 } else {
                     print("로그인 불가")
                 }

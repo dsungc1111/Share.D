@@ -15,10 +15,11 @@ final class QuestionVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        accessToken = UserDefaultManager.shared.accessToken
+//        accessToken = UserDefaultManager.shared.accessToken
         
-        print(accessToken)
+//        print(accessToken)
         
         NetworkManager.shared.fetchProfile()
+        
     }
 }

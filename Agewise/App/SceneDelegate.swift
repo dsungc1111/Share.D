@@ -11,29 +11,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     
-    func setTabBarController(scene: UIScene) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-    
-        window = UIWindow(windowScene: windowScene)
-
-        let tabBarController = UITabBarController()
-    
-        let settingVC = UINavigationController(rootViewController: SettingVC())
-        let promotionVC = UINavigationController(rootViewController: PromotionVC())
-        let questionVC = UINavigationController(rootViewController: QuestionVC())
-    
-        settingVC.tabBarItem = UITabBarItem(title: "세팅", image: UIImage(systemName: "gearshape"), tag: 0)
-        promotionVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 1)
-        questionVC.tabBarItem = UITabBarItem(title: "질문", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
-    
-        tabBarController.viewControllers = [questionVC, promotionVC, settingVC]
-        tabBarController.selectedIndex = 1
-        
-        window?.rootViewController = tabBarController
-        window?.makeKeyAndVisible()
-        
-        
-    }
+//    func setTabBarController(scene: UIScene) {
+//        guard let windowScene = (scene as? UIWindowScene) else { return }
+//    
+//        window = UIWindow(windowScene: windowScene)
+//
+//        let tabBarController = UITabBarController()
+//    
+//        let settingVC = UINavigationController(rootViewController: SettingVC())
+//        let promotionVC = UINavigationController(rootViewController: PromotionVC())
+//        let questionVC = UINavigationController(rootViewController: QuestionVC())
+//    
+//        settingVC.tabBarItem = UITabBarItem(title: "세팅", image: UIImage(systemName: "gearshape"), tag: 0)
+//        promotionVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 1)
+//        questionVC.tabBarItem = UITabBarItem(title: "질문", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
+//    
+//        tabBarController.viewControllers = [questionVC, promotionVC, settingVC]
+//        tabBarController.selectedIndex = 1
+//        
+//        window?.rootViewController = tabBarController
+//        window?.makeKeyAndVisible()
+//        
+//        
+//    }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
@@ -42,13 +42,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let access = UserDefaultManager.shared.accessToken
         window = UIWindow(windowScene: scene)
         
-        let vc = UINavigationController(rootViewController: OnBoardingVC())
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
+      
         if access == "" {
-            
+            let vc = UINavigationController(rootViewController: OnBoardingVC())
+            window?.rootViewController = vc
+            window?.makeKeyAndVisible()
         } else {
-            setTabBarController(scene: scene)
+            let vc = TabBarController()
+            window?.rootViewController = vc
+            window?.makeKeyAndVisible()
+            
         }
         
        

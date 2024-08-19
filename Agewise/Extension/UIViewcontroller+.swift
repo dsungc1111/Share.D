@@ -9,6 +9,21 @@ import UIKit
 
 extension UIViewController {
     
+    //MARK:- 화면 초기화
+    
+    func resetView(vc: UIViewController) {
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let sceneDelegate = windowScene?.delegate as? SceneDelegate
+        
+        let navigationController = UINavigationController(rootViewController: vc)
+        
+        sceneDelegate?.window?.rootViewController = navigationController
+        sceneDelegate?.window?.makeKeyAndVisible()
+    }
+    
+    
+    
+    
     func expiredToken() {
         
         let alert = UIAlertController(title: "로그인 만료", message: "계정 정보 만료", preferredStyle: .alert)

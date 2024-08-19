@@ -78,6 +78,7 @@ final class NetworkManager {
                 switch response.result {
                 case .success(let value):
                     completionHandler(.success(value))
+                    
                 case .failure(let error):
                     print(error)
                     completionHandler(.failure(NetworkError.unknownResponse))
@@ -100,9 +101,17 @@ final class NetworkManager {
                 
                 if response.response?.statusCode == 418 {
                     
-                    let vc = QuestionVC()
-                    vc.expiredToken()
-                   
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                    let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                       let window = sceneDelegate.window {
+                        
+                        let onboardingVC = OnBoardingVC()
+                        let navController = UINavigationController(rootViewController: onboardingVC)
+                        window.rootViewController = navController
+                        window.makeKeyAndVisible()
+                    }
+                    
+                    
                 }
                 switch response.result {
                 case .success(let value):
@@ -131,7 +140,7 @@ final class NetworkManager {
                 
                 if responseCode == 419 {
                     print("토큰만료하여 리푸레쉬토근해야합니다")
-                    NetworkManager.shared.refreshToken()
+                   self.refreshToken()
                 } else if responseCode == 401 {
                     print("인증할 수 없는 토큰입니다.")
                 } else if responseCode == 403 {
