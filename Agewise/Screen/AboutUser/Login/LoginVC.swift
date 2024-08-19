@@ -56,7 +56,7 @@ final class LoginVC: BaseVC {
             .bind(with: self) { owner, result in
                 
                 if result == 0 {
-                    self.resetView(vc: TabBarController())
+                    self.resetViewWithoutNavigation(vc: TabBarController())
                 } else {
                     print("로그인 불가")
                 }

@@ -15,6 +15,7 @@ enum Router {
     case login(query: LoginQuery)
     case refresh
     case fetchProfile
+    case withdraw
     case editProfile
     
 }
@@ -37,6 +38,8 @@ extension Router: TargetType {
                 .get
         case .fetchProfile:
                 .get
+        case .withdraw:
+                .get
         case .editProfile:
                 .put
         
@@ -55,6 +58,8 @@ extension Router: TargetType {
             return  "/auth/refresh"
         case .fetchProfile, .editProfile:
             return  "/users/me/profile"
+        case .withdraw:
+            return "/users/withdraw"
         }
     }
 
@@ -72,7 +77,7 @@ extension Router: TargetType {
 //                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-        case .editProfile:
+        case .editProfile, .withdraw:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
     //            HTTPHeaderName.contentType.rawValue : "multipart/form-data",
@@ -111,7 +116,6 @@ extension Router: TargetType {
         case .login(let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
-            
        
             
         default: return nil

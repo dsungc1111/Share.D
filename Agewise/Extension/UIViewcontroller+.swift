@@ -11,7 +11,7 @@ extension UIViewController {
     
     //MARK:- 화면 초기화
     
-    func resetView(vc: UIViewController) {
+    func resetViewWithNavigation(vc: UIViewController) {
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let sceneDelegate = windowScene?.delegate as? SceneDelegate
         
@@ -20,10 +20,17 @@ extension UIViewController {
         sceneDelegate?.window?.rootViewController = navigationController
         sceneDelegate?.window?.makeKeyAndVisible()
     }
-    
-    func expiredToken() {
+    func resetViewWithoutNavigation(vc: UIViewController) {
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let sceneDelegate = windowScene?.delegate as? SceneDelegate
         
-        let alert = UIAlertController(title: "로그인 만료", message: "계정 정보 만료", preferredStyle: .alert)
+        sceneDelegate?.window?.rootViewController = vc
+        sceneDelegate?.window?.makeKeyAndVisible()
+    }
+    
+    func expiredToken(title: String) {
+        
+        let alert = UIAlertController(title: title, message: "첫 화면으로 돌아갑니다.", preferredStyle: .alert)
         
         let okButton = UIAlertAction(title: "확인", style: .default)
         { _ in

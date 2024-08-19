@@ -109,6 +109,7 @@ final class NetworkManager {
                        let window = sceneDelegate.window {
                         
                         let onboardingVC = OnBoardingVC()
+                        onboardingVC.expiredToken(title: "로그인 만료")
                         let navController = UINavigationController(rootViewController: onboardingVC)
                         window.rootViewController = navController
                         window.makeKeyAndVisible()
@@ -117,7 +118,6 @@ final class NetworkManager {
                 switch response.result {
                 case .success(let value):
                     print("refresh완료")
-//                    UserDefaults.standard.setValue(value.accessToken, forKey: UserDefaultManager.shared.accessToken)
                     UserDefaultManager.shared.accessToken = value.accessToken
                     self.fetchProfile()
                 case .failure(let error):
@@ -159,6 +159,47 @@ final class NetworkManager {
                     }
                 }
             }
+        } catch {
+            print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
+        }
+    }
+    
+    //MARK: - 탈퇴하기
+    
+    func withdraw(vc: UIViewController) {
+        do {
+            let request = try Router.withdraw.asURLRequest()
+            
+            AF.request(request).responseDecodable(of: ProfileModel.self) { response in
+                
+                guard let responseCode = response.response?.statusCode else { return }
+                
+                print("탈퇴하기 = ", responseCode)
+                
+                if responseCode == 419 {
+                    print("토큰만료하여 리푸레쉬토근해야합니다")
+                   self.refreshToken()
+                } else if responseCode == 401 {
+                    print("인증할 수 없는 토큰입니다.")
+                } else if responseCode == 403 {
+                    print("접근권한 XX")
+                } else {
+                    print("ok")
+                    switch response.result {
+                    case .success(let value):
+                        
+                        vc.expiredToken(title: "탈퇴하시겠습니까?")
+                        
+                        
+                        
+                        
+                        print(value, "\n탈퇴됨")
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            
         } catch {
             print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
         }
