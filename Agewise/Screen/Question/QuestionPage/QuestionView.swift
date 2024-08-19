@@ -7,12 +7,14 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class QuestionView: BaseView {
     
     let imageContainer = {
-        let container = UIView()
-        container.backgroundColor = .lightGray
+        let container = UIImageView()
+        container.layer.cornerRadius = 10
+        container.contentMode = .scaleAspectFit
         return container
     }()
 //    let imageButton = {
@@ -30,13 +32,23 @@ final class QuestionView: BaseView {
     let infoLabel = {
         let label = UILabel()
         label.text = "제품정보란"
+        label.font = .boldSystemFont(ofSize: 14)
+        label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     let mallnameLabel = {
         let label = UILabel()
-        label.text = "쇼핑몰"
+        label.textColor = .lightGray
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
+    let priceLabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 13)
+        return label
+    }()
+    
     
     let textView = {
         let text = UITextView()
@@ -71,22 +83,28 @@ final class QuestionView: BaseView {
         addSubview(infoLabel)
         addSubview(mallnameLabel)
         addSubview(saveButton)
+        addSubview(priceLabel)
     }
     override func configureLayout() {
         imageContainer.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(30)
             make.height.equalTo(250)
         }
         infoLabel.snp.makeConstraints { make in
             make.top.equalTo(imageContainer.snp.bottom).offset(10)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(15)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(30)
         }
         mallnameLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageContainer.snp.bottom).offset(10)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(15)
+            make.top.equalTo(infoLabel.snp.bottom).offset(10)
+            make.centerX.equalTo(safeAreaLayoutGuide)
+        }
+        priceLabel.snp.makeConstraints { make in
+            make.top.equalTo(infoLabel.snp.bottom).offset(10)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
         }
         textView.snp.makeConstraints { make in
-            make.top.equalTo(infoLabel.snp.bottom).offset(10)
+            make.top.equalTo(priceLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(15)
             make.height.equalTo(200)
         }
@@ -97,5 +115,15 @@ final class QuestionView: BaseView {
         }
     }
     
+    func configureView(product: ProductDetail) {
+        
+        let image = URL(string: product.image)
+        
+        imageContainer.kf.setImage(with: image)
+        
+        infoLabel.text = product.title.removeHtmlTag
+        mallnameLabel.text = product.mallName
+        priceLabel.text = (Int(product.lprice)?.formatted() ?? "0") + " 원"
+    }
     
 }

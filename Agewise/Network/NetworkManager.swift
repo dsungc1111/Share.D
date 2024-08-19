@@ -17,7 +17,7 @@ final class NetworkManager {
     
     private init() {}
     
-    
+    //MARK: - POST
     //MARK: - 회원가입
     func join(email: String, password: String, nickname: String, completionHandler: @escaping (Int?) -> Void) {
         do {
@@ -88,6 +88,42 @@ final class NetworkManager {
         }
     }
     
+    //MARK: - 포스트 작성
+    func writePost(query: PostQuery) {
+        do {
+            let request = try Router.postQuestion(query: query).asURLRequest()
+            
+            AF.request(request).responseDecodable(of: PostModelToWrite.self) { response in
+                
+                guard let responseCode = response.response?.statusCode else { return }
+                
+                print("포스트 작성 = ", responseCode)
+                
+                if responseCode == 419 {
+                    print("토큰만료하여 리푸레쉬토근해야합니다")
+                   self.refreshToken()
+                } else if responseCode == 401 {
+                    print("인증할 수 없는 토큰입니다.")
+                } else if responseCode == 403 {
+                    print("접근권한 XX")
+                } else if responseCode == 410 {
+                    print("생성된 게시글 XX")
+                } else {
+                    print("ok")
+                    switch response.result {
+                    case .success(let value):
+                        print(value, "포스트 올라감.")
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        } catch {
+            print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
+        }
+    }
+    
+    
     //MARK: - 리프레시
     func refreshToken() {
         do {
@@ -99,7 +135,7 @@ final class NetworkManager {
                 print("리프레쉬 statusCdoe =", statusCode)
                 
                 if response.response?.statusCode == 418 {
-                    // 리프레시 토큰 만료 > 다시 로그인 필요
+                    
                     for key in UserDefaults.standard.dictionaryRepresentation().keys {
                         UserDefaults.standard.removeObject(forKey: key.description)
                     }
@@ -165,7 +201,6 @@ final class NetworkManager {
     }
     
     //MARK: - 탈퇴하기
-    
     func withdraw(vc: UIViewController) {
         do {
             let request = try Router.withdraw.asURLRequest()
@@ -187,12 +222,7 @@ final class NetworkManager {
                     print("ok")
                     switch response.result {
                     case .success(let value):
-                        
                         vc.expiredToken(title: "탈퇴하시겠습니까?")
-                        
-                        
-                        
-                        
                         print(value, "\n탈퇴됨")
                     case .failure(let error):
                         print(error)

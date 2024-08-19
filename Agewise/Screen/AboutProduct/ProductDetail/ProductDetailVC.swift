@@ -11,7 +11,7 @@ import RxSwift
 final class ProductDetailVC: BaseVC {
 
     var product: ProductDetail?
-    
+    var category = ""
     private let productDetailView = ProductDetailView()
     
     private let disposeBag = DisposeBag()
@@ -33,8 +33,9 @@ final class ProductDetailVC: BaseVC {
         
         rightBarButton.rx.tap
             .bind(with: self) { owner, _ in
-                print("질문하기 go!")
                 let vc = QuestionVC()
+                vc.productInfo = owner.product
+                vc.category = owner.category
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

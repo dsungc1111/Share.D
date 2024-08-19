@@ -17,7 +17,7 @@ enum Router {
     case fetchProfile
     case withdraw
     case editProfile
-    
+    case postQuestion(query: PostQuery)
 }
 
 extension Router: TargetType {
@@ -34,6 +34,9 @@ extension Router: TargetType {
                 .post
         case .login:
                 .post
+        case .postQuestion:
+                .post
+            
         case .refresh:
                 .get
         case .fetchProfile:
@@ -42,7 +45,7 @@ extension Router: TargetType {
                 .get
         case .editProfile:
                 .put
-        
+       
         }
     }
     
@@ -60,6 +63,8 @@ extension Router: TargetType {
             return  "/users/me/profile"
         case .withdraw:
             return "/users/withdraw"
+        case .postQuestion:
+            return "/posts"
         }
     }
 
@@ -71,23 +76,23 @@ extension Router: TargetType {
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-        case .fetchProfile:
+        case .fetchProfile, .postQuestion:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-//                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
         case .editProfile, .withdraw:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-    //            HTTPHeaderName.contentType.rawValue : "multipart/form-data",
+                //            HTTPHeaderName.contentType.rawValue : "multipart/form-data",
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
         case .refresh:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.refresh.rawValue : UserDefaultManager.shared.refreshToken,
-//                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+                //                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
         }
@@ -117,9 +122,13 @@ extension Router: TargetType {
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
        
+        case .postQuestion(let query):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(query)
             
         default: return nil
         }
     }
     
 }
+

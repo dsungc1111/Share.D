@@ -47,11 +47,8 @@ final class ProductVC: BaseVC {
         
         output.searchList
             .bind(to: productView.collectionView.rx.items(cellIdentifier: ProductCollectionViewCell.identifier, cellType: ProductCollectionViewCell.self)) { (row, element, cell) in
-                
-//                let vc = ProductDetailVC()
-//                vc.product = element
+   
                 cell.configureCell(element: element)
-//                self?.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
         
@@ -60,6 +57,7 @@ final class ProductVC: BaseVC {
         a.bind(with: self) { owner, result in
             let vc = ProductDetailVC()
             vc.product = result
+            vc.category = owner.searchItem
             owner.navigationController?.pushViewController(vc, animated: true)
         }
         .disposed(by: disposeBag)

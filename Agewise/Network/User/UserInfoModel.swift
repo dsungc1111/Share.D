@@ -7,6 +7,7 @@
 
 import Foundation
 
+//MARK: - 받아오는 모델
 struct JoinModel: Decodable {
     let user_id: String
     let email: String
@@ -39,7 +40,53 @@ struct ProfileModel: Decodable {
     }
 }
 
+struct Creator: Decodable {
+    let userId: String
+    let nick: String
+    let profileImage: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case nick
+        case profileImage
+    }
+}
+struct PostModelToWrite: Decodable {
+    let postID: String
+    let productId: String
+    let title: String
+    let content: String
+    let content1: String
+    let content2: String
+    let content3: String
+    let createdAt: String
+    let creator: Creator
+    let files: [String]
+    let likes: [String]
+    let likes2: [String]
+    let hashTags: [String]
+    let comments: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case postID = "post_id"
+        case productId = "product_id"
+        case title
+        case content
+        case content1
+        case content2
+        case content3
+        case createdAt
+        case creator
+        case files
+        case likes
+        case likes2
+        case hashTags
+        case comments
+    }
+}
 
+
+//MARK: - 요청 쿼리
 struct LoginQuery: Encodable {
     let email: String
     let password: String
@@ -51,4 +98,13 @@ struct JoinQuery: Encodable {
 }
 struct EmailValidationQuery: Encodable {
     let email: String
+}
+struct PostQuery: Encodable {
+    let title: String
+    let content: String
+    let content1: String
+    let content2: String
+    let content3: String
+    let product_id: String
+    let files: [String]
 }
