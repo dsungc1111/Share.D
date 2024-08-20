@@ -14,6 +14,8 @@ class BaseViewModel {
         
         switch statusCode {
         case 403:
+//            NetworkManager.shared.refreshToken()
+            
             return  "접근권한이 없습니다."
         case 419:
             NetworkManager.shared.refreshToken()

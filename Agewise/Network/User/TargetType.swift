@@ -22,10 +22,19 @@ extension TargetType {
     
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL()
-        var request = try URLRequest(url: url.appendingPathComponent(path), method: method)
-       
+        
+        var component = URLComponents(url: url.appendingPathComponent(path), resolvingAgainstBaseURL: false)
+        if let queryItems = queryItems {
+            component?.queryItems = queryItems
+        }
+        guard let finalUrl = component?.url else {
+            throw URLError(.badURL)
+        }
+        
+        var request = try URLRequest(url: finalUrl, method: method)
         request.allHTTPHeaderFields = header
         request.httpBody = body
+        
         
         return request
     }

@@ -55,26 +55,26 @@ struct PostModelToWrite: Decodable {
     let postID: String
     let productId: String
     let title: String
+    let price: Int?
     let content: String
     let content1: String
     let content2: String
-    let content3: String
     let createdAt: String
     let creator: Creator
-    let files: [String]
-    let likes: [String]
-    let likes2: [String]
-    let hashTags: [String]
-    let comments: [String]
+    let files: [String]?
+    let likes: [String]?
+    let likes2: [String]?
+    let hashTags: [String]?
+    let comments: [String]?
     
     enum CodingKeys: String, CodingKey {
         case postID = "post_id"
         case productId = "product_id"
+        case price
         case title
         case content
         case content1
         case content2
-        case content3
         case createdAt
         case creator
         case files
@@ -84,6 +84,11 @@ struct PostModelToWrite: Decodable {
         case comments
     }
 }
+struct PostModelToView: Decodable {
+    let data: [PostModelToWrite]
+}
+
+
 
 
 //MARK: - 요청 쿼리
@@ -101,10 +106,17 @@ struct EmailValidationQuery: Encodable {
 }
 struct PostQuery: Encodable {
     let title: String
+    let price: Int
     let content: String
     let content1: String
     let content2: String
-    let content3: String
     let product_id: String
     let files: [String]
+}
+struct GetPostQuery: Encodable {
+    
+    let next: String
+    let limit: String
+    let product_id: String
+    
 }

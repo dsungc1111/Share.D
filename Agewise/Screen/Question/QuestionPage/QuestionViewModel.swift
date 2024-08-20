@@ -49,7 +49,7 @@ final class QuestionViewModel: BaseViewModel {
                 let text = result.1
                 let category = result.2
                 
-                let save = PostQuery(title: product.title, content: text, content1: product.lprice, content2: product.mallName, content3: product.productId, product_id: category + "선물용" , files: [product.image])
+                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: category + "선물용" , files: [product.image])
                 
                 NetworkManager.shared.writePost(query: save) { result in
                     

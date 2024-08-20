@@ -109,6 +109,8 @@ final class SignUpViewModel: BaseViewModel {
             message = title
         case 400:
             message = "필수값을 채워주세요!"
+        case 402:
+            message = "닉네임 공백 불가"
         case 409:
             message = "이미 가입한 유저에요!"
         default:

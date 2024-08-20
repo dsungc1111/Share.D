@@ -26,15 +26,9 @@ final class NetworkManager {
             
             AF.request(request).responseDecodable(of: JoinModel.self) { response in
                 
-                switch response.result {
-                case .success(let value):
-                    print(value)
-                    guard let responseStatusCode = response.response?.statusCode else { return }
-                    completionHandler(responseStatusCode)
-                case .failure( _):
-                    guard let responseStatusCode = response.response?.statusCode else { return }
-                    completionHandler(responseStatusCode)
-                }
+                guard let responseStatusCode = response.response?.statusCode else { return }
+                completionHandler(responseStatusCode)
+                print(responseStatusCode)
             }
         } catch {
             completionHandler(500)
@@ -53,13 +47,15 @@ final class NetworkManager {
                 
                 guard let responseStatusCode = response.response?.statusCode else { return }
                 
-                switch response.result {
-                case .success(let value):
-                    print(value)
-                    completionHandler(responseStatusCode)
-                case .failure(_):
-                    completionHandler(responseStatusCode)
-                }
+                completionHandler(responseStatusCode)
+                
+//                switch response.result {
+//                case .success(let value):
+//                    print(value)
+//                    completionHandler(responseStatusCode)
+//                case .failure(_):
+//                    completionHandler(responseStatusCode)
+//                }
             }
         } catch {
             completionHandler(500)
@@ -149,8 +145,11 @@ final class NetworkManager {
                 }
                 switch response.result {
                 case .success(let value):
+           
                     UserDefaultManager.shared.accessToken = value.accessToken
+                    
                     self.fetchProfile()
+                    
                 case .failure(let error):
                     print(error)
                 }
@@ -179,6 +178,11 @@ final class NetworkManager {
                 } else if responseCode == 401 {
                     print("인증할 수 없는 토큰입니다.")
                 } else if responseCode == 403 {
+                    
+                    for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                        UserDefaults.standard.removeObject(forKey: key.description)
+                    }
+                   
                     print("접근권한 XX")
                 } else {
                     print("ok")
@@ -228,6 +232,34 @@ final class NetworkManager {
         } catch {
             print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
         }
+    }
+    
+    //MARK: - 포스트 조회
+    
+    func getPost(query: GetPostQuery) {
+        
+           do {
+               let request = try Router.getPost(query: query).asURLRequest()
+               print("query = ", query)
+               AF.request(request).responseDecodable(of: PostModelToView.self) { response in
+                   
+                   guard let responseCode = response.response?.statusCode else { return }
+                   
+                   print("포스트 조회 = ", responseCode)
+                   
+                   switch response.result {
+                   case .success(let value):
+                       print(value)
+                       print("============= count = ", value.data.count, "======================")
+                   case .failure(let error):
+                       print(error)
+                   }
+                   
+               }
+           } catch {
+               print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
+
+           }
     }
 }
 

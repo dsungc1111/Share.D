@@ -60,7 +60,6 @@ final class LoginVC: BaseVC {
                 if result == SuccessKeyword.login.rawValue {
                     self.resetViewWithoutNavigation(vc: TabBarController())
                 } else {
-                    print("여기임?")
                     owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }
             }

@@ -18,6 +18,7 @@ enum Router {
     case withdraw
     case editProfile
     case postQuestion(query: PostQuery)
+    case getPost(query: GetPostQuery)
 }
 
 extension Router: TargetType {
@@ -36,6 +37,7 @@ extension Router: TargetType {
                 .post
         case .postQuestion:
                 .post
+        
             
         case .refresh:
                 .get
@@ -43,9 +45,12 @@ extension Router: TargetType {
                 .get
         case .withdraw:
                 .get
+        case .getPost:
+                .get
+            
         case .editProfile:
                 .put
-       
+            
         }
     }
     
@@ -65,6 +70,8 @@ extension Router: TargetType {
             return "/users/withdraw"
         case .postQuestion:
             return "/posts"
+        case .getPost:
+            return "/posts"
         }
     }
 
@@ -82,17 +89,15 @@ extension Router: TargetType {
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-        case .editProfile, .withdraw:
+        case .editProfile, .withdraw, .getPost:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-                //            HTTPHeaderName.contentType.rawValue : "multipart/form-data",
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
         case .refresh:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.refresh.rawValue : UserDefaultManager.shared.refreshToken,
-                //                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
         }
@@ -103,7 +108,20 @@ extension Router: TargetType {
     }
     
     var queryItems: [URLQueryItem]? {
-        return nil
+        
+        switch self {
+        case .getPost(let query):
+            
+            let param = [
+                URLQueryItem(name: "next", value: query.next),
+                URLQueryItem(name: "limit", value: query.limit),
+                URLQueryItem(name: "product_id", value: query.product_id)
+            ]
+            return param
+        default: return nil
+        }
+        
+        
     }
     
     var body: Data? {

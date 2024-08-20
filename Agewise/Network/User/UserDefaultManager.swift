@@ -9,9 +9,9 @@ import Foundation
 
 final class UserDefaultManager {
 
-    private enum UserDaefaultKey: String {
+    private enum UserDefaultKey: String {
         case access
-        case refrech
+        case refresh
     }
     
     static let shared = UserDefaultManager()
@@ -20,18 +20,18 @@ final class UserDefaultManager {
     
     var accessToken: String {
         get {
-            UserDefaults.standard.string(forKey: UserDaefaultKey.access.rawValue) ?? ""
+            UserDefaults.standard.string(forKey: UserDefaultKey.access.rawValue) ?? ""
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: UserDaefaultKey.access.rawValue)
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultKey.access.rawValue)
         }
     }
     var refreshToken: String {
         get {
-            UserDefaults.standard.string(forKey: UserDaefaultKey.refrech.rawValue) ?? ""
+            UserDefaults.standard.string(forKey: UserDefaultKey.refresh.rawValue) ?? ""
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: UserDaefaultKey.refrech.rawValue)
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultKey.refresh.rawValue)
         }
     }
 }
