@@ -178,11 +178,8 @@ final class NetworkManager {
                 } else if responseCode == 401 {
                     print("인증할 수 없는 토큰입니다.")
                 } else if responseCode == 403 {
-                    
-                    for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                        UserDefaults.standard.removeObject(forKey: key.description)
-                    }
-                   
+                    let onboardingVC = OnBoardingVC()
+                    onboardingVC.expiredToken(title: "로그인 만료")
                     print("접근권한 XX")
                 } else {
                     print("ok")
@@ -236,31 +233,40 @@ final class NetworkManager {
     
     //MARK: - 포스트 조회
     
-    func getPost(query: GetPostQuery) {
-        
-           do {
-               let request = try Router.getPost(query: query).asURLRequest()
-               print("query = ", query)
-               AF.request(request).responseDecodable(of: PostModelToView.self) { response in
-                   
-                   guard let responseCode = response.response?.statusCode else { return }
-                   
-                   print("포스트 조회 = ", responseCode)
-                   
-                   switch response.result {
-                   case .success(let value):
-                       print(value)
-                       print("============= count = ", value.data.count, "======================")
-                   case .failure(let error):
-                       print(error)
-                   }
-                   
-               }
-           } catch {
-               print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
-
-           }
+    func getPost(query: GetPostQuery) -> Single<Result<PostModelToView, NetworkError>> {
+        return Single.create { observer -> Disposable in
+            do {
+                let request = try Router.getPost(query: query).asURLRequest()
+                print("query = ", query)
+                
+                AF.request(request).responseDecodable(of: PostModelToView.self) { response in
+                    guard let responseCode = response.response?.statusCode else {
+                        observer(.failure(NetworkError.invalidURL))
+                        return
+                    }
+                    
+                    print("포스트 조회 = ", responseCode)
+                    
+                    switch response.result {
+                    case .success(let value):
+                        print("============= count = ", value.data.count, "======================")
+                        print(value)
+                        observer(.success(.success(value)))
+                        
+                    case .failure(let error):
+                        print(error)
+                        observer(.success(.failure(.unknownResponse)))
+                    }
+                }
+            } catch {
+                print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
+                observer(.failure(NetworkError.unknownResponse))
+            }
+            
+            return Disposables.create()
+        }
     }
+
 }
 
 //MARK: - 상품 api 활용

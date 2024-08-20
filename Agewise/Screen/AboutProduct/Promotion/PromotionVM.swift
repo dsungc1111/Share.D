@@ -16,7 +16,7 @@ final class PromotionViewModel {
         case graduation = "20대"
         case developer = "30대"
         case parent = "40대"
-        case l = "50대"
+        case parent50 = "50대"
         case grand = "60대+"
     }
     
