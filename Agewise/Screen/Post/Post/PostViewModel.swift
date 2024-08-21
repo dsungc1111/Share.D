@@ -16,7 +16,7 @@ enum SuccessKeyword: String {
     case accessError =  "접근권한이 없습니다."
 }
 
-final class QuestionViewModel: BaseViewModel {
+final class PostViewModel: BaseViewModel {
     
     
     struct Input {

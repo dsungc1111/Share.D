@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class QuestionListCollectionViewCell : BaseCollectionViewCell {
+final class PostListCollectionViewCell : BaseCollectionViewCell {
 
     
     let imageView = {
@@ -16,7 +16,6 @@ final class QuestionListCollectionViewCell : BaseCollectionViewCell {
         view.contentMode = .scaleAspectFill
         return view
     }()
-    // 상품제목
     let titleLabel = {
         let label = UILabel()
         label.text = "예비"

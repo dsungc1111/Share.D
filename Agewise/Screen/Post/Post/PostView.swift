@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class QuestionView: BaseView {
+final class PostView: BaseView {
     
     let imageContainer = {
         let container = UIImageView()

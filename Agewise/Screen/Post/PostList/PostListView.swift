@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class QuestionListView: BaseView {
+final class PostListView: BaseView {
     
     
     let categoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: categoryLayout())
@@ -43,7 +43,7 @@ final class QuestionListView: BaseView {
         categoryCollectionView.register(ListCategoryCollectionViewCell.self, forCellWithReuseIdentifier: ListCategoryCollectionViewCell.identifier)
         categoryCollectionView.showsHorizontalScrollIndicator = false
         
-        resultCollectionView.register(QuestionListCollectionViewCell.self, forCellWithReuseIdentifier: QuestionListCollectionViewCell.identifier)
+        resultCollectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
         resultCollectionView.showsVerticalScrollIndicator = false
     }
     

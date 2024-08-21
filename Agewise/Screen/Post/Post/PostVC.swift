@@ -10,23 +10,23 @@ import RxSwift
 import RxCocoa
 import Toast
 
-final class QuestionVC: BaseVC {
+final class PostVC: BaseVC {
 
     
     var productInfo: ProductDetail?
     
     var category = ""
     
-    private let questionView = QuestionView()
+    private let postView = PostView()
     
-    private let questionViewModel = QuestionViewModel()
+    private let postViewModel = PostViewModel()
     
     private let disposeBag = DisposeBag()
     
     private var showToast: (() -> Void)?
     
     override func loadView() {
-        view = questionView
+        view = postView
     }
     
     override func viewDidLoad() {
@@ -42,18 +42,18 @@ final class QuestionVC: BaseVC {
         
         guard let product = productInfo else { return }
         
-        questionView.configureView(product: product)
+        postView.configureView(product: product)
         
         
         
-        let input = QuestionViewModel.Input(saveTap: questionView.saveButton.rx.tap, question: questionView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
+        let input = PostViewModel.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
         
-        let output = questionViewModel.transform(input: input)
+        let output = postViewModel.transform(input: input)
         
         output.result
             .bind(with: self) { owner, result in
-                owner.questionView.saveButton.isEnabled = result
-                owner.questionView.saveButton.backgroundColor = result ? .black : .lightGray
+                owner.postView.saveButton.isEnabled = result
+                owner.postView.saveButton.backgroundColor = result ? .black : .lightGray
             }
             .disposed(by: disposeBag)
         

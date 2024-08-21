@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class QuestionListViewModel: BaseViewModel {
+final class PostListViewModel: BaseViewModel {
     
     enum AgeTitle: String, CaseIterable {
         case teen = "10대"
@@ -35,44 +35,33 @@ final class QuestionListViewModel: BaseViewModel {
     private let disposeBag = DisposeBag()
     private var isLastPage = false
     private var nextCursor = BehaviorRelay(value: "")
+    private let lastPage = PublishSubject<String>()
+    
     override init() {
         NetworkManager.shared.fetchProfile()
     }
     
     func transform(input: Input) -> Output {
         
-        let list = PublishSubject<[PostModelToWrite]>()
-        var data: [PostModelToWrite] = []
         let ageList = PublishSubject<[String]>()
-        let lastPage = PublishSubject<String>()
+        let list = PublishSubject<[PostModelToWrite]>()
+        
         let age = AgeTitle.allCases.map { $0.rawValue }
-        // 쿼리 초기세팅
+        var data: [PostModelToWrite] = []
         var query = GetPostQuery(next: "", limit: "6", product_id: "10대선물용")
-        
-        
         
         input.trigger
             .flatMap { NetworkManager.shared.getPost(query: query) }
             .subscribe(with: self) { owner, result in
-                
                 switch result {
                 case .success(let value):
                     data.append(contentsOf: value.data)
                     list.onNext(data)
-                    
-                    if value.next_cursor != "0" {
-                        owner.nextCursor.accept(value.next_cursor)
-                        print("페이지네이션했을 때 Nextcursor2 = ", owner.nextCursor.value)
-                        owner.isLastPage = false
-                    } else {
-                        owner.isLastPage = true
-                        lastPage.onNext("마지막 페이지입니다.")
-                    }
+                    owner.nextCursorChange(cursor: value.next_cursor)
                 case .failure(_):
                     print("실패")
                 }
                 ageList.onNext(age)
-                
             }
             .disposed(by: disposeBag)
         
@@ -90,15 +79,7 @@ final class QuestionListViewModel: BaseViewModel {
                 case .success(let value):
                     data.append(contentsOf: value.data)
                     list.onNext(data)
-                    print("====================", data, "====================")
-                    if value.next_cursor != "0" {
-                        owner.nextCursor.accept(value.next_cursor)
-                        print("첫 게시했을 때 Nextcursor = ", owner.nextCursor.value)
-                        owner.isLastPage = false
-                    } else {
-                        owner.isLastPage = true
-                        lastPage.onNext("마지막 페이지입니다.")
-                    }
+                    owner.nextCursorChange(cursor: value.next_cursor)
                 case .failure(_):
                     print("실패")
                 }
@@ -116,27 +97,33 @@ final class QuestionListViewModel: BaseViewModel {
                 NetworkManager.shared.getPost(query: value)
             }
             .subscribe(with: self) { owner, result in
-                print("페이지네이션했을 때 Nextcursor1 = ", owner.nextCursor.value)
                 switch result {
                 case .success(let value):
-                    
                     data.append(contentsOf: value.data)
                     list.onNext(data)
-                    
-                    if value.next_cursor != "0" {
-                        owner.nextCursor.accept(value.next_cursor)
-                        print("페이지네이션했을 때 Nextcursor2 = ", owner.nextCursor.value)
-                        owner.isLastPage = false
-                    } else {
-                        owner.isLastPage = true
-                        lastPage.onNext("마지막 페이지입니다.")
-                    }
+                    owner.nextCursorChange(cursor: value.next_cursor)
                 case .failure(_):
                     print("실패")
                 }
             }
             .disposed(by: disposeBag)
-     
+        
         return Output(productList: list, ageList: ageList, lastPage: lastPage)
     }
+}
+
+extension PostListViewModel {
+    
+    func nextCursorChange(cursor: String) {
+        
+        if cursor != "0" {
+            nextCursor.accept(cursor)
+            isLastPage = false
+        } else {
+            isLastPage = true
+            lastPage.onNext("마지막 페이지입니다.")
+        }
+        
+    }
+    
 }

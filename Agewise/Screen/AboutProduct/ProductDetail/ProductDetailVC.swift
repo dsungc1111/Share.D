@@ -33,7 +33,7 @@ final class ProductDetailVC: BaseVC {
         
         rightBarButton.rx.tap
             .bind(with: self) { owner, _ in
-                let vc = QuestionVC()
+                let vc = PostVC()
                 vc.productInfo = owner.product
                 vc.category = owner.category
                 owner.navigationController?.pushViewController(vc, animated: true)
