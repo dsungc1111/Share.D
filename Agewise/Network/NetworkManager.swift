@@ -247,6 +247,10 @@ final class NetworkManager {
                     
                     print("포스트 조회 = ", responseCode)
                     
+                    if responseCode == 419 {
+                        self.refreshToken()
+                    }
+                    
                     switch response.result {
                     case .success(let value):
                         print("============= count = ", value.data.count, "======================")

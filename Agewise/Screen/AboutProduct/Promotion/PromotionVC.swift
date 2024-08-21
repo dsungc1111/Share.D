@@ -8,7 +8,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import Kingfisher
 
 
 final class PromotionVC: BaseVC {
@@ -26,7 +25,6 @@ final class PromotionVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.shared.fetchProfile()
     }
     
     override func bind() {
@@ -37,32 +35,33 @@ final class PromotionVC: BaseVC {
         let output = promotionViewModel.transform(input: input)
         
         output.categoryTap
-            .bind(with: self) { owner, result in
+            .bind(with: self) { owner, category in
                 let vc = ProductVC()
-                vc.searchItem = result
+                vc.searchItem = category
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
         
         output.trendTap
-            .bind(with: self) { owner, result in
+            .bind(with: self) { owner, popular in
                 let vc = ProductVC()
-                vc.searchItem = result
+                vc.searchItem = popular
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
         
         
+        //MARK: - 광고 배너
         output.adList
             .bind(to: promotionView.adCollectionView.rx.items(cellIdentifier: AdCollectionViewCell.identifier, cellType: AdCollectionViewCell.self)) {
                 (item, element, cell) in
                 
-                let image = URL(string: element.image)
-                cell.productImage.kf.setImage(with: image)
+                cell.configureCell(element: element)
                 
             }
             .disposed(by: disposeBag)
         
+        //MARK: - 연령별 버튼
         output.ageList
             .bind(to: promotionView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (item, element, cell) in
                 
@@ -70,7 +69,7 @@ final class PromotionVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        
+        //MARK: - 추천
         output.presentList
             .bind(to: promotionView.trendCollectionView.rx.items(cellIdentifier: TrendCollectionViewCell.identifier, cellType: TrendCollectionViewCell.self)) { (row, element, cell) in
                 

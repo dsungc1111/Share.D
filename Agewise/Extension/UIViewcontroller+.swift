@@ -20,6 +20,7 @@ extension UIViewController {
         sceneDelegate?.window?.rootViewController = navigationController
         sceneDelegate?.window?.makeKeyAndVisible()
     }
+    
     func resetViewWithoutNavigation(vc: UIViewController) {
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let sceneDelegate = windowScene?.delegate as? SceneDelegate
@@ -29,6 +30,8 @@ extension UIViewController {
     }
     
     func expiredToken(title: String) {
+        
+        print("에어로 로그인 화면으로 돌아감.")
         
         let alert = UIAlertController(title: title, message: "첫 화면으로 돌아갑니다.", preferredStyle: .alert)
         

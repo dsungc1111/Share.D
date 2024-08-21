@@ -35,7 +35,7 @@ final class ProductVC: BaseVC {
         productView.collectionView.rx.prefetchItems
             .bind(with: self, onNext: { owner, indexPaths in
                 guard let lastIndexPath = indexPaths.last else { return }
-                if lastIndexPath.row >= self.productView.collectionView.numberOfItems(inSection: 0) - 1 {
+                if lastIndexPath.row >= owner.productView.collectionView.numberOfItems(inSection: 0) - 1 {
                     loadMoreTrigger.onNext(())
                 }
             })

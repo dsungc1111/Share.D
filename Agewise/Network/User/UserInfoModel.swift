@@ -86,6 +86,7 @@ struct PostModelToWrite: Decodable {
 }
 struct PostModelToView: Decodable {
     let data: [PostModelToWrite]
+    let next_cursor: String
 }
 
 
@@ -117,6 +118,6 @@ struct GetPostQuery: Encodable {
     
     let next: String
     let limit: String
-    let product_id: String
+    var product_id: String
     
 }

@@ -62,6 +62,9 @@ final class QuestionVC: BaseVC {
             .bind(with: self) { owner, result in
                 if result == SuccessKeyword.post.rawValue {
                    print("업로드 성공")
+                    let vc = TabBarController()
+                    self.resetViewWithoutNavigation(vc: vc)
+                    vc.selectedIndex = 0
                 } else if result == SuccessKeyword.accessError.rawValue {
                     self.expiredToken(title: "로그인 화면으로 돌아감.")
                 } else {

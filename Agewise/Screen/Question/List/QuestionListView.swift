@@ -30,7 +30,7 @@ final class QuestionListView: BaseView {
         let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: width, height: 100)
+        layout.itemSize = CGSize(width: width, height: 150)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)
@@ -41,8 +41,10 @@ final class QuestionListView: BaseView {
         super.init(frame: frame)
         
         categoryCollectionView.register(ListCategoryCollectionViewCell.self, forCellWithReuseIdentifier: ListCategoryCollectionViewCell.identifier)
+        categoryCollectionView.showsHorizontalScrollIndicator = false
         
         resultCollectionView.register(QuestionListCollectionViewCell.self, forCellWithReuseIdentifier: QuestionListCollectionViewCell.identifier)
+        resultCollectionView.showsVerticalScrollIndicator = false
     }
     
     @available(*, unavailable)
@@ -53,7 +55,7 @@ final class QuestionListView: BaseView {
     override func configureLayout() {
         addSubview(categoryCollectionView)
         addSubview(resultCollectionView)
-        
+       
         categoryCollectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(70)
@@ -61,7 +63,9 @@ final class QuestionListView: BaseView {
         categoryCollectionView.backgroundColor = .systemPink
         resultCollectionView.snp.makeConstraints { make in
             make.top.equalTo(categoryCollectionView.snp.bottom)
-            make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
+       
     }
 }

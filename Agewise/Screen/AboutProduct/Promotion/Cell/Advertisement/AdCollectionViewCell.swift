@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class AdCollectionViewCell: BaseCollectionViewCell {
     
@@ -25,6 +26,11 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
         productImage.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
+    }
+    
+    func configureCell(element: ProductDetail) {
+        let image = URL(string: element.image)
+        productImage.kf.setImage(with: image)
     }
     
 }

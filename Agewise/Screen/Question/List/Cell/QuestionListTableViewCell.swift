@@ -31,12 +31,18 @@ final class QuestionListCollectionViewCell : BaseCollectionViewCell {
         label.font = .systemFont(ofSize: 11)
         return label
     }()
+    let contentLabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 11)
+        return label
+    }()
    
     
     override func configureHierarchy() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(priceLabel)
+        contentView.addSubview(contentLabel)
     }
     override func configureLayout() {
         imageView.snp.makeConstraints { make in
@@ -53,6 +59,19 @@ final class QuestionListCollectionViewCell : BaseCollectionViewCell {
             make.top.equalTo(titleLabel.snp.bottom).offset(15)
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
         }
+        contentLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.leading.equalTo(imageView.snp.trailing).offset(10)
+        }
     }
 
+    func configureCell(element: PostModelToWrite) {
+        priceLabel.text = (element.price?.formatted() ?? "0") + " 원"
+        titleLabel.text = element.title.removeHtmlTag
+        if let image = element.files?.first {
+            let imageUrl = URL(string: image)
+            imageView.kf.setImage(with: imageUrl)
+        }
+        contentLabel.text = element.content
+    }
 }

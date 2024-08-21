@@ -30,33 +30,45 @@ final class QuestionListVC: BaseVC {
     }
     override func bind() {
         
-        let input = QuestionListViewModel.Input(trigger: Observable.just(()), categoryTap: questionListView.categoryCollectionView.rx.modelSelected(String.self))
+        let loadMoreTrigger = PublishSubject<Void>()
+        
+        questionListView.resultCollectionView.rx.prefetchItems
+            .bind(with: self, onNext: { owner, indexPaths in
+                guard let lastIndexPath = indexPaths.last else { return }
+                
+                if lastIndexPath.item >= owner.questionListView.resultCollectionView.numberOfItems(inSection: 0) - 1 {
+                    print("이건됨?")
+                    loadMoreTrigger.onNext(())
+                }
+            })
+               .disposed(by: disposeBag)
+        
+        
+        let input = QuestionListViewModel.Input(trigger: Observable.just(()), categoryTap: questionListView.categoryCollectionView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
         
         let output = questionListViewModel.transform(input: input)
         
         
         output.ageList
-            .bind(to: questionListView.categoryCollectionView.rx.items(cellIdentifier: ListCategoryCollectionViewCell.identifier, cellType: ListCategoryCollectionViewCell.self)) { row, element, cell in
-                print(element)
+            .bind(to: questionListView.categoryCollectionView.rx.items(cellIdentifier: ListCategoryCollectionViewCell.identifier, cellType: ListCategoryCollectionViewCell.self)) { item, element, cell in
+                
                 cell.categoryButton.setTitle(element, for: .normal)
             }
             .disposed(by: disposeBag)
         
-        output.list
-            .bind(to: questionListView.resultCollectionView.rx.items(cellIdentifier: QuestionListCollectionViewCell.identifier, cellType: QuestionListCollectionViewCell.self)) { (row, element, cell) in
+        output.productList
+            .bind(to: questionListView.resultCollectionView.rx.items(cellIdentifier: QuestionListCollectionViewCell.identifier, cellType: QuestionListCollectionViewCell.self)) { (item, element, cell) in
                 
-                cell.priceLabel.text = (element.price?.formatted() ?? "0") + " 원"
-                cell.titleLabel.text = element.title.removeHtmlTag
-                if let image = element.files?.first {
-                    let imageUrl = URL(string: image)
-                    cell.imageView.kf.setImage(with: imageUrl)
-                }
+                cell.configureCell(element: element)
                 
             }
             .disposed(by: disposeBag)
         
-        
-    
+        output.lastPage
+            .bind(with: self) { owner, result in
+                print(result)
+            }
+            .disposed(by: disposeBag)
     }
     
     
