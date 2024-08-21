@@ -57,7 +57,7 @@ final class PostListViewModel: BaseViewModel {
                 case .success(let value):
                     data.append(contentsOf: value.data)
                     list.onNext(data)
-                    owner.nextCursorChange(cursor: value.next_cursor)
+                    owner.nextCursorChange(cursor: value.next_cursor ?? "")
                 case .failure(_):
                     print("실패")
                 }
@@ -79,7 +79,7 @@ final class PostListViewModel: BaseViewModel {
                 case .success(let value):
                     data.append(contentsOf: value.data)
                     list.onNext(data)
-                    owner.nextCursorChange(cursor: value.next_cursor)
+                    owner.nextCursorChange(cursor: value.next_cursor ?? "")
                 case .failure(_):
                     print("실패")
                 }
@@ -114,7 +114,8 @@ final class PostListViewModel: BaseViewModel {
 
 extension PostListViewModel {
     
-    func nextCursorChange(cursor: String) {
+    func nextCursorChange(cursor: String?) {
+        guard let cursor = cursor else { return }
         
         if cursor != "0" {
             nextCursor.accept(cursor)

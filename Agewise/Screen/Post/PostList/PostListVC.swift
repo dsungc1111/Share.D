@@ -54,7 +54,7 @@ final class PostListVC: BaseVC {
         postListView.resultCollectionView.rx.modelSelected(PostModelToWrite.self)
             .bind(with: self) { owner, result in
                 let vc = PostDetailVC()
-                vc.element = result
+                vc.element = result.postID
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

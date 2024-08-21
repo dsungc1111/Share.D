@@ -65,6 +65,8 @@
 		8B3231DE2C754A650095DF0B /* ListCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231DD2C754A650095DF0B /* ListCategoryCollectionViewCell.swift */; };
 		8B93B3532C76139600A68DB5 /* PostDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3522C76139600A68DB5 /* PostDetailVC.swift */; };
 		8B93B3552C7616B400A68DB5 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3542C7616B400A68DB5 /* PostDetailView.swift */; };
+		8B93B3572C76A04E00A68DB5 /* DetailPostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3562C76A04E00A68DB5 /* DetailPostVM.swift */; };
+		8B93B3592C76B14A00A68DB5 /* ReuseDateformatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3582C76B14A00A68DB5 /* ReuseDateformatter.swift */; };
 		8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */; };
 		8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */; };
 		8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */; };
@@ -123,6 +125,8 @@
 		8B3231DD2C754A650095DF0B /* ListCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B93B3522C76139600A68DB5 /* PostDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVC.swift; sourceTree = "<group>"; };
 		8B93B3542C7616B400A68DB5 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
+		8B93B3562C76A04E00A68DB5 /* DetailPostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPostVM.swift; sourceTree = "<group>"; };
+		8B93B3582C76B14A00A68DB5 /* ReuseDateformatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReuseDateformatter.swift; sourceTree = "<group>"; };
 		8BC986372C6C0BAA00B69112 /* Agewise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agewise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -410,6 +414,7 @@
 			children = (
 				8B93B3522C76139600A68DB5 /* PostDetailVC.swift */,
 				8B93B3542C7616B400A68DB5 /* PostDetailView.swift */,
+				8B93B3562C76A04E00A68DB5 /* DetailPostVM.swift */,
 			);
 			path = PostDetail;
 			sourceTree = "<group>";
@@ -444,6 +449,7 @@
 				8B3231092C6C11AB0095DF0B /* Screen */,
 				8BC986482C6C0BAC00B69112 /* Info.plist */,
 				8B3231062C6C0CFF0095DF0B /* APIKey.swift */,
+				8B93B3582C76B14A00A68DB5 /* ReuseDateformatter.swift */,
 			);
 			path = Agewise;
 			sourceTree = "<group>";
@@ -568,6 +574,7 @@
 				8B3231DE2C754A650095DF0B /* ListCategoryCollectionViewCell.swift in Sources */,
 				8B32312A2C6C44910095DF0B /* LoginViewModel.swift in Sources */,
 				8B3231D32C73272E0095DF0B /* PostVC.swift in Sources */,
+				8B93B3592C76B14A00A68DB5 /* ReuseDateformatter.swift in Sources */,
 				8B3231D52C73277F0095DF0B /* PostView.swift in Sources */,
 				8B3231792C6C9AE70095DF0B /* PromotionVC.swift in Sources */,
 				8B3231282C6C36660095DF0B /* SignUpView.swift in Sources */,
@@ -577,6 +584,7 @@
 				8B3231AA2C7090F60095DF0B /* String+.swift in Sources */,
 				8B32310F2C6C12B90095DF0B /* BaseView.swift in Sources */,
 				8B32318E2C6E297A0095DF0B /* ProductModel.swift in Sources */,
+				8B93B3572C76A04E00A68DB5 /* DetailPostVM.swift in Sources */,
 				8B32310C2C6C12980095DF0B /* OnBoardingView.swift in Sources */,
 				8B3231912C6E2BCE0095DF0B /* TrendCollectionViewCell.swift in Sources */,
 				8B3231A02C700B760095DF0B /* ProductVC.swift in Sources */,

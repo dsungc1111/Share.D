@@ -250,23 +250,47 @@ final class NetworkManager {
                     if responseCode == 419 {
                         self.refreshToken()
                     }
-                    
                     switch response.result {
                     case .success(let value):
-                        print("============= count = ", value.data.count, "======================")
-                        print(value)
                         observer(.success(.success(value)))
-                        
                     case .failure(let error):
-                        print(error)
                         observer(.success(.failure(.unknownResponse)))
                     }
                 }
             } catch {
-                print("URLRequestConvertible에서 asURLRequest로 요청 만드는 거 실패", error)
                 observer(.failure(NetworkError.unknownResponse))
             }
-            
+            return Disposables.create()
+        }
+    }
+    
+    func detailPost(query: String) -> Single<Result<PostModelToWrite, NetworkError>> {
+        return Single.create { observer -> Disposable in
+            do {
+                let request = try Router.detailPost(query: query).asURLRequest()
+                print("query = ", query)
+                
+                AF.request(request).responseDecodable(of: PostModelToWrite.self) { response in
+                    guard let responseCode = response.response?.statusCode else {
+                        observer(.failure(NetworkError.invalidURL))
+                        return
+                    }
+                    
+                    print("포스트 조회 = ", responseCode)
+                    
+                    if responseCode == 419 {
+                        self.refreshToken()
+                    }
+                    switch response.result {
+                    case .success(let value):
+                        observer(.success(.success(value)))
+                    case .failure(let error):
+                        observer(.success(.failure(.unknownResponse)))
+                    }
+                }
+            } catch {
+                observer(.failure(NetworkError.unknownResponse))
+            }
             return Disposables.create()
         }
     }

@@ -86,7 +86,7 @@ struct PostModelToWrite: Decodable {
 }
 struct PostModelToView: Decodable {
     let data: [PostModelToWrite]
-    let next_cursor: String
+    let next_cursor: String?
 }
 
 
