@@ -37,9 +37,6 @@ final class PostListViewModel: BaseViewModel {
     private var nextCursor = BehaviorRelay(value: "")
     private let lastPage = PublishSubject<String>()
     
-    override init() {
-        NetworkManager.shared.fetchProfile()
-    }
     
     func transform(input: Input) -> Output {
         

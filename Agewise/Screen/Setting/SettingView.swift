@@ -16,6 +16,11 @@ final class SettingView: BaseView {
         btn.setTitle("탈퇴하기", for: .normal)
         return btn
     }()
+    let logoutButton = {
+        let btn = UIButton()
+        btn.setTitle("로그아웃", for: .normal)
+        return btn
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,12 +34,20 @@ final class SettingView: BaseView {
     
     override func configureLayout() {
         addSubview(resetbutton)
+        addSubview(logoutButton)
         
         resetbutton.snp.makeConstraints { make in
             make.center.equalTo(safeAreaLayoutGuide)
             make.size.equalTo(100)
         }
         resetbutton.backgroundColor = .systemCyan
+        
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(resetbutton.snp.bottom).offset(10)
+            make.centerX.equalTo(safeAreaLayoutGuide)
+            make.size.equalTo(100)
+        }
+        logoutButton.backgroundColor = .systemRed
     }
     
 }

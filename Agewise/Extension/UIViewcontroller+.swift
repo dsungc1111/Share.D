@@ -29,14 +29,18 @@ extension UIViewController {
         sceneDelegate?.window?.makeKeyAndVisible()
     }
     
-    func expiredToken(title: String) {
+    
+    
+    func withdrawUser(completionHandler: @escaping ((String) -> Void)) {
         
-        print("에어로 로그인 화면으로 돌아감.")
         
-        let alert = UIAlertController(title: title, message: "첫 화면으로 돌아갑니다.", preferredStyle: .alert)
+//        
+        let alert = UIAlertController(title: "탈퇴", message: "탈퇴하시겠습니까?", preferredStyle: .alert)
         
         let okButton = UIAlertAction(title: "확인", style: .default)
         { _ in
+            completionHandler("확인")
+            
             for key in UserDefaults.standard.dictionaryRepresentation().keys {
                 UserDefaults.standard.removeObject(forKey: key.description)
             }
@@ -49,8 +53,12 @@ extension UIViewController {
             
             sceneDelegate?.window?.rootViewController = navigationController
             sceneDelegate?.window?.makeKeyAndVisible()
+            
         }
-        let cancelButton = UIAlertAction(title: "취소", style: .cancel)
+        let cancelButton = UIAlertAction(title: "취소", style: .cancel) {
+            _  in
+            completionHandler("취소")
+        }
         
         
         

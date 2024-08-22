@@ -52,7 +52,9 @@ final class LoginViewModel: BaseViewModel {
         input.signInTap
             .subscribe(with: self) { owner, _ in
                
-                NetworkManager.shared.createLogin(email: email, password: password) { result in
+                let query = LoginQuery(email: email, password: password)
+                
+                UserNetworkManager.shared.createLogin(query: query) { result in
                     success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.login.rawValue))
                 }
             }
@@ -62,6 +64,7 @@ final class LoginViewModel: BaseViewModel {
     }
     
     override func judgeStatusCode(statusCode: Int, title: String) -> String {
+        
         var message = super.judgeStatusCode(statusCode: statusCode, title: title)
         
         switch statusCode {

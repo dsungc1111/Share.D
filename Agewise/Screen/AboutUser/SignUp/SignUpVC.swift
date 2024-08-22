@@ -27,17 +27,25 @@ final class SignUpVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let input = SignUpViewModel.Input(sigUpTap: signUpView.signUpButton.rx.tap, validaionTap: signUpView.validaionCheckButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
+        let input = SignUpViewModel.Input(sigUpTap: signUpView.signUpButton.rx.tap, emailValidaionTap: signUpView.validaionCheckButton.rx.tap, emailText: signUpView.emailTextField.rx.text.orEmpty, passwordText: signUpView.passwordTextField.rx.text.orEmpty, nicknameText: signUpView.nicknameTextField.rx.text.orEmpty)
         
         
         let output = signUpViewModel.transform(input: input)
-        
-        
+    
         output.emailValid
             .bind(with: self) { owner, result in
+                print(result)
                 
                 owner.signUpView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
                 owner.signUpView.passwordWarningLabel.isHidden = result ? false : true
+                owner.signUpView.signUpButton.isEnabled = false
+                
+            }
+            .disposed(by: disposeBag)
+        
+        output.emailCheck
+            .bind(with: self) { owner, value in
+                owner.signUpView.emailWarningLabel.text = value
             }
             .disposed(by: disposeBag)
         
@@ -49,33 +57,39 @@ final class SignUpVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        // 차후 닉네임 중복에 관해서 정리
-        output.nicknameValid
+        output.readyNickname
             .bind(with: self) { owner, result in
-                
                 let color = result ? UIColor.black : UIColor.lightGray
                 
                 owner.signUpView.signUpButton.setTitleColor( color , for: .normal)
                 owner.signUpView.signUpButton.layer.borderColor = color.cgColor
-                owner.signUpView.signUpButton.isEnabled = result
             }
             .disposed(by: disposeBag)
+
+        let signUpValid = Observable.combineLatest(output.emailValid, output.pwValid, output.nicknameValid) { $0 && $1 && $2 }
         
-        output.validation
-            .bind(with: self) { owner, value in
-                owner.signUpView.emailWarningLabel.text = value
-            }
-            .disposed(by: disposeBag)
-        
-        
-        output.success
+        signUpValid
             .bind(with: self) { owner, result in
+                print(result)
+                
+                owner.signUpView.signUpButton.isEnabled = result
+                let color = result ? UIColor.black : UIColor.lightGray
+                owner.signUpView.signUpButton.setTitleColor(color, for: .normal)
+                owner.signUpView.signUpButton.layer.borderColor = color.cgColor
+            }
+            .disposed(by: disposeBag)
+        
+        
+        output.statusCode
+            .bind(with: self) { owner, result in
+                
                 if result == SuccessKeyword.signUp.rawValue {
-                    self.resetViewWithoutNavigation(vc: LoginVC())
+                    owner.resetViewWithoutNavigation(vc: LoginVC())
                 } else {
                     owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }
             }
             .disposed(by: disposeBag)
     }
+    
 }

@@ -20,6 +20,7 @@ enum Router {
     case postQuestion(query: PostQuery)
     case getPost(query: GetPostQuery)
     case detailPost(query: String)
+    case editPost(query: String)
 }
 
 extension Router: TargetType {
@@ -38,7 +39,7 @@ extension Router: TargetType {
                 .post
         case .postQuestion:
                 .post
-        
+            
             
         case .refresh:
                 .get
@@ -53,7 +54,8 @@ extension Router: TargetType {
             
         case .editProfile:
                 .put
-            
+        case .editPost:
+                .put
         }
     }
     
@@ -75,11 +77,11 @@ extension Router: TargetType {
             return "/posts"
         case .getPost:
             return "/posts"
-        case .detailPost(query: let query):
+        case .detailPost(query: let query), .editPost(query: let query):
             return "/posts/\(query)"
+            
         }
     }
-
     
     var header: [String : String] {
         switch self {
@@ -88,16 +90,10 @@ extension Router: TargetType {
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
             ]
-        case .fetchProfile, .postQuestion:
+        case .editProfile, .withdraw, .getPost, .detailPost, .fetchProfile, .postQuestion, .editPost:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
-                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey
-            ]
-        case .editProfile, .withdraw, .getPost, .detailPost:
-            return [
-                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey.removeHtmlTag,
+                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
             ]
         case .refresh:
@@ -146,7 +142,7 @@ extension Router: TargetType {
         case .login(let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
-       
+            
         case .postQuestion(let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
@@ -156,4 +152,5 @@ extension Router: TargetType {
     }
     
 }
+
 

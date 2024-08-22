@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoginButton: UIButton {
+final class LoginButton: UIButton {
     
     init(title: String) {
         super.init(frame: .zero)
@@ -17,6 +17,7 @@ class LoginButton: UIButton {
         titleLabel?.font = .boldSystemFont(ofSize: 16)
         setTitleColor(.black, for: .normal)
         layer.borderWidth = 1
+        
     }
     
     @available(*, unavailable)

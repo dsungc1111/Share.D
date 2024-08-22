@@ -9,39 +9,42 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+enum SignUpSuccessKeyword: String {
+    case email = "사용 가능한 이메일입니다."
+    case signup = "회원가입 성공!"
+}
+
 final class SignUpViewModel: BaseViewModel {
     
-    deinit {
-        print("signupViewModel deinit!!")
-    }
     
     struct Input {
         let sigUpTap: ControlEvent<Void>
-        let validaionTap: ControlEvent<Void>
+        let emailValidaionTap: ControlEvent<Void>
         let emailText: ControlProperty<String>
         let passwordText: ControlProperty<String>
         let nicknameText: ControlProperty<String>
     }
     struct Output {
-        let success: PublishSubject<String>
-        let validation: PublishSubject<String>
+        let statusCode: PublishSubject<String>
+        let emailCheck: PublishSubject<String>
         let emailValid: Observable<Bool>
         let pwValid: Observable<Bool>
         let nicknameValid: Observable<Bool>
+        let readyNickname: Observable<Bool>
     }
+    let statusCode = PublishSubject<String>()
+    let emailCheck = PublishSubject<String>()
+    
     
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         
-        let success = PublishSubject<String>()
-        let validation = PublishSubject<String>()
-        
-
         
         var email = ""
         var password = ""
         var nickname = ""
+        var emailValidation = ""
         
         input.emailText
             .bind(with: self) { owner, value in
@@ -49,8 +52,6 @@ final class SignUpViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        let emailValid =  input.emailText
-            .map { $0.contains("@") }
         
         input.passwordText
             .bind(with: self) { owner, value in
@@ -70,37 +71,47 @@ final class SignUpViewModel: BaseViewModel {
         
         
         
-        input.validaionTap
+        input.emailValidaionTap
             .bind(with: self) { owner, _ in
                 
                 if email.contains("@") {
-                    NetworkManager.shared.checkEmailValidation(email: email) { result in
+                    UserNetworkManager.shared.checkEmailValidation(email: email) { result in
                         
-                        validation.onNext(owner.judgeStatusCode(statusCode: result, title: "사용 가능한 이메일입니다."))
+                        emailValidation = owner.judgeStatusCode(statusCode: result, title: SignUpSuccessKeyword.email.rawValue)
+                        owner.emailCheck.onNext(emailValidation)
                         
                     }
                 } else {
-                    validation.onNext("email 형식을 지켜주세요 - @필수")
+                    owner.emailCheck.onNext("email 형식을 지켜주세요 - @필수")
                 }
             }
             .disposed(by: disposeBag)
         
+        let emailValid =  input.emailText
+            .map { $0.contains("@")  }
+        
+        
+        let readyNickname = Observable.combineLatest(emailValid, pwValid) { $0 && $1 }
+        
         
         input.sigUpTap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(with: self, onNext: { owner, _ in
                 
-                NetworkManager.shared.join(email: email, password: password, nickname: nickname) { result in
-                    
-                    success.onNext(owner.judgeStatusCode(statusCode: result, title: "회원가입 성공!"))
+                let query = JoinQuery(email: email, password: password, nick: nickname)
+                
+                UserNetworkManager.shared.join(query: query) { result in
+                    let message = owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.signUp.rawValue)
+                    owner.statusCode.onNext(message)
                 }
             })
             .disposed(by: disposeBag)
         
-        return Output(success: success, validation: validation, emailValid: emailValid, pwValid: pwValid, nicknameValid: nicknameValid)
+        return Output(statusCode: statusCode, emailCheck: emailCheck, emailValid: emailValid, pwValid: pwValid, nicknameValid: nicknameValid, readyNickname: readyNickname)
     }
     
     // 메시지 전달
-
+    
     override func judgeStatusCode(statusCode: Int, title: String) -> String {
         var message = super.judgeStatusCode(statusCode: statusCode, title: title)
         

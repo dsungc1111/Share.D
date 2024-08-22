@@ -53,7 +53,7 @@ final class PostViewModel: BaseViewModel {
                 
                 NetworkManager.shared.writePost(query: save) { result in
                     
-                    success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
+//                    success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
                     
                 }
             }
@@ -62,20 +62,20 @@ final class PostViewModel: BaseViewModel {
         return Output(result: result, success: success)
     }
     
-    override func judgeStatusCode(statusCode: Int, title: String) -> String {
-        var message = super.judgeStatusCode(statusCode: statusCode, title: title)
-        
-        switch statusCode {
-        case 200 :
-            message = title
-        case 401:
-            message = "유효하지 않은 액세스 토큰"
-        case 410:
-            message = "생성된 게시글 X" // DB서버 장애로 게시글이 저장되지 않았을 때
-        default:
-            message = "기타 에러"
-        }
-        
-        return message
-    }
+//    override func judgeStatusCode(statusCode: Int, title: String) -> String {
+//        var message = super.judgeStatusCode(statusCode: statusCode, title: title)
+//        
+//        switch statusCode {
+//        case 200 :
+//            message = title
+//        case 401:
+//            message = "유효하지 않은 액세스 토큰"
+//        case 410:
+//            message = "생성된 게시글 X" // DB서버 장애로 게시글이 저장되지 않았을 때
+//        default:
+//            message = "기타 에러"
+//        }
+//        
+//        return message
+//    }
 }

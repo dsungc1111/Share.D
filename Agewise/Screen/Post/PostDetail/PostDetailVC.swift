@@ -25,8 +25,21 @@ final class PostDetailVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+    }
+    
+    override func configureNavigationBar() {
+        let editButton = UIBarButtonItem(title: "✍️ 수정하기", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = editButton
+        
+        editButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("클릭")
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    override func bind() {
         let input = DetailPostVM.Input(trigger: Observable.just(element))
         
         let output = detailPostVM.transform(input: input)
@@ -38,11 +51,5 @@ final class PostDetailVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        
-        
     }
-    
-
-   
-
 }

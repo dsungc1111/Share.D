@@ -44,8 +44,6 @@ final class PostVC: BaseVC {
         
         postView.configureView(product: product)
         
-        
-        
         let input = PostViewModel.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
         
         let output = postViewModel.transform(input: input)
@@ -66,7 +64,7 @@ final class PostVC: BaseVC {
                     self.resetViewWithoutNavigation(vc: vc)
                     vc.selectedIndex = 0
                 } else if result == SuccessKeyword.accessError.rawValue {
-                    self.expiredToken(title: "로그인 화면으로 돌아감.")
+//                    self.withdrawUser(title: "로그인 화면으로 돌아감.", content: "fhrmdls")
                 } else {
                     owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }
