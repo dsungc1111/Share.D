@@ -31,21 +31,18 @@ extension UIViewController {
     
     
     
-    func withdrawUser(completionHandler: @escaping ((String) -> Void)) {
+    func withdrawUser(completionHandler: @escaping (() -> Void)) {
         
-        
-//        
         let alert = UIAlertController(title: "탈퇴", message: "탈퇴하시겠습니까?", preferredStyle: .alert)
         
         let okButton = UIAlertAction(title: "확인", style: .default)
         { _ in
-            completionHandler("확인")
+            completionHandler()
             
             for key in UserDefaults.standard.dictionaryRepresentation().keys {
                 UserDefaults.standard.removeObject(forKey: key.description)
             }
            
-            
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             let sceneDelegate = windowScene?.delegate as? SceneDelegate
             let vc = OnBoardingVC()
@@ -55,12 +52,7 @@ extension UIViewController {
             sceneDelegate?.window?.makeKeyAndVisible()
             
         }
-        let cancelButton = UIAlertAction(title: "취소", style: .cancel) {
-            _  in
-            completionHandler("취소")
-        }
-        
-        
+        let cancelButton = UIAlertAction(title: "취소", style: .cancel)
         
         alert.addAction(okButton)
         alert.addAction(cancelButton)

@@ -32,8 +32,8 @@ final class PostVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
     }
+    
     override func configureNavigationBar() {
         navigationItem.title = "질문작성"
     }
@@ -61,10 +61,12 @@ final class PostVC: BaseVC {
                 if result == SuccessKeyword.post.rawValue {
                    print("업로드 성공")
                     let vc = TabBarController()
-                    self.resetViewWithoutNavigation(vc: vc)
+                    owner.resetViewWithoutNavigation(vc: vc)
                     vc.selectedIndex = 0
                 } else if result == SuccessKeyword.accessError.rawValue {
-//                    self.withdrawUser(title: "로그인 화면으로 돌아감.", content: "fhrmdls")
+                    owner.withdrawUser {
+                        print("로그아웃")
+                    }
                 } else {
                     owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }

@@ -70,6 +70,7 @@
 		8B93B37D2C774B1E00A68DB5 /* UserNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B37C2C774B1E00A68DB5 /* UserNetworkManager.swift */; };
 		8B93B37F2C77561B00A68DB5 /* TokenNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B37E2C77561B00A68DB5 /* TokenNetworkManager.swift */; };
 		8B93B3812C7759FC00A68DB5 /* settingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3802C7759FC00A68DB5 /* settingVM.swift */; };
+		8B93B3832C77E61500A68DB5 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3822C77E61500A68DB5 /* UserRouter.swift */; };
 		8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */; };
 		8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */; };
 		8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */; };
@@ -133,6 +134,7 @@
 		8B93B37C2C774B1E00A68DB5 /* UserNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNetworkManager.swift; sourceTree = "<group>"; };
 		8B93B37E2C77561B00A68DB5 /* TokenNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenNetworkManager.swift; sourceTree = "<group>"; };
 		8B93B3802C7759FC00A68DB5 /* settingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingVM.swift; sourceTree = "<group>"; };
+		8B93B3822C77E61500A68DB5 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		8BC986372C6C0BAA00B69112 /* Agewise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agewise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -227,8 +229,8 @@
 		8B3231202C6C22DF0095DF0B /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				8B3231212C6C22F80095DF0B /* SignUpVC.swift */,
 				8B3231272C6C36660095DF0B /* SignUpView.swift */,
+				8B3231212C6C22F80095DF0B /* SignUpVC.swift */,
 				8B3231752C6C7AD60095DF0B /* SignUpViewModel.swift */,
 			);
 			path = SignUp;
@@ -237,9 +239,9 @@
 		8B3231662C6C6FD30095DF0B /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				8B32318C2C6E28350095DF0B /* User */,
 				8B93B37B2C774B0800A68DB5 /* NetworkManager */,
 				8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */,
-				8B32318C2C6E28350095DF0B /* User */,
 				8B32318B2C6E28270095DF0B /* Product */,
 				8B3231672C6C71590095DF0B /* UrlComponent.swift */,
 			);
@@ -284,9 +286,11 @@
 		8B32318C2C6E28350095DF0B /* User */ = {
 			isa = PBXGroup;
 			children = (
-				8B3231692C6C721E0095DF0B /* TargetType.swift */,
+				8B93B37C2C774B1E00A68DB5 /* UserNetworkManager.swift */,
 				8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */,
 				8B3231702C6C74B60095DF0B /* UserInfoModel.swift */,
+				8B93B3822C77E61500A68DB5 /* UserRouter.swift */,
+				8B3231692C6C721E0095DF0B /* TargetType.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -430,7 +434,6 @@
 		8B93B37B2C774B0800A68DB5 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
-				8B93B37C2C774B1E00A68DB5 /* UserNetworkManager.swift */,
 				8B93B37E2C77561B00A68DB5 /* TokenNetworkManager.swift */,
 			);
 			path = NetworkManager;
@@ -573,6 +576,7 @@
 				8B3231BC2C7213530095DF0B /* UIViewcontroller+.swift in Sources */,
 				8B3231862C6E06A50095DF0B /* Reusable.swift in Sources */,
 				8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */,
+				8B93B3832C77E61500A68DB5 /* UserRouter.swift in Sources */,
 				8B3231D72C735CB50095DF0B /* PostViewModel.swift in Sources */,
 				8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */,
 				8B3231932C6F2A2A0095DF0B /* PromotionVM.swift in Sources */,

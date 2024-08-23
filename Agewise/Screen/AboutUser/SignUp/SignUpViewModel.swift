@@ -69,22 +69,23 @@ final class SignUpViewModel: BaseViewModel {
         
         let nicknameValid = input.nicknameText.map { $0.count >= 2 }
         
-        
-        
         input.emailValidaionTap
-            .bind(with: self) { owner, _ in
+            .map {
+                let emailtext = EmailValidationQuery(email: email)
+                return emailtext
+            }
+            .flatMap { value in
+                UserNetworkManager.shared.userNetwork(api: .emailValidation(query: value), model: EmailValidationModel.self)
+            }
+            .subscribe(with: self, onNext: { owner, result in
                 
                 if email.contains("@") {
-                    UserNetworkManager.shared.checkEmailValidation(email: email) { result in
-                        
-                        emailValidation = owner.judgeStatusCode(statusCode: result, title: SignUpSuccessKeyword.email.rawValue)
-                        owner.emailCheck.onNext(emailValidation)
-                        
-                    }
+                    let message = owner.judgeStatusCode(statusCode: result.statuscode, title: SignUpSuccessKeyword.email.rawValue)
+                    owner.emailCheck.onNext(message)
                 } else {
                     owner.emailCheck.onNext("email 형식을 지켜주세요 - @필수")
                 }
-            }
+            })
             .disposed(by: disposeBag)
         
         let emailValid =  input.emailText
@@ -95,22 +96,25 @@ final class SignUpViewModel: BaseViewModel {
         
         
         input.sigUpTap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(with: self, onNext: { owner, _ in
-                
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .map {
                 let query = JoinQuery(email: email, password: password, nick: nickname)
+                return query
+            }
+            .flatMap { query in
+                UserNetworkManager.shared.userNetwork(api: .join(query: query), model: JoinModel.self)
+            }
+            .subscribe(with: self, onNext: { owner, result in
                 
-                UserNetworkManager.shared.join(query: query) { result in
-                    let message = owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.signUp.rawValue)
-                    owner.statusCode.onNext(message)
-                }
+                let message = owner.judgeStatusCode(statusCode: result.statuscode, title: SuccessKeyword.signUp.rawValue)
+                owner.statusCode.onNext(message)
+                
             })
             .disposed(by: disposeBag)
         
         return Output(statusCode: statusCode, emailCheck: emailCheck, emailValid: emailValid, pwValid: pwValid, nicknameValid: nicknameValid, readyNickname: readyNickname)
     }
     
-    // 메시지 전달
     
     override func judgeStatusCode(statusCode: Int, title: String) -> String {
         var message = super.judgeStatusCode(statusCode: statusCode, title: title)
@@ -118,8 +122,6 @@ final class SignUpViewModel: BaseViewModel {
         switch statusCode {
         case 200 :
             message = title
-        case 400:
-            message = "필수값을 채워주세요!"
         case 402:
             message = "닉네임 공백 불가"
         case 409:
@@ -130,4 +132,5 @@ final class SignUpViewModel: BaseViewModel {
         
         return message
     }
+    
 }

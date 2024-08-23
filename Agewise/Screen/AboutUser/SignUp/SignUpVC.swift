@@ -23,6 +23,9 @@ final class SignUpVC: BaseVC {
     override func loadView() {
         view = signUpView
     }
+    override func configureNavigationBar() {
+        navigationItem.title = "회원가입"
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,7 +87,7 @@ final class SignUpVC: BaseVC {
             .bind(with: self) { owner, result in
                 
                 if result == SuccessKeyword.signUp.rawValue {
-                    owner.resetViewWithoutNavigation(vc: LoginVC())
+                    owner.resetViewWithNavigation(vc: LoginVC())
                 } else {
                     owner.view.makeToast(result, duration: 2.0, position: .bottom)
                 }

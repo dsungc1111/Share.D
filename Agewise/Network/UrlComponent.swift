@@ -9,6 +9,10 @@ import Foundation
 import Alamofire
 
 
+
+
+
+
 enum Router {
     case join(query: JoinQuery)
     case emailValidation(query: EmailValidationQuery)

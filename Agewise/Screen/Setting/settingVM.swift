@@ -32,25 +32,21 @@ final class SettingVM: BaseViewModel {
         
         input.resetTap
             .subscribe(with: self) { owner, _ in
-//                UserNetworkManager.shared.withdraw { result in
-//                    
-//                    let message = owner.judgeStatusCode(statusCode: result, title: WithdrawKeyword.success.rawValue)
-//                    
-//                    resetMessage.onNext(message)
-//                }
                 showResetAlert.onNext(())
             }
             .disposed(by: disposeBag)
         
+       
         input.withdrawButtonTap
-            .bind(with: self) { owner, _ in
-                UserNetworkManager.shared.withdraw { result in
-                    
-                    let message = owner.judgeStatusCode(statusCode: result, title: WithdrawKeyword.success.rawValue)
-                    
-                    resetMessage.onNext(message)
-                }
+            .flatMap {
+                UserNetworkManager.shared.userNetwork(api: .withdraw, model: ProfileModel.self)
+                    .map { $0 }
             }
+            .subscribe(with: self, onNext: { owner, result in
+                let message = owner.judgeStatusCode(statusCode: result.statuscode, title: WithdrawKeyword.success.rawValue)
+                
+                resetMessage.onNext(message)
+            })
             .disposed(by: disposeBag)
         
         return Output(showResetAlert: showResetAlert, resetMessage: resetMessage)

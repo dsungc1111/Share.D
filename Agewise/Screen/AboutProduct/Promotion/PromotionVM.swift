@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class PromotionViewModel {
+final class PromotionViewModel: BaseViewModel {
     
     enum AgeTitle: String, CaseIterable {
         case teen = "10대"
@@ -42,6 +42,11 @@ final class PromotionViewModel {
     }
     
     private let disposeBag = DisposeBag()
+    
+    
+    override init() {
+        TokenNetworkManager.shared.fetchProfile()
+    }
     
     func transform(input: Input) -> Output {
         

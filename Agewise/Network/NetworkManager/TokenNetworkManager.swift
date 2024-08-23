@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 final class TokenNetworkManager {
     
@@ -27,7 +28,13 @@ final class TokenNetworkManager {
                 print("리프레쉬 statusCdoe =", statusCode)
                 
                 if response.response?.statusCode == 418 {
+                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                    let sceneDelegate = windowScene?.delegate as? SceneDelegate
+                    let vc = OnBoardingVC()
+                    let navigationController = UINavigationController(rootViewController: vc)
                     
+                    sceneDelegate?.window?.rootViewController = navigationController
+                    sceneDelegate?.window?.makeKeyAndVisible()
                 }
                 switch response.result {
                 case .success(let value):
@@ -65,13 +72,17 @@ final class TokenNetworkManager {
                     print("인증할 수 없는 토큰입니다.")
                 } else if responseCode == 403 {
                   
-//                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-//                    let sceneDelegate = windowScene?.delegate as? SceneDelegate
-//                    let vc = OnBoardingVC()
-//                    let navigationController = UINavigationController(rootViewController: vc)
-//                    
-//                    sceneDelegate?.window?.rootViewController = navigationController
-//                    sceneDelegate?.window?.makeKeyAndVisible()
+                    print("초기화 해야겠죠?")
+                    
+                    UserDefaultManager.shared.removeAll()
+                    
+                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                    let sceneDelegate = windowScene?.delegate as? SceneDelegate
+                    let vc = OnBoardingVC()
+                    let navigationController = UINavigationController(rootViewController: vc)
+                    
+                    sceneDelegate?.window?.rootViewController = navigationController
+                    sceneDelegate?.window?.makeKeyAndVisible()
                     print("접근권한 XX")
                 } else {
                     print("ok")

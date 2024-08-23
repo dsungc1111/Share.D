@@ -32,13 +32,15 @@ final class SettingVC: BaseVC {
         
         output.showResetAlert
             .bind(with: self) { owner, _ in
-                owner.withdrawUser { result in
-                    if result == "확인" {
-                        withdrawButtonTap.onNext(())
-                    }
+                
+                owner.withdrawUser { 
+                    
+                    withdrawButtonTap.onNext(())
+                    
                 }
             }
             .disposed(by: disposeBag)
+        
         output.resetMessage
             .bind(with: self) { owner, value in
                 
@@ -47,11 +49,13 @@ final class SettingVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-//        settingView.logoutButton.rx.tap
-//            .bind(with: self) { owner, _ in
-//                owner.withdrawUser(title: "로그아웃!!", content: "로그아웃?")
-//            }
-//            .disposed(by: disposeBag)
+        settingView.logoutButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.withdrawUser {
+                    print("로그아웃")
+                }
+            }
+            .disposed(by: disposeBag)
         
     }
 }

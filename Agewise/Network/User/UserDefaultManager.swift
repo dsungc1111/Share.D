@@ -34,4 +34,10 @@ final class UserDefaultManager {
             UserDefaults.standard.setValue(newValue, forKey: UserDefaultKey.refresh.rawValue)
         }
     }
+    
+    func removeAll() {
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+            UserDefaults.standard.removeObject(forKey: key.description)
+        }
+    }
 }

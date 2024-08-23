@@ -27,6 +27,9 @@ final class LoginVC: BaseVC {
         super.viewDidLoad()
         
     }
+    override func configureNavigationBar() {
+        navigationItem.title = "로그인"
+    }
     override func bind() {
         
         let input = LoginViewModel.Input(signInTap: loginView.signInButton.rx.tap, emailText: loginView.emailTextField.rx.text.orEmpty, passwordText: loginView.passwordTextField.rx.text.orEmpty)

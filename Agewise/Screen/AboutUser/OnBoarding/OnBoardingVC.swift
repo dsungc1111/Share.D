@@ -9,7 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-
 final class OnBoardingVC: BaseVC {
 
     private let onBoardingView = OnBoardingView()
@@ -26,7 +25,6 @@ final class OnBoardingVC: BaseVC {
         onBoardingView.loginButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = LoginVC()
-                vc.navigationItem.title = "로그인"
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -34,13 +32,9 @@ final class OnBoardingVC: BaseVC {
         onBoardingView.signUpButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = SignUpVC()
-                vc.navigationItem.title = "회원가입"
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
     }
-    
-
-
 }
 

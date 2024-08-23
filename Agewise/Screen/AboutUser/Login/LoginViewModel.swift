@@ -50,14 +50,19 @@ final class LoginViewModel: BaseViewModel {
         let pwValid = input.passwordText.map { $0.count >= 8 }
         
         input.signInTap
-            .subscribe(with: self) { owner, _ in
-               
+            .map {
                 let query = LoginQuery(email: email, password: password)
-                
-                UserNetworkManager.shared.createLogin(query: query) { result in
-                    success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.login.rawValue))
-                }
+                return query
             }
+            .flatMap { value in
+                UserNetworkManager.shared.userNetwork(api: .login(query: value), model: LoginModel.self)
+            }
+            .subscribe(with: self, onNext: { owner, result in
+                let message = owner.judgeStatusCode(statusCode: result.statuscode, title: SuccessKeyword.login.rawValue)
+                UserDefaultManager.shared.accessToken = result.data?.accessToken ?? ""
+                UserDefaultManager.shared.refreshToken = result.data?.refreshToken ?? ""
+                success.onNext(message)
+            })
             .disposed(by: disposeBag)
         
         return Output(success: success, emailValid: emailValid, pwValid: pwValid)
@@ -72,12 +77,8 @@ final class LoginViewModel: BaseViewModel {
             message = title
         case 400:
             message = "필수값을 채워주세요!"
-        case 402:
-            message = "닉네임 공백 불가"
-        case 403:
-            message = "이미 가입된 유저입니다."
-        case 409:
-            message = "이미 가입한 유저에요!"
+        case 401:
+            message = "이메일과 비밀번호를 확인해주세요."
         default:
             message = "회원이 아닙니다."
         }

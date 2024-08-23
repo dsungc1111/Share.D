@@ -20,12 +20,8 @@ class BaseViewModel {
             return  "다시 실행해주세요"
         case 420 :
             return "SesacKey를 확인하세요"
-        case 429:
-            return "과호출입니다!"
-        case 444:
-            return "비정상적인 URL입니다!"
         default:
-            return "기타 에러 - 사전 정의 X"
+            return "다시 시도해주세요."
         }
     }
 }
