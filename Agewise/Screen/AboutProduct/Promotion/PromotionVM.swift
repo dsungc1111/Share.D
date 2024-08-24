@@ -37,7 +37,6 @@ final class PromotionViewModel: BaseViewModel {
     
     struct Output {
         let adList: PublishSubject<[ProductDetail]>
-//        let ageList: PublishSubject<[String]>
         let presentList: PublishSubject<[String]>
         let trendTap: ControlEvent<String>
         let scrollIndexPath: PublishSubject<IndexPath>
@@ -49,46 +48,50 @@ final class PromotionViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         
         let adList = PublishSubject<[ProductDetail]>()
-//        let ageList = PublishSubject<[String]>()
         let presentList = PublishSubject<[String]>()
         let scrollIndexPath = PublishSubject<IndexPath>()
         
-        
         //MARK: - About Token
         
-        input.adTrigger
-            .subscribe(with: self) { owner, _ in
-                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
-                    
-                    switch result {
-                    case .success((let statuscode, let value)):
-                        print("스테이터스코드", statuscode)
-                        print("밸류", value)
-                    case .failure(_):
-                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { result in
-                            
-                            switch result {
-                            case .success((let statuscode, let value)):
-                                print("리프레쉬 토큰", statuscode)
-                                UserDefaultManager.shared.accessToken = value.accessToken
-                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
-                                    
-                                    switch result {
-                                    case .success((let statuscode, let value)):
-                                        print("성공")
-                                    case .failure(_):
-                                        print("실패")
-                                    }
-                                }
-                            case .failure(_):
-                                print("리프레쉬도 실패...?")
-                            }
-                        }
-                        print("실패!!!1")
-                    }
-                }
-            }
-            .disposed(by: disposeBag)
+//        input.adTrigger
+//            .subscribe(with: self) { owner, _ in
+//                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+//                    
+//                    switch result {
+//                    case .success((let statuscode, let value)):
+//                        print("스테이터스코드", statuscode)
+//                        print("밸류", value)
+//                    case .failure(_):
+//                        print("실팽ㅇㄹㅇㄹ")
+//                        
+//                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { result in
+//                            
+//                            print("리프레쉬 실행")
+//                            switch result {
+//                            case .success((let statuscode, let value)):
+//                                print("리프레쉬 토큰", statuscode)
+//                                
+//                                UserDefaultManager.shared.accessToken = value.accessToken
+//                                
+//                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+//                                    
+//                                    switch result {
+//                                    case .success((let statuscode, let value)):
+//                                        print("성공")
+//                                    case .failure(_):
+//                                        print("실패")
+//                                    }
+//                                    
+//                                }
+//                            case .failure(_):
+//                                print("리프레쉬도 실패...?")
+//                            }
+//                            
+//                        }
+//                    }
+//                }
+//            }
+//            .disposed(by: disposeBag)
         
         
         input.adTrigger
@@ -105,23 +108,23 @@ final class PromotionViewModel: BaseViewModel {
                 case .failure(_):
                     print("네이버 실패")
                 }
-                let age = AgeTitle.allCases.map { $0.rawValue }
+                
                 let present = productTitle.allCases.map { $0.rawValue }
                 
-//                ageList.onNext(age)
+                
                 presentList.onNext(present)
                 
             }
             .disposed(by: disposeBag)
-     
         
-        input.currentIndex
-            .bind(with: self, onNext: { owner, indexPath in
-                print("selected", indexPath)
-//                owner.currentIndex = indexPath.item
-                print("dd", owner.currentIndex)
-            })
-            .disposed(by: disposeBag)
+        
+        //        input.currentIndex
+        //            .bind(with: self, onNext: { owner, indexPath in
+        //
+        ////                owner.currentIndex = indexPath.item
+        //
+        //            })
+        //            .disposed(by: disposeBag)
         
         input.timer
             .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)

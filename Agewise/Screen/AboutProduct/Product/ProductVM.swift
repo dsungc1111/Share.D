@@ -1,5 +1,5 @@
 //
-//  ProductViewModel.swift
+//  ProductVM.swift
 //  Agewise
 //
 //  Created by 최대성 on 8/17/24.
@@ -9,15 +9,17 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class ProductViewModel {
+final class ProductVM {
     
     struct Input {
         let searchItem: Observable<String>
         let loadMore: Observable<Void>
+        let searchDetail: ControlEvent<ProductDetail>
     }
     
     struct Output {
         let searchList: PublishSubject<[ProductDetail]>
+        let searchDetail: PublishSubject<ProductDetail>
     }
     
     private let disposeBag = DisposeBag()
@@ -28,6 +30,7 @@ final class ProductViewModel {
     func transform(input: Input) -> Output {
         
         let list = PublishSubject<[ProductDetail]>()
+        let searchDetail = PublishSubject<ProductDetail>()
         
         let searchWithPage = Observable.combineLatest(input.searchItem, page.asObservable())
         
@@ -59,8 +62,14 @@ final class ProductViewModel {
 //            })
 //            .disposed(by: disposeBag)
         
+        input.searchDetail
+            .bind(with: self) { owner, result in
+                searchDetail.onNext(result)
+            }
+            .disposed(by: disposeBag)
+            
         
-        return Output(searchList: list)
+        return Output(searchList: list, searchDetail: searchDetail)
     }
     
 }

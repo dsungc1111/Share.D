@@ -29,6 +29,7 @@ final class PostListVC: BaseVC {
     }
     override func configureNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: nil)
+        navigationItem.title = "질문"
   
     }
     override func bind() {
@@ -63,7 +64,7 @@ final class PostListVC: BaseVC {
         output.ageList
             .bind(to: postListView.categoryCollectionView.rx.items(cellIdentifier: ListCategoryCollectionViewCell.identifier, cellType: ListCategoryCollectionViewCell.self)) { item, element, cell in
                 
-                cell.categoryButton.setTitle(element, for: .normal)
+                cell.configureCell(element: element)
             }
             .disposed(by: disposeBag)
         

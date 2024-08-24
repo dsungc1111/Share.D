@@ -15,10 +15,8 @@ final class PostListView: BaseView {
     
     private static func categoryLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        let cellSpacing: CGFloat = 10
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 100, height: 60)
-        layout.minimumInteritemSpacing = cellSpacing
+        layout.itemSize = CGSize(width: 80, height: 60)
         return layout
     }
     
@@ -58,9 +56,8 @@ final class PostListView: BaseView {
        
         categoryCollectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(70)
+            make.height.equalTo(50)
         }
-        categoryCollectionView.backgroundColor = .systemPink
         resultCollectionView.snp.makeConstraints { make in
             make.top.equalTo(categoryCollectionView.snp.bottom)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)

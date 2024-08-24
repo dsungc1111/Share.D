@@ -9,22 +9,23 @@ import UIKit
 import RxSwift
 import SnapKit
 
-final class TrendCollectionViewCell: UICollectionViewCell {
+final class RecommendCollectionViewCell: BaseCollectionViewCell {
     
     var disposeBag = DisposeBag()
+    
     
     let presentButton = {
         let btn = UIButton()
         btn.titleLabel?.textAlignment = .center
         btn.isEnabled = false
         btn.setTitleColor(.black, for: .normal)
+        btn.setTitleColor(.white, for: .normal)
         return btn
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureHierarchy()
-        configureLayout()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -35,13 +36,18 @@ final class TrendCollectionViewCell: UICollectionViewCell {
         disposeBag = DisposeBag()
     }
     
-    func configureHierarchy() {
+    override func configureHierarchy() {
         contentView.addSubview(presentButton)
     }
     
-    func configureLayout() {
+    override func configureLayout() {
+        contentView.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
         presentButton.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
+    }
+    
+    func configureCell(element: String) {
+        presentButton.setTitle(element, for: .normal)
     }
 }

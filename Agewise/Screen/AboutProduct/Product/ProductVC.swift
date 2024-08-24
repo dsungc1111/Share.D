@@ -13,7 +13,7 @@ final class ProductVC: BaseVC {
 
     private let productView = ProductView()
     
-    private let productViewModel = ProductViewModel()
+    private let productVM = ProductVM()
     
     private let disposeBag = DisposeBag()
     
@@ -41,9 +41,9 @@ final class ProductVC: BaseVC {
             })
                .disposed(by: disposeBag)
            
-        let input = ProductViewModel.Input(searchItem: Observable.just(searchItem), loadMore: loadMoreTrigger)
+        let input = ProductVM.Input(searchItem: Observable.just(searchItem), loadMore: loadMoreTrigger, searchDetail: productView.collectionView.rx.modelSelected(ProductDetail.self))
       
-        let output = productViewModel.transform(input: input)
+        let output = productVM.transform(input: input)
         
         output.searchList
             .bind(to: productView.collectionView.rx.items(cellIdentifier: ProductCollectionViewCell.identifier, cellType: ProductCollectionViewCell.self)) { (row, element, cell) in
@@ -52,9 +52,8 @@ final class ProductVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        let a = productView.collectionView.rx.modelSelected(ProductDetail.self)
-        
-        a.bind(with: self) { owner, result in
+        output.searchDetail
+        .bind(with: self) { owner, result in
             let vc = ProductDetailVC()
             vc.product = result
             vc.category = owner.searchItem

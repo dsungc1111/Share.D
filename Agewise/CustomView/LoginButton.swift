@@ -15,8 +15,9 @@ final class LoginButton: UIButton {
         setTitle(title, for: .normal)
         layer.cornerRadius = 10
         titleLabel?.font = .boldSystemFont(ofSize: 16)
-        setTitleColor(.black, for: .normal)
+        setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
         layer.borderWidth = 1
+        layer.borderColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1).cgColor
         
     }
     

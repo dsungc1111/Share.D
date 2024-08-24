@@ -13,13 +13,11 @@ final class PromotionView: BaseView {
     let scrollView = UIScrollView()
     let contentView = UIView()
     
-    lazy var text = ""
-    
     private let hotDealLabel = {
         let label = UILabel()
         label.font = UIFont(name: "Copperplate-Bold", size: 30)
         label.text = "요즘 인기 TOP10"
-        label.textColor = UIColor(red: 61/255, green: 17/255, blue: 62/255, alpha: 1)
+        label.textColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
         return label
     }()
     
@@ -31,23 +29,29 @@ final class PromotionView: BaseView {
         layout.itemSize = CGSize(width: width - 20, height: 400)
         return layout
     }
-  
+    let backView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 10
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        return view
+    }()
     let stateLabel = {
         let label = UILabel()
         label.text = "누구에게 선물하시나요?"
         label.textColor = .black
         label.font = UIFont(name: "Copperplate-Bold", size: 24)
         label.clipsToBounds = true
-        label.textColor = UIColor(red: 61/255, green: 17/255, blue: 62/255, alpha: 1)
+        label.textColor = .white
         return label
     }()
     let ageButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("연령대", for: .normal)
         btn.setTitleColor(.black, for: .normal)
-        btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 10
-        
+        btn.backgroundColor = .white
         let ageGroups = ["10대", "20대", "30대", "40대", "50대", "60대+"]
         
         var buttons: [UIAction] = []
@@ -68,10 +72,9 @@ final class PromotionView: BaseView {
         let btn = UIButton(type: .system)
         btn.setTitle("성별", for: .normal)
         btn.setTitleColor(.black, for: .normal)
-        btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 10
-        
-        let ageGroups = ["남자", "여자"]
+        btn.backgroundColor = .white
+        let ageGroups = ["남성", "여성"]
         
         var buttons: [UIAction] = []
         
@@ -88,33 +91,36 @@ final class PromotionView: BaseView {
     }()
     let selectLabel = {
         let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 16)
         label.text = "에게 선물할거에요."
-        label.textColor = UIColor(red: 61/255, green: 17/255, blue: 62/255, alpha: 1)
+        label.textColor = .white
         return label
     }()
     let searchButton: UIButton = {
         let btn = UIButton()
         btn.setTitle("😀 추천받기", for: .normal)
-        btn.setTitleColor(UIColor(red: 61/255, green: 17/255, blue: 62/255, alpha: 1), for: .normal)
+        btn.setTitleColor(.black, for: .normal)
         btn.layer.cornerRadius = 10
         btn.titleLabel?.textAlignment = .center
-        
-        // 그림자 설정
-        btn.layer.shadowColor = UIColor.black.cgColor  // 그림자 색상
-        btn.layer.shadowOffset = CGSize(width: 0, height: 2)  // 그림자 오프셋
-        btn.layer.shadowOpacity = 0.5  // 그림자 불투명도
-        btn.layer.shadowRadius = 4  // 그림자 반경
-        
+        btn.backgroundColor = .white
         return btn
     }()
     
-    let trendCollectionView = UICollectionView(frame: .zero, collectionViewLayout: trendCollectionViewLayout())
+    let recommendLabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Copperplate-Bold", size: 24)
+        label.text = "추천 상품"
+        label.textColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        return label
+    }()
     
-    private static func trendCollectionViewLayout() -> UICollectionViewLayout {
+    let recommendCollectionView = UICollectionView(frame: .zero, collectionViewLayout: recommendCollectionViewLayout())
+    
+    private static func recommendCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         let cellSpacing: CGFloat = 10
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 150, height: 50)
+        layout.itemSize = CGSize(width: 140, height: 50)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: cellSpacing, left: cellSpacing, bottom: cellSpacing, right: cellSpacing)
@@ -129,8 +135,8 @@ final class PromotionView: BaseView {
         adCollectionView.isPagingEnabled = true
         
        
-        trendCollectionView.register(TrendCollectionViewCell.self, forCellWithReuseIdentifier: TrendCollectionViewCell.identifier)
-        trendCollectionView.showsVerticalScrollIndicator = false
+        recommendCollectionView.register(RecommendCollectionViewCell.self, forCellWithReuseIdentifier: RecommendCollectionViewCell.identifier)
+        recommendCollectionView.showsVerticalScrollIndicator = false
         
         
       }
@@ -145,11 +151,13 @@ final class PromotionView: BaseView {
         scrollView.addSubview(contentView)
         contentView.addSubview(hotDealLabel)
         contentView.addSubview(adCollectionView)
+        contentView.addSubview(backView)
         contentView.addSubview(stateLabel)
-        contentView.addSubview(trendCollectionView)
+        contentView.addSubview(recommendCollectionView)
         contentView.addSubview(ageButton)
         contentView.addSubview(genderButton)
         contentView.addSubview(selectLabel)
+        contentView.addSubview(recommendLabel)
         contentView.addSubview(searchButton)
     }
     
@@ -173,10 +181,16 @@ final class PromotionView: BaseView {
             make.trailing.equalTo(contentView.safeAreaLayoutGuide)
             make.height.equalTo(450)
         }
-        
-        stateLabel.snp.makeConstraints { make in
+        backView.snp.makeConstraints { make in
             make.top.equalTo(adCollectionView.snp.bottom).offset(10)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(120)
+        }
+        stateLabel.snp.makeConstraints { make in
+            make.top.equalTo(backView.snp.top).inset(10)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide)
             make.height.equalTo(35)
         }
         ageButton.snp.makeConstraints { make in
@@ -187,26 +201,29 @@ final class PromotionView: BaseView {
         }
         genderButton.snp.makeConstraints { make in
             make.top.equalTo(stateLabel.snp.bottom).offset(10)
-            make.leading.equalTo(ageButton.snp.trailing).offset(15)
+            make.leading.equalTo(ageButton.snp.trailing).offset(10)
             make.height.equalTo(40)
-            make.width.equalTo(60)
+            make.width.equalTo(50)
         }
         selectLabel.snp.makeConstraints { make in
             make.top.equalTo(stateLabel.snp.bottom).offset(20)
-            make.leading.equalTo(genderButton.snp.trailing).offset(10)
-            make.width.equalTo(140)
+            make.leading.equalTo(genderButton.snp.trailing).offset(5)
+            make.width.equalTo(120)
         }
         
         searchButton.snp.makeConstraints { make in
             make.top.equalTo(stateLabel.snp.bottom).offset(10)
-            make.leading.equalTo(selectLabel.snp.trailing)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(5)
+            make.leading.equalTo(selectLabel.snp.trailing).offset(5)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
             make.height.equalTo(40)
         }
-        
-        
-        trendCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(ageButton.snp.bottom).offset(10)
+        recommendLabel.snp.makeConstraints { make in
+            make.top.equalTo(backView.snp.bottom).offset(20)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.height.equalTo(40)
+        }
+        recommendCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(recommendLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(30)
             make.height.equalTo(300)
             make.bottom.equalTo(contentView.snp.bottom)

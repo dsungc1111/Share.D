@@ -81,7 +81,7 @@ final class PostDetailView: BaseView {
         let image = URL(string: url)
         imageView.kf.setImage(with: image)
         
-        writerLabel.text = element.creator.nick
+        writerLabel.text = "게시자 : " + element.creator.nick
         dateLabel.text = "게시일 : " + dateTool.changeStringForm(dateString: element.createdAt)
         contentLabel.text = element.content +  "  " + element.postID
     }

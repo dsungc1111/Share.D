@@ -23,6 +23,8 @@ final class TabBarController: UITabBarController {
         promotionVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 1)
         postListVC.tabBarItem = UITabBarItem(title: "질문", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
         setViewControllers([postListVC, promotionVC, settingVC], animated: true)
+        
+        self.tabBar.tintColor = UIColor(red: 64/255, green: 120/255, blue: 187/255, alpha: 1)
         self.selectedIndex = 1
     }
 }

@@ -12,13 +12,14 @@ final class OnBoardingView: BaseView {
     
     private let presnetImage = {
         let image = UIImageView()
-        image.image = UIImage(named: "star")
+        image.image = UIImage(named: "aa")
         return image
     }()
     private let titleLabel = {
         let label = UILabel()
-        label.text = "Agewise"
+        label.text = "Share.D"
         label.font = UIFont(name: "Copperplate", size: 40)
+        label.textColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
         label.textAlignment = .center
         return label
     }()
@@ -29,7 +30,7 @@ final class OnBoardingView: BaseView {
     
     override func configureHierarchy() {
         addSubview(presnetImage)
-        addSubview(titleLabel)
+//        addSubview(titleLabel)
         addSubview(loginButton)
         addSubview(signUpButton)
     }
@@ -40,11 +41,11 @@ final class OnBoardingView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(40)
             make.height.equalTo(200)
         }
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(presnetImage.snp.bottom).offset(30)
-            make.bottom.equalTo(loginButton.snp.top).offset(30)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(40)
-        }
+//        titleLabel.snp.makeConstraints { make in
+//            make.top.equalTo(presnetImage.snp.bottom).offset(30)
+//            make.bottom.equalTo(loginButton.snp.top).offset(-30)
+//            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(40)
+//        }
         loginButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide).inset(120)
             make.leading.equalTo(safeAreaLayoutGuide).inset(50)

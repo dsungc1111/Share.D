@@ -13,7 +13,9 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
     
     let imageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleToFill
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 10
         return view
     }()
     let titleLabel = {
@@ -47,10 +49,11 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(20)
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
-            make.size.equalTo(70)
+            make.height.equalTo(100)
+            make.width.equalTo(80)
         }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(25)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
             make.width.equalTo(200)
         }

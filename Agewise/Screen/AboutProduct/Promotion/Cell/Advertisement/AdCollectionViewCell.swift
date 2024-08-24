@@ -22,7 +22,7 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     }()
     private let rankLabel = {
         let label = UILabel()
-        label.backgroundColor = .orange
+        label.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
         label.textColor = .white
         label.textAlignment = .center
         label.font = UIFont(name: "Copperplate-Bold", size: 25)
@@ -31,7 +31,7 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
         label.layer.cornerRadius = 10
         return label
     }()
-    let mallLabel = {
+    private let mallLabel = {
         let label = UILabel()
         label.textColor = .lightGray
         return label

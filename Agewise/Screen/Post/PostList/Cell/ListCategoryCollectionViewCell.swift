@@ -10,20 +10,27 @@ import SnapKit
 
 final class ListCategoryCollectionViewCell: BaseCollectionViewCell {
     
-    let categoryButton = {
+    private let categoryButton = {
         let btn = UIButton()
         btn.titleLabel?.textAlignment = .center
         btn.isEnabled = false
+        btn.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        btn.layer.cornerRadius = 10
         return btn
     }()
     
-    
     override func configureLayout() {
+        
         contentView.addSubview(categoryButton)
         
         categoryButton.snp.makeConstraints { make in
-            make.edges.equalTo(contentView.safeAreaLayoutGuide)
+            make.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide)
         }
-        categoryButton.backgroundColor = .red
+    }
+    
+    func configureCell(element: String) {
+        categoryButton.setTitle(element, for: .normal)
     }
 }

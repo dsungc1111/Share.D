@@ -36,7 +36,7 @@ final class PromotionVC: BaseVC {
         
         
         
-        let input = PromotionViewModel.Input(adTrigger: Observable.just(()), trendTap: promotionView.trendCollectionView.rx.modelSelected(String.self), ageButtonTap: promotionView.ageButton.rx.tap, timer: timer, currentIndex: promotionView.adCollectionView.rx.prefetchItems)
+        let input = PromotionViewModel.Input(adTrigger: Observable.just(()), trendTap: promotionView.recommendCollectionView.rx.modelSelected(String.self), ageButtonTap: promotionView.ageButton.rx.tap, timer: timer, currentIndex: promotionView.adCollectionView.rx.prefetchItems)
         
         
         let output = promotionViewModel.transform(input: input)
@@ -65,9 +65,9 @@ final class PromotionVC: BaseVC {
         
         //MARK: - 추천
         output.presentList
-            .bind(to: promotionView.trendCollectionView.rx.items(cellIdentifier: TrendCollectionViewCell.identifier, cellType: TrendCollectionViewCell.self)) { (item, element, cell) in
+            .bind(to: promotionView.recommendCollectionView.rx.items(cellIdentifier: RecommendCollectionViewCell.identifier, cellType: RecommendCollectionViewCell.self)) { (item, element, cell) in
                 
-                cell.presentButton.setTitle(element, for: .normal)
+                cell.configureCell(element: element)
                 
             }
             .disposed(by: disposeBag)
@@ -80,13 +80,15 @@ final class PromotionVC: BaseVC {
                 
                 let age = owner.promotionView.ageButton.titleLabel?.text
                 let gender = owner.promotionView.genderButton.titleLabel?.text
-                let searchText = (age ?? "나이") + (gender ?? "성별")
+                let searchText = (age ?? "") + " " + (gender ?? "")
                 
-                if searchText == "연령대성별" {
+                
+                if age == "연령대" || gender == "성별" {
                     owner.view.makeToast("조건을 선택해주세요!!", duration: 2.0, position: .center)
                 } else {
                     let vc = ProductVC()
                     vc.searchItem = searchText
+                    vc.navigationItem.title = "For " + searchText
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -101,7 +103,7 @@ final class PromotionVC: BaseVC {
     }
     
     override func configureNavigationBar() {
-        navigationItem.title = "AGEWISE"
+        navigationItem.title = "Share.D"
     }
     
     

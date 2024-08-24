@@ -11,37 +11,38 @@ import Kingfisher
 
 final class ProductCollectionViewCell: BaseCollectionViewCell {
     
-   
-    let imageView = {
+    
+    private let imageView = {
         let image = UIImageView()
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
         image.contentMode = .scaleToFill
         return image
     }()
-    let companyNameLabel = {
+    private let companyNameLabel = {
         let label = UILabel()
-        label.textColor = .darkGray
+        label.textColor = .lightGray
         label.font = .systemFont(ofSize: 13)
         return label
     }()
-    let productNameLabel = {
+    private let productNameLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13)
         label.numberOfLines = 2
         return label
     }()
-    let priceLabel = {
-       let label = UILabel()
+    private let priceLabel = {
+        let label = UILabel()
         label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
-    let likeButton = {
-        let button = UIButton()
-        button.contentMode = .scaleAspectFill
-        button.layer.cornerRadius = 10
-        button.setImage(UIImage(systemName: "heart.circle"), for: .normal)
-        return button
+    private let likeButton = {
+        let btn = UIButton()
+        btn.contentMode = .scaleAspectFill
+        btn.layer.cornerRadius = 10
+        btn.setImage(UIImage(systemName: "heart"), for: .normal)
+        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        return btn
     }()
     
     override func prepareForReuse() {
@@ -78,12 +79,12 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(5)
         }
         likeButton.snp.makeConstraints { make in
-            make.bottom.equalTo(imageView.snp.bottom).inset(10)
-            make.trailing.equalTo(imageView.snp.trailing).inset(10)
-            make.size.equalTo(40)
+            make.top.equalTo(productNameLabel.snp.bottom).offset(2)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.size.equalTo(30)
         }
     }
-   
+    
     func configureCell(element: ProductDetail) {
         
         priceLabel.text = (Int(element.lprice)?.formatted() ?? "0") + "원"
@@ -93,6 +94,8 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         let image = URL(string: element.image)
         
         imageView.kf.setImage(with: image)
+        
+        companyNameLabel.text = element.mallName
         
     }
     
