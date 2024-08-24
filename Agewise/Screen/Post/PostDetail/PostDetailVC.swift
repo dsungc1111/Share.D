@@ -25,21 +25,12 @@ final class PostDetailVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
-    
-    override func configureNavigationBar() {
-        let editButton = UIBarButtonItem(title: "✍️ 수정하기", style: .plain, target: nil, action: nil)
-        navigationItem.rightBarButtonItem = editButton
-        
-        editButton.rx.tap
-            .bind(with: self) { owner, _ in
-                print("클릭")
-            }
-            .disposed(by: disposeBag)
-    }
+ 
     
     override func bind() {
+        var title = ""
+        
         let input = DetailPostVM.Input(trigger: Observable.just(element))
         
         let output = detailPostVM.transform(input: input)
@@ -48,6 +39,24 @@ final class PostDetailVC: BaseVC {
             .bind(with: self) { owner, result in
                 owner.postDetailView.configurePostDetail(element: result)
                 owner.navigationItem.title = result.productId
+                
+                if UserDefaultManager.shared.userId == result.creator.userId {
+                    title = "✍️ 수정하기"
+                } else {
+                    owner.navigationItem.rightBarButtonItem = nil
+                }
+                
+                let editButton = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+                owner.navigationItem.rightBarButtonItem = editButton
+                
+                editButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        let vc = PostVC()
+                        vc.postView.editView(result: result)
+                        vc.navigationItem.title = "질문 수정"
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
         

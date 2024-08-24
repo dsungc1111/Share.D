@@ -125,5 +125,16 @@ final class PostView: BaseView {
         mallnameLabel.text = product.mallName
         priceLabel.text = (Int(product.lprice)?.formatted() ?? "0") + " 원"
     }
-    
+    func editView(result: PostModelToWrite) {
+        
+        guard let urlString = result.files?.first else { return }
+        
+        let image = URL(string: urlString)
+        imageContainer.kf.setImage(with: image)
+        infoLabel.text = result.title.removeHtmlTag
+        mallnameLabel.text = result.content1
+        priceLabel.text = (result.price?.formatted() ?? "0") + "원"
+        textView.text = result.content
+        
+    }
 }

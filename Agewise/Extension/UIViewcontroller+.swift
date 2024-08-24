@@ -59,4 +59,30 @@ extension UIViewController {
         
         present(alert, animated: true)
     }
+    
+    func logoutUser() {
+        
+        let alert = UIAlertController(title: "로그인 만료", message: "로그인 화면으로 돌아갑니다", preferredStyle: .alert)
+        
+        let okButton = UIAlertAction(title: "확인", style: .default)
+        { _ in
+            
+            for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                UserDefaults.standard.removeObject(forKey: key.description)
+            }
+           
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
+            let vc = OnBoardingVC()
+            let navigationController = UINavigationController(rootViewController: vc)
+            
+            sceneDelegate?.window?.rootViewController = navigationController
+            sceneDelegate?.window?.makeKeyAndVisible()
+            
+        }
+        
+        alert.addAction(okButton)
+        
+        present(alert, animated: true)
+    }
 }

@@ -44,7 +44,6 @@ final class SignUpViewModel: BaseViewModel {
         var email = ""
         var password = ""
         var nickname = ""
-        var emailValidation = ""
         
         input.emailText
             .bind(with: self) { owner, value in

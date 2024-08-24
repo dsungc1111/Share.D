@@ -59,7 +59,7 @@
 		8B3231CF2C731C520095DF0B /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231CE2C731C520095DF0B /* SettingView.swift */; };
 		8B3231D32C73272E0095DF0B /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231D22C73272E0095DF0B /* PostVC.swift */; };
 		8B3231D52C73277F0095DF0B /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231D42C73277F0095DF0B /* PostView.swift */; };
-		8B3231D72C735CB50095DF0B /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231D62C735CB40095DF0B /* PostViewModel.swift */; };
+		8B3231D72C735CB50095DF0B /* PostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231D62C735CB40095DF0B /* PostVM.swift */; };
 		8B3231D92C74B2270095DF0B /* PostListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231D82C74B2270095DF0B /* PostListCollectionViewCell.swift */; };
 		8B3231DB2C74B6D00095DF0B /* PostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231DA2C74B6D00095DF0B /* PostListViewModel.swift */; };
 		8B3231DE2C754A650095DF0B /* ListCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3231DD2C754A650095DF0B /* ListCategoryCollectionViewCell.swift */; };
@@ -71,6 +71,9 @@
 		8B93B37F2C77561B00A68DB5 /* TokenNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B37E2C77561B00A68DB5 /* TokenNetworkManager.swift */; };
 		8B93B3812C7759FC00A68DB5 /* settingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3802C7759FC00A68DB5 /* settingVM.swift */; };
 		8B93B3832C77E61500A68DB5 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3822C77E61500A68DB5 /* UserRouter.swift */; };
+		8B93B3882C78252500A68DB5 /* TokenRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B3872C78252500A68DB5 /* TokenRouter.swift */; };
+		8B93B38B2C783FAE00A68DB5 /* PostNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B38A2C783FAE00A68DB5 /* PostNetworkManager.swift */; };
+		8B93B38D2C783FB500A68DB5 /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93B38C2C783FB500A68DB5 /* PostRouter.swift */; };
 		8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */; };
 		8BC9863D2C6C0BAA00B69112 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */; };
 		8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC9863E2C6C0BAA00B69112 /* OnBoardingVC.swift */; };
@@ -123,7 +126,7 @@
 		8B3231CE2C731C520095DF0B /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		8B3231D22C73272E0095DF0B /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		8B3231D42C73277F0095DF0B /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
-		8B3231D62C735CB40095DF0B /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
+		8B3231D62C735CB40095DF0B /* PostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVM.swift; sourceTree = "<group>"; };
 		8B3231D82C74B2270095DF0B /* PostListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B3231DA2C74B6D00095DF0B /* PostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListViewModel.swift; sourceTree = "<group>"; };
 		8B3231DD2C754A650095DF0B /* ListCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -135,6 +138,9 @@
 		8B93B37E2C77561B00A68DB5 /* TokenNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenNetworkManager.swift; sourceTree = "<group>"; };
 		8B93B3802C7759FC00A68DB5 /* settingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingVM.swift; sourceTree = "<group>"; };
 		8B93B3822C77E61500A68DB5 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
+		8B93B3872C78252500A68DB5 /* TokenRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRouter.swift; sourceTree = "<group>"; };
+		8B93B38A2C783FAE00A68DB5 /* PostNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNetworkManager.swift; sourceTree = "<group>"; };
+		8B93B38C2C783FB500A68DB5 /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		8BC986372C6C0BAA00B69112 /* Agewise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agewise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BC9863A2C6C0BAA00B69112 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8BC9863C2C6C0BAA00B69112 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -239,8 +245,11 @@
 		8B3231662C6C6FD30095DF0B /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				8B3231692C6C721E0095DF0B /* TargetType.swift */,
+				8B3231702C6C74B60095DF0B /* UserInfoModel.swift */,
 				8B32318C2C6E28350095DF0B /* User */,
-				8B93B37B2C774B0800A68DB5 /* NetworkManager */,
+				8B93B3862C78251800A68DB5 /* Token */,
+				8B93B3892C783F9400A68DB5 /* Post */,
 				8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */,
 				8B32318B2C6E28270095DF0B /* Product */,
 				8B3231672C6C71590095DF0B /* UrlComponent.swift */,
@@ -288,9 +297,7 @@
 			children = (
 				8B93B37C2C774B1E00A68DB5 /* UserNetworkManager.swift */,
 				8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */,
-				8B3231702C6C74B60095DF0B /* UserInfoModel.swift */,
 				8B93B3822C77E61500A68DB5 /* UserRouter.swift */,
-				8B3231692C6C721E0095DF0B /* TargetType.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -407,7 +414,7 @@
 			children = (
 				8B3231D42C73277F0095DF0B /* PostView.swift */,
 				8B3231D22C73272E0095DF0B /* PostVC.swift */,
-				8B3231D62C735CB40095DF0B /* PostViewModel.swift */,
+				8B3231D62C735CB40095DF0B /* PostVM.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -424,19 +431,29 @@
 		8B93B3512C76104100A68DB5 /* PostDetail */ = {
 			isa = PBXGroup;
 			children = (
-				8B93B3522C76139600A68DB5 /* PostDetailVC.swift */,
 				8B93B3542C7616B400A68DB5 /* PostDetailView.swift */,
+				8B93B3522C76139600A68DB5 /* PostDetailVC.swift */,
 				8B93B3562C76A04E00A68DB5 /* PostDetailVM.swift */,
 			);
 			path = PostDetail;
 			sourceTree = "<group>";
 		};
-		8B93B37B2C774B0800A68DB5 /* NetworkManager */ = {
+		8B93B3862C78251800A68DB5 /* Token */ = {
 			isa = PBXGroup;
 			children = (
 				8B93B37E2C77561B00A68DB5 /* TokenNetworkManager.swift */,
+				8B93B3872C78252500A68DB5 /* TokenRouter.swift */,
 			);
-			path = NetworkManager;
+			path = Token;
+			sourceTree = "<group>";
+		};
+		8B93B3892C783F9400A68DB5 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				8B93B38A2C783FAE00A68DB5 /* PostNetworkManager.swift */,
+				8B93B38C2C783FB500A68DB5 /* PostRouter.swift */,
+			);
+			path = Post;
 			sourceTree = "<group>";
 		};
 		8BC9862E2C6C0BAA00B69112 = {
@@ -577,7 +594,7 @@
 				8B3231862C6E06A50095DF0B /* Reusable.swift in Sources */,
 				8BC9863F2C6C0BAA00B69112 /* OnBoardingVC.swift in Sources */,
 				8B93B3832C77E61500A68DB5 /* UserRouter.swift in Sources */,
-				8B3231D72C735CB50095DF0B /* PostViewModel.swift in Sources */,
+				8B3231D72C735CB50095DF0B /* PostVM.swift in Sources */,
 				8BC9863B2C6C0BAA00B69112 /* AppDelegate.swift in Sources */,
 				8B3231932C6F2A2A0095DF0B /* PromotionVM.swift in Sources */,
 				8B32311D2C6C21700095DF0B /* LoginVC.swift in Sources */,
@@ -585,6 +602,7 @@
 				8B32311F2C6C22580095DF0B /* BaseVC.swift in Sources */,
 				8B3231A72C707C430095DF0B /* ProductCollectionViewCell.swift in Sources */,
 				8B93B3532C76139600A68DB5 /* PostDetailVC.swift in Sources */,
+				8B93B38B2C783FAE00A68DB5 /* PostNetworkManager.swift in Sources */,
 				8B32316F2C6C74240095DF0B /* UserDefaultManager.swift in Sources */,
 				8B3231A52C70776B0095DF0B /* ProductViewModel.swift in Sources */,
 				8B3231962C6F63320095DF0B /* AdCollectionViewCell.swift in Sources */,
@@ -599,6 +617,7 @@
 				8B93B3592C76B14A00A68DB5 /* ReuseDateformatter.swift in Sources */,
 				8B3231D52C73277F0095DF0B /* PostView.swift in Sources */,
 				8B3231792C6C9AE70095DF0B /* PromotionVC.swift in Sources */,
+				8B93B38D2C783FB500A68DB5 /* PostRouter.swift in Sources */,
 				8B3231282C6C36660095DF0B /* SignUpView.swift in Sources */,
 				8B3231B32C71BEA00095DF0B /* ProductDetailView.swift in Sources */,
 				8B93B37D2C774B1E00A68DB5 /* UserNetworkManager.swift in Sources */,
@@ -612,6 +631,7 @@
 				8B3231912C6E2BCE0095DF0B /* TrendCollectionViewCell.swift in Sources */,
 				8B93B3812C7759FC00A68DB5 /* settingVM.swift in Sources */,
 				8B3231A02C700B760095DF0B /* ProductVC.swift in Sources */,
+				8B93B3882C78252500A68DB5 /* TokenRouter.swift in Sources */,
 				8B3231DB2C74B6D00095DF0B /* PostListViewModel.swift in Sources */,
 				8B3231652C6C6FCD0095DF0B /* NetworkManager.swift in Sources */,
 				8B32319D2C7006110095DF0B /* BaseCollectionViewCell.swift in Sources */,
@@ -766,6 +786,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83K785968Z;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Agewise/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -797,6 +818,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83K785968Z;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Agewise/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

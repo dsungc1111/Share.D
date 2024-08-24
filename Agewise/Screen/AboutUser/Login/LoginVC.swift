@@ -29,6 +29,7 @@ final class LoginVC: BaseVC {
     }
     override func configureNavigationBar() {
         navigationItem.title = "로그인"
+        
     }
     override func bind() {
         

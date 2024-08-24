@@ -16,7 +16,7 @@ enum SuccessKeyword: String {
     case accessError =  "접근권한이 없습니다."
 }
 
-final class PostViewModel: BaseViewModel {
+final class PostVM: BaseViewModel {
     
     
     struct Input {
@@ -41,6 +41,7 @@ final class PostViewModel: BaseViewModel {
         
         let combined = Observable.combineLatest(input.productInfo, input.question, input.category)
         
+        
         input.saveTap
             .withLatestFrom(combined)
             .bind(with: self) { owner, result in
@@ -58,6 +59,35 @@ final class PostViewModel: BaseViewModel {
                 }
             }
             .disposed(by: disposeBag)
+        
+//        input.saveTap
+//            .withLatestFrom(combined)
+//            .map { result in
+//                let product = result.0
+//                let text = result.1
+//                let category = result.2
+//                
+//                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: category + "선물용" , files: [product.image])
+//                
+//                return save
+//            }
+//            .flatMap { result in
+//                
+//                PostNetworkManager.shared.postNetworkManager(api: .postQuestion(query: result), model: PostModelToWrite.self)
+//                    
+//                
+//            }
+//            .subscribe(with: self, onNext: { owner, result in
+//                print("tlfgod")
+//                print(result)
+////                let statuscode = result.statuscode
+////                guard let data = result.data else { return }
+////                print("저장 statuscode", statuscode)
+////                print("저장 데이터 = ", data)
+////                let message = owner.judgeStatusCode(statusCode: statuscode, title: SuccessKeyword.post.rawValue)
+////                success.onNext(message)
+//            })
+//            .disposed(by: disposeBag)
         
         return Output(result: result, success: success)
     }

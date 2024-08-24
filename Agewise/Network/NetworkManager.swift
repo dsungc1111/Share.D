@@ -17,6 +17,8 @@ final class NetworkManager {
     
     private init() {}
     
+    
+    
     //MARK: - 포스트 작성
     func writePost(query: PostQuery, completionHandler: @escaping (Int) -> Void) {
         do {
@@ -53,7 +55,6 @@ final class NetworkManager {
         return Single.create { observer -> Disposable in
             do {
                 let request = try Router.getPost(query: query).asURLRequest()
-                print("query = ", query)
                 
                 AF.request(request).responseDecodable(of: PostModelToView.self) { response in
                     guard let responseCode = response.response?.statusCode else {
@@ -64,7 +65,7 @@ final class NetworkManager {
                     print("포스트 조회 = ", responseCode)
                     
                     if responseCode == 419 {
-                        TokenNetworkManager.shared.refreshToken()
+//                        TokenNetworkManager.shared.refreshToken()
                     }
                     switch response.result {
                     case .success(let value):
@@ -95,7 +96,7 @@ final class NetworkManager {
                     print("포스트 조회 = ", responseCode)
                     
                     if responseCode == 419 {
-                        TokenNetworkManager.shared.refreshToken()
+//                        TokenNetworkManager.shared.refreshToken()
                     }
                     switch response.result {
                     case .success(let value):

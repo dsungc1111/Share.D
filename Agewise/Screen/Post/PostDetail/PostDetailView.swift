@@ -83,6 +83,6 @@ final class PostDetailView: BaseView {
         
         writerLabel.text = element.creator.nick
         dateLabel.text = "게시일 : " + dateTool.changeStringForm(dateString: element.createdAt)
-        contentLabel.text = element.content
+        contentLabel.text = element.content +  "  " + element.postID
     }
 }

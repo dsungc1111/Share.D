@@ -17,9 +17,9 @@ final class PostVC: BaseVC {
     
     var category = ""
     
-    private let postView = PostView()
+    let postView = PostView()
     
-    private let postViewModel = PostViewModel()
+    private let postVM = PostVM()
     
     private let disposeBag = DisposeBag()
     
@@ -44,9 +44,11 @@ final class PostVC: BaseVC {
         
         postView.configureView(product: product)
         
-        let input = PostViewModel.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
         
-        let output = postViewModel.transform(input: input)
+        
+        let input = PostVM.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
+        
+        let output = postVM.transform(input: input)
         
         output.result
             .bind(with: self) { owner, result in
@@ -58,6 +60,7 @@ final class PostVC: BaseVC {
         
         output.success
             .bind(with: self) { owner, result in
+                print(result)
                 if result == SuccessKeyword.post.rawValue {
                    print("업로드 성공")
                     let vc = TabBarController()

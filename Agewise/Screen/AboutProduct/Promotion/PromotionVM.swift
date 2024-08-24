@@ -29,33 +29,71 @@ final class PromotionViewModel: BaseViewModel {
     
     struct Input {
         let adTrigger: Observable<Void>
-        let categoryTap: ControlEvent<String>
         let trendTap: ControlEvent<String>
+        let ageButtonTap: ControlEvent<Void>
+        let timer: Observable<Int>
+        let currentIndex: ControlEvent<[IndexPath]>
     }
     
     struct Output {
         let adList: PublishSubject<[ProductDetail]>
-        let ageList: PublishSubject<[String]>
+//        let ageList: PublishSubject<[String]>
         let presentList: PublishSubject<[String]>
-        let categoryTap: ControlEvent<String>
         let trendTap: ControlEvent<String>
+        let scrollIndexPath: PublishSubject<IndexPath>
     }
-    
+    private var currentIndex: Int = 0
     private let disposeBag = DisposeBag()
     
-    
-    override init() {
-        TokenNetworkManager.shared.fetchProfile()
-    }
     
     func transform(input: Input) -> Output {
         
         let adList = PublishSubject<[ProductDetail]>()
-        let ageList = PublishSubject<[String]>()
+//        let ageList = PublishSubject<[String]>()
         let presentList = PublishSubject<[String]>()
+        let scrollIndexPath = PublishSubject<IndexPath>()
+        
+        
+        //MARK: - About Token
         
         input.adTrigger
-            .map { "핫딜" }
+            .subscribe(with: self) { owner, _ in
+                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+                    
+                    switch result {
+                    case .success((let statuscode, let value)):
+                        print("스테이터스코드", statuscode)
+                        print("밸류", value)
+                    case .failure(_):
+                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { result in
+                            
+                            switch result {
+                            case .success((let statuscode, let value)):
+                                print("리프레쉬 토큰", statuscode)
+                                UserDefaultManager.shared.accessToken = value.accessToken
+                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+                                    
+                                    switch result {
+                                    case .success((let statuscode, let value)):
+                                        print("성공")
+                                    case .failure(_):
+                                        print("실패")
+                                    }
+                                }
+                            case .failure(_):
+                                print("리프레쉬도 실패...?")
+                            }
+                        }
+                        print("실패!!!1")
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
+        input.adTrigger
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .map { "요즘 인기 선물" }
             .flatMap { value in
                 NetworkManager.shared.naverAPI(query: value, page: 1)
             }
@@ -65,20 +103,37 @@ final class PromotionViewModel: BaseViewModel {
                 case .success(let value):
                     adList.onNext(value.items)
                 case .failure(_):
-                    print("실패")
+                    print("네이버 실패")
                 }
-                
                 let age = AgeTitle.allCases.map { $0.rawValue }
                 let present = productTitle.allCases.map { $0.rawValue }
                 
-                ageList.onNext(age)
+//                ageList.onNext(age)
                 presentList.onNext(present)
                 
             }
             .disposed(by: disposeBag)
+     
         
+        input.currentIndex
+            .bind(with: self, onNext: { owner, indexPath in
+                print("selected", indexPath)
+//                owner.currentIndex = indexPath.item
+                print("dd", owner.currentIndex)
+            })
+            .disposed(by: disposeBag)
         
-        return Output(adList: adList, ageList: ageList, presentList: presentList, categoryTap: input.categoryTap, trendTap: input.trendTap)
+        input.timer
+            .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, result in
+                print("11", owner.currentIndex)
+                scrollIndexPath.onNext(IndexPath(item: (owner.currentIndex + 1) % 40, section: 0))
+                owner.currentIndex += 1
+                
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, scrollIndexPath: scrollIndexPath)
     }
     
 }

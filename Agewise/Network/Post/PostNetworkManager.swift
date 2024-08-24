@@ -1,22 +1,22 @@
 //
-//  UserNetworkManager.swift
+//  PostNetworkManager.swift
 //  Agewise
 //
-//  Created by 최대성 on 8/22/24.
+//  Created by 최대성 on 8/23/24.
 //
 
 import Foundation
 import Alamofire
 import RxSwift
 
-
-final class UserNetworkManager {
+final class PostNetworkManager {
     
-    static let shared = UserNetworkManager()
+    static let shared = PostNetworkManager()
     
     private init() {}
     
-    func userNetwork<T: Decodable>(api: UserRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
+    func postNetworkManager<T: Decodable>(api: PostRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
+        
         return Single.create { observer in
             
             AF.request(api)
@@ -25,11 +25,15 @@ final class UserNetworkManager {
                     
                     guard let statuscode = response.response?.statusCode else { return }
                     
+                    print(response.result)
                     switch response.result {
                     case .success(let value):
+                        print("value = ",value)
                         observer(.success((statuscode: statuscode, data: value)))
-                    case .failure(_):
-                        observer(.success((statuscode: statuscode, data: nil)))
+                        
+                    case .failure(let error):
+                        print(error)
+                        observer(.failure(error))
                     }
                 }
             return Disposables.create()

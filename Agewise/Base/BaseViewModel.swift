@@ -15,8 +15,9 @@ class BaseViewModel {
         switch statusCode {
         case 403:
             return  "접근권한이 없습니다."
+        case 418:
+            return "로그인 만료되었습니다. 로그인화면으로 이동합니다."
         case 419:
-            TokenNetworkManager.shared.refreshToken()
             return  "다시 실행해주세요"
         case 420 :
             return "SesacKey를 확인하세요"

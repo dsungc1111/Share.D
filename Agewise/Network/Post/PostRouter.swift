@@ -1,24 +1,24 @@
 //
-//  Header.swift
+//  PostRouter.swift
 //  Agewise
 //
-//  Created by 최대성 on 8/14/24.
+//  Created by 최대성 on 8/23/24.
 //
+
+import Foundation
+
 
 import Foundation
 import Alamofire
 
-
-enum Router {
-   
-    case editProfile
+enum PostRouter {
     case postQuestion(query: PostQuery)
-    case getPost(query: GetPostQuery)
+    case getPost(query: GetPostQuery) // 조회
     case detailPost(query: String)
-    case editPost(query: String)
+    case editPost(query: PostQuery)
 }
 
-extension Router: TargetType {
+extension PostRouter: TargetType {
     
     var baseURL: String {
         return APIKey.baseURL + "v1"
@@ -26,18 +26,12 @@ extension Router: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        
         case .postQuestion:
                 .post
-            
-       
         case .getPost:
                 .get
         case .detailPost:
                 .get
-            
-        case .editProfile:
-                .put
         case .editPost:
                 .put
         }
@@ -45,28 +39,26 @@ extension Router: TargetType {
     
     var path: String {
         switch self {
-        
-        case .editProfile:
-            return  "/users/me/profile"
         case .postQuestion:
             return "/posts"
         case .getPost:
             return "/posts"
-        case .detailPost(query: let query), .editPost(query: let query):
+        case .detailPost(query: let query):
             return "/posts/\(query)"
-            
+        case .editPost:
+            return "/posts/\(UserDefaultManager.shared.userId)"
         }
     }
     
     var header: [String : String] {
         switch self {
-        
-        case .editProfile, .getPost, .detailPost, .postQuestion, .editPost:
+            
+        case .getPost, .detailPost, .postQuestion, .editPost:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
-            ]       
+            ]
         }
     }
     
@@ -75,7 +67,6 @@ extension Router: TargetType {
     }
     
     var queryItems: [URLQueryItem]? {
-        
         switch self {
         case .getPost(let query):
             
@@ -87,22 +78,11 @@ extension Router: TargetType {
             return param
         default: return nil
         }
-        
-        
     }
     
     var body: Data? {
-        
-        switch self {
-            
-        case .postQuestion(let query):
-            let encoder = JSONEncoder()
-            return try? encoder.encode(query)
-            
-        default: return nil
-        }
+        return nil
     }
     
+    
 }
-
-
