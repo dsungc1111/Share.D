@@ -65,6 +65,8 @@ final class SettingVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
+        
+        settingView.nicknameLabel.text = "닉네임" + UserDefaultManager.shared.userNickname
     }
     
     override func configureNavigationBar() {

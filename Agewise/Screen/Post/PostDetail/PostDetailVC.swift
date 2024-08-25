@@ -31,7 +31,7 @@ final class PostDetailVC: BaseVC {
     override func bind() {
         var title = ""
         
-        let input = DetailPostVM.Input(trigger: Observable.just(element))
+        let input = DetailPostVM.Input(trigger: Observable.just(element), deleteTap: postDetailView.deleteButton.rx.tap)
         
         let output = detailPostVM.transform(input: input)
         
@@ -53,12 +53,17 @@ final class PostDetailVC: BaseVC {
                     .bind(with: self) { owner, _ in
                         let vc = PostVC()
                         vc.postView.editView(result: result)
-                        vc.navigationItem.title = "질문 수정"
+                        vc.editOrWrite = true
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }
                     .disposed(by: owner.disposeBag)
+                
             }
             .disposed(by: disposeBag)
+        
+        
+       
+       
         
     }
 }

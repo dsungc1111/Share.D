@@ -28,6 +28,7 @@ final class PromotionVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
     }
     
     override func bind() {
@@ -103,7 +104,7 @@ final class PromotionVC: BaseVC {
     }
     
     override func configureNavigationBar() {
-        navigationItem.title = "Share.D"
+        navigationItem.title = "\(UserDefaultManager.shared.userNickname) 님 "
     }
     
     

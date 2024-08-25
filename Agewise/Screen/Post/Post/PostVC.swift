@@ -25,6 +25,8 @@ final class PostVC: BaseVC {
     
     private var showToast: (() -> Void)?
     
+    var editOrWrite = false
+    
     override func loadView() {
         view = postView
     }
@@ -32,10 +34,17 @@ final class PostVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
+        
     }
     
     override func configureNavigationBar() {
-        navigationItem.title = "질문작성"
+        
+        if editOrWrite == false {
+            navigationItem.title = "질문작성"
+        } else {
+            navigationItem.title = "질문수정"
+        }
     }
     
     override func bind() {
@@ -44,11 +53,10 @@ final class PostVC: BaseVC {
         
         postView.configureView(product: product)
         
-        
-        
-        let input = PostVM.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product))
+        let input = PostVM.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product), editOrWrite: Observable.just(editOrWrite))
         
         let output = postVM.transform(input: input)
+        
         
         output.result
             .bind(with: self) { owner, result in
@@ -61,20 +69,27 @@ final class PostVC: BaseVC {
         output.success
             .bind(with: self) { owner, result in
                 print(result)
-                if result == SuccessKeyword.post.rawValue {
-                   print("업로드 성공")
-                    let vc = TabBarController()
-                    owner.resetViewWithoutNavigation(vc: vc)
-                    vc.selectedIndex = 0
-                } else if result == SuccessKeyword.accessError.rawValue {
-                    owner.withdrawUser {
-                        print("로그아웃")
+                if owner.editOrWrite == false {
+                    if result == SuccessKeyword.post.rawValue {
+                        print("업로드 성공")
+                        let vc = TabBarController()
+                        owner.resetViewWithoutNavigation(vc: vc)
+                        vc.selectedIndex = 0
+                    } else if result == SuccessKeyword.accessError.rawValue {
+                        owner.withdrawUser {
+                            print("로그아웃")
+                        }
+                    } else {
+                        owner.view.makeToast(result, duration: 2.0, position: .bottom)
                     }
                 } else {
-                    owner.view.makeToast(result, duration: 2.0, position: .bottom)
+                    print("수정성공")
                 }
             }
             .disposed(by: disposeBag)
+        
+        
+        
     }
     
 }

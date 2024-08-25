@@ -16,6 +16,7 @@ enum PostRouter {
     case getPost(query: GetPostQuery) // 조회
     case detailPost(query: String)
     case editPost(query: PostQuery)
+    case delete(query: String)
 }
 
 extension PostRouter: TargetType {
@@ -34,6 +35,8 @@ extension PostRouter: TargetType {
                 .get
         case .editPost:
                 .put
+        case .delete:
+                .delete
         }
     }
     
@@ -47,13 +50,15 @@ extension PostRouter: TargetType {
             return "/posts/\(query)"
         case .editPost:
             return "/posts/\(UserDefaultManager.shared.userId)"
+        case .delete(query: let query) :
+            return "/posts/\(query)"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,

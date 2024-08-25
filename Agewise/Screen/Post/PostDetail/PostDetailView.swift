@@ -40,6 +40,15 @@ final class PostDetailView: BaseView {
         label.text = "제목 테이블 예비"
         return label
     }()
+    let deleteButton = {
+        let btn = UIButton()
+        btn.setTitle("삭제", for: .normal)
+        btn.setTitleColor(.red, for: .normal)
+        btn.backgroundColor = .white
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.red.cgColor
+        return btn
+    }()
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -47,6 +56,7 @@ final class PostDetailView: BaseView {
         addSubview(dateLabel)
         addSubview(contentLabel)
         addSubview(productLabel)
+        addSubview(deleteButton)
     }
     override func configureLayout() {
         imageView.snp.makeConstraints { make in
@@ -71,6 +81,12 @@ final class PostDetailView: BaseView {
         productLabel.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.top).inset(10)
             make.horizontalEdges.equalTo(contentLabel.snp.horizontalEdges).inset(10)
+            make.height.equalTo(40)
+        }
+        deleteButton.snp.makeConstraints { make in
+            make.centerX.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+            make.width.equalTo(100)
             make.height.equalTo(40)
         }
     }

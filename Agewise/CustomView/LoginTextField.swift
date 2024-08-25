@@ -15,6 +15,7 @@ class LoginTextField: UITextField {
         placeholder = placeholderText
         layer.cornerRadius = 10
         layer.borderWidth = 1
+        layer.borderColor = UIColor(hexCode: MainColor.main.rawValue).cgColor
         leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         leftViewMode = .always
     }

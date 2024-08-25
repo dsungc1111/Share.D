@@ -53,45 +53,49 @@ final class PromotionViewModel: BaseViewModel {
         
         //MARK: - About Token
         
-//        input.adTrigger
-//            .subscribe(with: self) { owner, _ in
-//                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
-//                    
-//                    switch result {
-//                    case .success((let statuscode, let value)):
-//                        print("스테이터스코드", statuscode)
-//                        print("밸류", value)
-//                    case .failure(_):
-//                        print("실팽ㅇㄹㅇㄹ")
-//                        
-//                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { result in
-//                            
-//                            print("리프레쉬 실행")
-//                            switch result {
-//                            case .success((let statuscode, let value)):
-//                                print("리프레쉬 토큰", statuscode)
-//                                
-//                                UserDefaultManager.shared.accessToken = value.accessToken
-//                                
-//                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
-//                                    
-//                                    switch result {
-//                                    case .success((let statuscode, let value)):
-//                                        print("성공")
-//                                    case .failure(_):
-//                                        print("실패")
-//                                    }
-//                                    
-//                                }
-//                            case .failure(_):
-//                                print("리프레쉬도 실패...?")
-//                            }
-//                            
-//                        }
-//                    }
-//                }
-//            }
-//            .disposed(by: disposeBag)
+        input.adTrigger
+            .subscribe(with: self) { owner, _ in
+                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+                    
+                    switch result {
+                    case .success((let statuscode, let value)):
+                        print("스테이터스코드", statuscode)
+                        print("밸류", value)
+                        UserDefaultManager.shared.userNickname = value.nick
+                        UserDefaultManager.shared.userId = value.id
+                        print(UserDefaultManager.shared.userNickname)
+                        
+                    case .failure(_):
+                        print("실팽ㅇㄹㅇㄹ")
+                        
+                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { result in
+                            
+                            print("리프레쉬 실행")
+                            switch result {
+                            case .success((let statuscode, let value)):
+                                print("리프레쉬 토큰", statuscode)
+                                
+                                UserDefaultManager.shared.accessToken = value.accessToken
+                                
+                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+                                    
+                                    switch result {
+                                    case .success((let statuscode, let value)):
+                                        print("성공")
+                                    case .failure(_):
+                                        print("실패")
+                                    }
+                                    
+                                }
+                            case .failure(_):
+                                print("리프레쉬도 실패...?")
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
         
         
         input.adTrigger

@@ -39,7 +39,7 @@ final class SignUpVC: BaseVC {
             .bind(with: self) { owner, result in
                 print(result)
                 
-                owner.signUpView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
+                owner.signUpView.passwordTextField.layer.borderColor = result ? UIColor(hexCode: MainColor.main.rawValue).cgColor : UIColor.lightGray.cgColor
                 owner.signUpView.passwordWarningLabel.isHidden = result ? false : true
                 owner.signUpView.signUpButton.isEnabled = false
                 
@@ -54,7 +54,7 @@ final class SignUpVC: BaseVC {
         
         output.pwValid
             .bind(with: self) { owner, result in
-                owner.signUpView.nicknameTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
+                owner.signUpView.nicknameTextField.layer.borderColor = result ? UIColor(hexCode: MainColor.main.rawValue).cgColor : UIColor.lightGray.cgColor
                 owner.signUpView.passwordWarningLabel.textColor = result ? .black : .red
                 owner.signUpView.passwordWarningLabel.text = result ? "비밀번호 조건 부합" : "비밀번호 8글자 이상"
             }
@@ -76,7 +76,7 @@ final class SignUpVC: BaseVC {
                 print(result)
                 
                 owner.signUpView.signUpButton.isEnabled = result
-                let color = result ? UIColor.black : UIColor.lightGray
+                let color = result ? UIColor(hexCode: MainColor.main.rawValue) : UIColor.lightGray
                 owner.signUpView.signUpButton.setTitleColor(color, for: .normal)
                 owner.signUpView.signUpButton.layer.borderColor = color.cgColor
             }

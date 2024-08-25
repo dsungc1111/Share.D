@@ -19,11 +19,16 @@ enum SuccessKeyword: String {
 final class PostVM: BaseViewModel {
     
     
+    deinit {
+        print("====deinit======")
+    }
+    
     struct Input {
         let saveTap: ControlEvent<Void>
         let question: ControlProperty<String>
         let category: Observable<String>
         let productInfo: Observable<ProductDetail>
+        let editOrWrite: Observable<Bool>
     }
     struct Output {
         let result: Observable<Bool>
@@ -31,13 +36,32 @@ final class PostVM: BaseViewModel {
     }
     private let disposeBag = DisposeBag()
     
+    private var editOrWrite = false
+    
+    
+    override init() {
+        print("postVM init")
+    }
+    
     func transform(input: Input) -> Output {
+        
+        input.editOrWrite
+            .bind(with: self) { owner, result in
+                owner.editOrWrite = result
+            }
+            .disposed(by: disposeBag)
+        
         
         let success = PublishSubject<String>()
         
         let result = input.question
             .map { $0.count != 0 }
         
+        input.question
+            .bind(with: self) { owner, result in
+                print(result)
+            }
+            .disposed(by: disposeBag)
         
         let combined = Observable.combineLatest(input.productInfo, input.question, input.category)
         
@@ -46,20 +70,48 @@ final class PostVM: BaseViewModel {
             .withLatestFrom(combined)
             .bind(with: self) { owner, result in
                 
+                
                 let product = result.0
                 let text = result.1
                 let category = result.2
                 
                 let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: category + "선물용" , files: [product.image])
                 
-                NetworkManager.shared.writePost(query: save) { result in
-                    
-                    success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
-                    
+                
+//                PostNetworkManager.shared.networking(api: .postQuestion(query: save), model: PostModelToWrite.self) { result in
+//                    
+//                    switch result {
+//                    case .success(let success):
+//                        print("0 = ",success.0)
+//                        print("1 = ",success.1)
+//                    case .failure(let failure):
+//                        print(failure)
+//                        print("실패")
+//                    }
+//                }
+                
+                if owner.editOrWrite == false {
+                    NetworkManager.shared.writePost(query: save) { result in
+                        success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
+                        //
+                    }
+                } else {
+                    PostNetworkManager.shared.networking(api: .editPost(query: save), model: PostModelToWrite.self) { result in
+                        switch result {
+                            
+                        case .success((let statuscode, let value)):
+                            print("수정statuscode",statuscode)
+                            print("수정 value = ", value)
+                        case .failure(let error):
+                            print("에러", error)
+                        }
+                    }
                 }
             }
             .disposed(by: disposeBag)
         
+        
+        //MARK: - 싱글 사용 > 에러
 //        input.saveTap
 //            .withLatestFrom(combined)
 //            .map { result in

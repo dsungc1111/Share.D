@@ -61,6 +61,9 @@ final class LoginViewModel: BaseViewModel {
                 let message = owner.judgeStatusCode(statusCode: result.statuscode, title: SuccessKeyword.login.rawValue)
                 UserDefaultManager.shared.accessToken = result.data?.accessToken ?? ""
                 UserDefaultManager.shared.refreshToken = result.data?.refreshToken ?? ""
+                UserDefaultManager.shared.userNickname = result.data?.nick ?? ""
+                UserDefaultManager.shared.userId = result.data?.user_id ?? ""
+                
                 success.onNext(message)
             })
             .disposed(by: disposeBag)

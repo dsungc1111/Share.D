@@ -12,12 +12,18 @@ import RxCocoa
 final class PostListViewModel: BaseViewModel {
     
     enum AgeTitle: String, CaseIterable {
-        case teen = "10대"
-        case graduation = "20대"
-        case developer = "30대"
-        case parent = "40대"
-        case parent50 = "50대"
-        case grand = "60대+"
+        case teenWoman = "10대 여성"
+        case teenMan = "10대 남성"
+        case graduationWoman = "20대 여성"
+        case graduationMan = "20대 남성"
+        case developerWoman = "30대 여성"
+        case developer = "30대 남성"
+        case parentWoman = "40대 여성"
+        case parent = "40대 남성"
+        case parent50Woman = "50대 여성"
+        case parent50 = "50대 남성"
+        case grandWoman = "60대+ 여성"
+        case grand = "60대+ 남성"
     }
     
     struct Input {
