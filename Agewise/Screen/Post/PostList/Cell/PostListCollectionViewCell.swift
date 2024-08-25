@@ -28,8 +28,7 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
     
     let priceLabel = {
         let label = UILabel()
-        label.text = "예비"
-        label.font = .systemFont(ofSize: 11)
+        label.font = .boldSystemFont(ofSize: 11)
         return label
     }()
     let contentLabel = {
@@ -50,7 +49,7 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
             make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(20)
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
             make.height.equalTo(100)
-            make.width.equalTo(80)
+            make.width.equalTo(100)
         }
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(25)
@@ -62,7 +61,7 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
         }
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.bottom.equalTo(imageView.snp.bottom).inset(30)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
         }
     }

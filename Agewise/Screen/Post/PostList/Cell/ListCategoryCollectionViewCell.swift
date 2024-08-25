@@ -25,8 +25,7 @@ final class ListCategoryCollectionViewCell: BaseCollectionViewCell {
         
         categoryButton.snp.makeConstraints { make in
             make.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
         }
     }
     

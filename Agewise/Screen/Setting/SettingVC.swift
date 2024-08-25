@@ -21,6 +21,7 @@ final class SettingVC: BaseVC {
         view = settingView
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,5 +58,16 @@ final class SettingVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
+        
+        settingView.editButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("클릭")
+            }
+            .disposed(by: disposeBag)
+        
+    }
+    
+    override func configureNavigationBar() {
+        navigationItem.title = "설정"
     }
 }

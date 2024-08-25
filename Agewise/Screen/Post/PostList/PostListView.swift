@@ -55,7 +55,8 @@ final class PostListView: BaseView {
         addSubview(resultCollectionView)
        
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.trailing.equalTo(safeAreaLayoutGuide)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
         }
         resultCollectionView.snp.makeConstraints { make in
