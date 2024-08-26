@@ -34,8 +34,6 @@ final class PostVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
-        
     }
     
     override func configureNavigationBar() {
@@ -49,6 +47,7 @@ final class PostVC: BaseVC {
     
     override func bind() {
         
+        print(#function)
         guard let product = productInfo else { return }
         
         postView.configureView(product: product)
@@ -61,7 +60,7 @@ final class PostVC: BaseVC {
         output.result
             .bind(with: self) { owner, result in
                 owner.postView.saveButton.isEnabled = result
-                owner.postView.saveButton.backgroundColor = result ? .black : .lightGray
+                owner.postView.saveButton.backgroundColor = result ? UIColor(hexCode: MainColor.main.rawValue) : .lightGray
             }
             .disposed(by: disposeBag)
         
@@ -76,7 +75,7 @@ final class PostVC: BaseVC {
                         owner.resetViewWithoutNavigation(vc: vc)
                         vc.selectedIndex = 0
                     } else if result == SuccessKeyword.accessError.rawValue {
-                        owner.withdrawUser {
+                        owner.withdrawUser(title: "로그아웃") {
                             print("로그아웃")
                         }
                     } else {

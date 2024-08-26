@@ -90,19 +90,7 @@ struct PostModelToView: Decodable {
 }
 
 
-struct Test: Decodable {
-    let post_id: String
-    let createdAt: String
-    let creator: String
-    let user_id: String
-    let nick: String
-    let files: [String]
-    let like: [String]
-    let likes: [String]
-    let buyers: [String]
-    let hashTags:[String]
-    let comments: [String]
-}
+
 
 
 

@@ -18,26 +18,24 @@ final class TokenNetworkManager {
     private init() {}
     
     
-    func networking<T: Decodable>(api: TokenRouter, model: T.Type, completionHandler: @escaping (Result<(Int, T), NetworkError>) -> Void) {
+    func networking<T: Decodable>(api: TokenRouter, model: T.Type, completionHandler: @escaping (Int, T?) -> Void) {
         
         let url = api.baseURL + api.path
         
         AF.request(url, method: api.method, encoding: URLEncoding(destination: .queryString), headers: HTTPHeaders(api.header))
-            .validate(statusCode: 200..<500)
+            .validate(statusCode: 200..<300)
             .responseDecodable(of: T.self) { response in
+                
                 switch response.result {
                 case .success(let value):
                     if let statusCode = response.response?.statusCode {
                         print(statusCode)
-                        completionHandler(.success((statusCode, value)))
-                    } else {
-                        completionHandler(.failure(.invalidURL))
+                        completionHandler(statusCode, value)
                     }
                 case .failure(let error):
+                    print("실패 에러 = ", error)
                     if let statusCode = response.response?.statusCode {
-                        completionHandler(.failure(.unknownResponse))
-                    } else {
-                        completionHandler(.failure(.unknownResponse))
+                        completionHandler(statusCode, nil)
                     }
                 }
             }

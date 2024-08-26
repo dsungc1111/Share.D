@@ -16,6 +16,7 @@ enum Router {
     case getPost(query: GetPostQuery)
     case detailPost(query: String)
     case editPost(query: String)
+    case viewPost(query: GetPostQuery)
 }
 
 extension Router: TargetType {
@@ -31,7 +32,7 @@ extension Router: TargetType {
                 .post
             
        
-        case .getPost:
+        case .getPost, .viewPost:
                 .get
         case .detailPost:
                 .get
@@ -55,13 +56,15 @@ extension Router: TargetType {
         case .detailPost(query: let query), .editPost(query: let query):
             return "/posts/\(query)"
             
+        case .viewPost(query: let query):
+            return "/posts/users/\(UserDefaultManager.shared.userId)"
         }
     }
     
     var header: [String : String] {
         switch self {
         
-        case .editProfile, .getPost, .detailPost, .postQuestion, .editPost:
+        case .editProfile, .getPost, .detailPost, .postQuestion, .editPost, .viewPost:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,

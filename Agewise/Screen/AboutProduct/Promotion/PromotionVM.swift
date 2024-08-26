@@ -40,6 +40,7 @@ final class PromotionViewModel: BaseViewModel {
         let presentList: PublishSubject<[String]>
         let trendTap: ControlEvent<String>
         let scrollIndexPath: PublishSubject<IndexPath>
+        let logout: PublishSubject<String>
     }
     private var currentIndex: Int = 0
     private let disposeBag = DisposeBag()
@@ -50,50 +51,44 @@ final class PromotionViewModel: BaseViewModel {
         let adList = PublishSubject<[ProductDetail]>()
         let presentList = PublishSubject<[String]>()
         let scrollIndexPath = PublishSubject<IndexPath>()
-        
+        let logout = PublishSubject<String>()
         //MARK: - About Token
         
         input.adTrigger
             .subscribe(with: self) { owner, _ in
-                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
+                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
+                    print("스테이터스코드", statuscode)
+                    print("밸류", result)
                     
-                    switch result {
-                    case .success((let statuscode, let value)):
-                        print("스테이터스코드", statuscode)
-                        print("밸류", value)
-                        UserDefaultManager.shared.userNickname = value.nick
-                        UserDefaultManager.shared.userId = value.id
+                    
+                    if statuscode == 200 {
+                        UserDefaultManager.shared.userNickname = result?.nick ?? ""
+                        UserDefaultManager.shared.userId = result?.nick ?? ""
                         print(UserDefaultManager.shared.userNickname)
+                    } else if statuscode == 419 {
                         
-                    case .failure(_):
-                        print("실팽ㅇㄹㅇㄹ")
-                        
-                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { result in
-                            
-                            print("리프레쉬 실행")
-                            switch result {
-                            case .success((let statuscode, let value)):
-                                print("리프레쉬 토큰", statuscode)
+                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statuscode, result in
+                            print("리프레쉬 토큰", statuscode, result)
+                            if statuscode == 200 {
+                                UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
                                 
-                                UserDefaultManager.shared.accessToken = value.accessToken
-                                
-                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { result in
-                                    
-                                    switch result {
-                                    case .success((let statuscode, let value)):
-                                        print("성공")
-                                    case .failure(_):
-                                        print("실패")
-                                    }
-                                    
+                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
+                                    print(statuscode, result)
                                 }
-                            case .failure(_):
-                                print("리프레쉬도 실패...?")
+                            } else if statuscode == 418 {
+                                let message = owner.judgeStatusCode(statusCode: statuscode, title: "로그인 만료")
+                                logout.onNext(message)
                             }
-                            
                         }
+                        
+                        
+                        
                     }
+                    
+                    
+                    
                 }
+                
             }
             .disposed(by: disposeBag)
         
@@ -140,7 +135,7 @@ final class PromotionViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, scrollIndexPath: scrollIndexPath)
+        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, scrollIndexPath: scrollIndexPath, logout: logout)
     }
     
 }

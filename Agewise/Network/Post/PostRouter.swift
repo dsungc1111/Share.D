@@ -11,12 +11,14 @@ import Foundation
 import Foundation
 import Alamofire
 
+
 enum PostRouter {
     case postQuestion(query: PostQuery)
     case getPost(query: GetPostQuery) // 조회
     case detailPost(query: String)
     case editPost(query: PostQuery)
     case delete(query: String)
+    case viewPost(query: GetPostQuery)
 }
 
 extension PostRouter: TargetType {
@@ -37,6 +39,8 @@ extension PostRouter: TargetType {
                 .put
         case .delete:
                 .delete
+        case .viewPost:
+                .get
         }
     }
     
@@ -52,13 +56,15 @@ extension PostRouter: TargetType {
             return "/posts/\(UserDefaultManager.shared.userId)"
         case .delete(query: let query) :
             return "/posts/\(query)"
+        case .viewPost(query: let query):
+            return "/posts/users/\(UserDefaultManager.shared.userId)"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost:
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
@@ -73,7 +79,7 @@ extension PostRouter: TargetType {
     
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .getPost(let query):
+        case .getPost(let query), .viewPost(let query):
             
             let param = [
                 URLQueryItem(name: "next", value: query.next),

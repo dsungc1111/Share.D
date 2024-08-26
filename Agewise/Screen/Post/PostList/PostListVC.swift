@@ -14,7 +14,7 @@ final class PostListVC: BaseVC {
     
     private let postListView = PostListView()
     
-    private let postListViewModel = PostListViewModel()
+    private let postListViewModel = PostListVM()
     
     private let disposeBag = DisposeBag()
     
@@ -47,7 +47,7 @@ final class PostListVC: BaseVC {
                .disposed(by: disposeBag)
         
         
-        let input = PostListViewModel.Input(trigger: Observable.just(()), categoryTap: postListView.categoryCollectionView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
+        let input = PostListVM.Input(trigger: Observable.just(()), categoryTap: postListView.categoryCollectionView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
         
         let output = postListViewModel.transform(input: input)
         

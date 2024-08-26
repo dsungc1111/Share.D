@@ -31,9 +31,9 @@ extension UIViewController {
     
     
     
-    func withdrawUser(completionHandler: @escaping (() -> Void)) {
+    func withdrawUser(title: String, completionHandler: @escaping (() -> Void)) {
         
-        let alert = UIAlertController(title: "탈퇴", message: "탈퇴하시겠습니까?", preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: "\(title)하시겠습니까?", preferredStyle: .alert)
         
         let okButton = UIAlertAction(title: "확인", style: .default)
         { _ in

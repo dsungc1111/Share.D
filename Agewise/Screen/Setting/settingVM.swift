@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Alamofire
 
 final class SettingVM: BaseViewModel {
     
@@ -16,20 +17,46 @@ final class SettingVM: BaseViewModel {
     }
     
     struct Input {
+        let myQuestionTap: ControlEvent<Void>
+        let logoutTap: ControlEvent<Void>
         let resetTap: ControlEvent<Void>
         let withdrawButtonTap: PublishSubject<Void>
     }
     struct Output {
         let showResetAlert: PublishSubject<Void>
         let resetMessage: PublishSubject<String>
+        let logoutTap: ControlEvent<Void>
     }
     
     private let disposeBag = DisposeBag()
+    private var isLastPage = false
+    private var nextCursor = BehaviorRelay(value: "")
+    private let lastPage = PublishSubject<String>()
     
     func transform(input: Input) -> Output {
         let showResetAlert = PublishSubject<Void>()
         let resetMessage = PublishSubject<String>()
+        var data: [PostModelToWrite] = []
+        var query = GetPostQuery(next: "", limit: "6", product_id: "")
+        let list = PublishSubject<[PostModelToWrite]>()
+        //MARK: - 내가 한 질문
         
+        input.myQuestionTap
+            .subscribe(with: self, onNext: { owner, _ in
+                PostNetworkManager.shared.networking(api: .viewPost(query: query), model: PostModelToView.self) { result in
+                    switch result {
+                    case .success(let success):
+                        print(success)
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        
+        
+        //MARK: - 탈퇴하기
         input.resetTap
             .subscribe(with: self) { owner, _ in
                 showResetAlert.onNext(())
@@ -49,7 +76,7 @@ final class SettingVM: BaseViewModel {
             })
             .disposed(by: disposeBag)
         
-        return Output(showResetAlert: showResetAlert, resetMessage: resetMessage)
+        return Output(showResetAlert: showResetAlert, resetMessage: resetMessage, logoutTap: input.logoutTap)
     }
     
     
@@ -70,3 +97,19 @@ final class SettingVM: BaseViewModel {
 }
 
 
+extension SettingVM {
+    
+    func nextCursorChange(cursor: String?) {
+        guard let cursor = cursor else { return }
+        
+        if cursor != "0" {
+            nextCursor.accept(cursor)
+            isLastPage = false
+        } else {
+            isLastPage = true
+            lastPage.onNext("마지막 페이지입니다.")
+        }
+        
+    }
+    
+}

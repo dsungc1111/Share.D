@@ -17,7 +17,7 @@ final class NetworkManager {
     
     private init() {}
     
-    
+   
     
     //MARK: - 포스트 작성
     func writePost(query: PostQuery, completionHandler: @escaping (Int) -> Void) {
@@ -80,6 +80,41 @@ final class NetworkManager {
             return Disposables.create()
         }
     }
+    func viewPost(query: GetPostQuery) -> Single<Result<PostModelToView, NetworkError>> {
+        return Single.create { observer -> Disposable in
+            do {
+                let request = try Router.viewPost(query: query).asURLRequest()
+                
+                AF.request(request).responseDecodable(of: PostModelToView.self) { response in
+                    guard let responseCode = response.response?.statusCode else {
+                        observer(.failure(NetworkError.invalidURL))
+                        return
+                    }
+                    
+                    print("request = ", request)
+                    print("내거 조회 = ", responseCode)
+                    
+                    if responseCode == 419 {
+//                        TokenNetworkManager.shared.refreshToken()
+                    }
+                    switch response.result {
+                    case .success(let value):
+                        observer(.success(.success(value)))
+                    case .failure(let error):
+                        print(error)
+                        observer(.success(.failure(.unknownResponse)))
+                    }
+                }
+            } catch {
+                observer(.failure(NetworkError.unknownResponse))
+            }
+            return Disposables.create()
+        }
+    }
+    
+   
+    
+    
     
     func detailPost(query: String) -> Single<Result<PostModelToWrite, NetworkError>> {
         return Single.create { observer -> Disposable in

@@ -101,6 +101,14 @@ final class PromotionVC: BaseVC {
             })
             .disposed(by: disposeBag)
         
+        
+        output.logout
+            .bind(with: self) { owner, result in
+                owner.logoutUser()
+                print(result)
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     override func configureNavigationBar() {

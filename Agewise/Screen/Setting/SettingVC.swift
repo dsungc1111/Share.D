@@ -27,17 +27,42 @@ final class SettingVC: BaseVC {
         
         let withdrawButtonTap = PublishSubject<Void>()
         
-        let input = SettingVM.Input(resetTap: settingView.resetbutton.rx.tap, withdrawButtonTap: withdrawButtonTap)
+        let input = SettingVM.Input(myQuestionTap: settingView.myQuestionButton.rx.tap, logoutTap: settingView.logoutButton.rx.tap, resetTap: settingView.resetbutton.rx.tap, withdrawButtonTap: withdrawButtonTap)
         
         let output = settingVM.transform(input: input)
         
+        
+        
+        
+        //MARK: - 프로필 설정
+        settingView.editButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("클릭")
+            }
+            .disposed(by: disposeBag)
+        
+        
+        //MARK: - 내가 한 질문
+        
+        //MARK: - 좋아요
+        
+        
+        //MARK: - 로그아웃 버튼
+        output.logoutTap
+            .bind(with: self) { owner, _ in
+                owner.withdrawUser(title: "로그아웃 ") {
+                    print("로그아웃")
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
+        //MARK: - 탈퇴하기 버튼
         output.showResetAlert
             .bind(with: self) { owner, _ in
                 
-                owner.withdrawUser { 
-                    
+                owner.withdrawUser(title: "탈퇴 ") {
                     withdrawButtonTap.onNext(())
-                    
                 }
             }
             .disposed(by: disposeBag)
@@ -47,21 +72,6 @@ final class SettingVC: BaseVC {
                 
               print(value)
              
-            }
-            .disposed(by: disposeBag)
-        
-        settingView.logoutButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.withdrawUser {
-                    print("로그아웃")
-                }
-            }
-            .disposed(by: disposeBag)
-        
-        
-        settingView.editButton.rx.tap
-            .bind(with: self) { owner, _ in
-                print("클릭")
             }
             .disposed(by: disposeBag)
         

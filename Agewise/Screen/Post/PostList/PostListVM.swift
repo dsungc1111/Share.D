@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class PostListViewModel: BaseViewModel {
+final class PostListVM: BaseViewModel {
     
     enum AgeTitle: String, CaseIterable {
         case teenWoman = "10대 여성"
@@ -56,6 +56,7 @@ final class PostListViewModel: BaseViewModel {
         input.trigger
             .flatMap { NetworkManager.shared.getPost(query: query) }
             .subscribe(with: self) { owner, result in
+                
                 switch result {
                 case .success(let value):
                     data.append(contentsOf: value.data)
@@ -115,7 +116,7 @@ final class PostListViewModel: BaseViewModel {
     }
 }
 
-extension PostListViewModel {
+extension PostListVM {
     
     func nextCursorChange(cursor: String?) {
         guard let cursor = cursor else { return }
