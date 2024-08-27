@@ -19,6 +19,7 @@ enum PostRouter {
     case editPost(query: PostQuery)
     case delete(query: String)
     case viewPost(query: GetPostQuery)
+    case likePost(String, LikeQuery)
 }
 
 extension PostRouter: TargetType {
@@ -29,7 +30,7 @@ extension PostRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .postQuestion:
+        case .postQuestion, .likePost:
                 .post
         case .getPost:
                 .get
@@ -56,15 +57,18 @@ extension PostRouter: TargetType {
             return "/posts/\(UserDefaultManager.shared.userId)"
         case .delete(query: let query) :
             return "/posts/\(query)"
-        case .viewPost(query: let query):
+        case .viewPost:
             return "/posts/users/\(UserDefaultManager.shared.userId)"
+        case .likePost(let post_id, _):
+            return "/posts/\(post_id)/like"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost:
+            
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
@@ -92,8 +96,23 @@ extension PostRouter: TargetType {
     }
     
     var body: Data? {
-        return nil
+        
+        switch self {
+        case .postQuestion(let query):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(query)
+            
+        case .likePost(_, let like):
+//            let param: [String : Bool] = ["like_status" : like.like_status]
+            let encoder = JSONEncoder()
+            return try? encoder.encode(like)
+            
+        default: return nil
+            
+        }
+        
     }
     
     
 }
+

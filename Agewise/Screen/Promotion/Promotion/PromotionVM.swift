@@ -58,35 +58,27 @@ final class PromotionViewModel: BaseViewModel {
             .subscribe(with: self) { owner, _ in
                 TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
                     print("스테이터스코드", statuscode)
-                    print("밸류", result)
-                    
                     
                     if statuscode == 200 {
                         UserDefaultManager.shared.userNickname = result?.nick ?? ""
-                        UserDefaultManager.shared.userId = result?.nick ?? ""
+                        UserDefaultManager.shared.userId = result?.id ?? ""
                         print(UserDefaultManager.shared.userNickname)
                     } else if statuscode == 419 {
                         
                         TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statuscode, result in
-                            print("리프레쉬 토큰", statuscode, result)
+                            
                             if statuscode == 200 {
                                 UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
                                 
                                 TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
-                                    print(statuscode, result)
+                                    
                                 }
                             } else if statuscode == 418 {
                                 let message = owner.judgeStatusCode(statusCode: statuscode, title: "로그인 만료")
                                 logout.onNext(message)
                             }
                         }
-                        
-                        
-                        
                     }
-                    
-                    
-                    
                 }
                 
             }

@@ -17,7 +17,7 @@ final class NetworkManager {
     
     private init() {}
     
-   
+    
     
     //MARK: - 포스트 작성
     func writePost(query: PostQuery, completionHandler: @escaping (Int) -> Void) {
@@ -36,7 +36,7 @@ final class NetworkManager {
                     
                     completionHandler(responseCode)
                 case .failure(_):
-//                    guard let responseStatusCode = response.response?.statusCode else { return }
+                    //                    guard let responseStatusCode = response.response?.statusCode else { return }
                     completionHandler(responseCode)
                 }
                 
@@ -46,8 +46,6 @@ final class NetworkManager {
             completionHandler(500)
         }
     }
-    
-    // 매개변수로 라우터를 받아
     
     //MARK: - 포스트 조회
     
@@ -64,13 +62,20 @@ final class NetworkManager {
                     
                     print("포스트 조회 = ", responseCode)
                     
-                    if responseCode == 419 {
-//                        TokenNetworkManager.shared.refreshToken()
-                    }
                     switch response.result {
                     case .success(let value):
                         observer(.success(.success(value)))
                     case .failure( _):
+                        if let statusCode = response.response?.statusCode {
+                            print(statusCode)
+                            if statusCode == 419 {
+                                TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
+                                    UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
+                                }
+                            } else if statusCode == 418 {
+                                print("재로그인")
+                            }
+                        }
                         observer(.success(.failure(.unknownResponse)))
                     }
                 }
@@ -85,26 +90,34 @@ final class NetworkManager {
             do {
                 let request = try Router.viewPost(query: query).asURLRequest()
                 
-                AF.request(request).responseDecodable(of: PostModelToView.self) { response in
-                    guard let responseCode = response.response?.statusCode else {
-                        observer(.failure(NetworkError.invalidURL))
-                        return
+                AF.request(request)
+                    .responseDecodable(of: PostModelToView.self) { response in
+                        guard let responseCode = response.response?.statusCode else {
+                            observer(.failure(NetworkError.invalidURL))
+                            return
+                        }
+                        
+                        print("request = ", request)
+                        print("내거 조회 = ", responseCode)
+                        
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            if let statusCode = response.response?.statusCode {
+                                print(statusCode)
+                                if statusCode == 419 {
+                                    TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
+                                        UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
+                                    }
+                                } else if statusCode == 418 {
+                                    print("재로그인")
+                                }
+                            }
+                            observer(.success(.failure(.unknownResponse)))
+                        }
                     }
-                    
-                    print("request = ", request)
-                    print("내거 조회 = ", responseCode)
-                    
-                    if responseCode == 419 {
-//                        TokenNetworkManager.shared.refreshToken()
-                    }
-                    switch response.result {
-                    case .success(let value):
-                        observer(.success(.success(value)))
-                    case .failure(let error):
-                        print(error)
-                        observer(.success(.failure(.unknownResponse)))
-                    }
-                }
             } catch {
                 observer(.failure(NetworkError.unknownResponse))
             }
@@ -112,7 +125,7 @@ final class NetworkManager {
         }
     }
     
-   
+    
     
     
     
@@ -131,7 +144,7 @@ final class NetworkManager {
                     print("포스트 조회 = ", responseCode)
                     
                     if responseCode == 419 {
-//                        TokenNetworkManager.shared.refreshToken()
+                        //                        TokenNetworkManager.shared.refreshToken()
                     }
                     switch response.result {
                     case .success(let value):
@@ -146,7 +159,7 @@ final class NetworkManager {
             return Disposables.create()
         }
     }
-
+    
 }
 
 //MARK: - 상품 api 활용

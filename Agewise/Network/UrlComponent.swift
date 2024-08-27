@@ -17,6 +17,7 @@ enum Router {
     case detailPost(query: String)
     case editPost(query: String)
     case viewPost(query: GetPostQuery)
+//    case likePost(query: LikeQuery)
 }
 
 extension Router: TargetType {
@@ -32,14 +33,10 @@ extension Router: TargetType {
                 .post
             
        
-        case .getPost, .viewPost:
-                .get
-        case .detailPost:
+        case .getPost, .viewPost, .detailPost:
                 .get
             
-        case .editProfile:
-                .put
-        case .editPost:
+        case .editProfile, .editPost:
                 .put
         }
     }
@@ -58,6 +55,7 @@ extension Router: TargetType {
             
         case .viewPost(query: let query):
             return "/posts/users/\(UserDefaultManager.shared.userId)"
+       
         }
     }
     
@@ -80,7 +78,7 @@ extension Router: TargetType {
     var queryItems: [URLQueryItem]? {
         
         switch self {
-        case .getPost(let query):
+        case .getPost(let query), .viewPost(let query):
             
             let param = [
                 URLQueryItem(name: "next", value: query.next),
@@ -101,7 +99,7 @@ extension Router: TargetType {
         case .postQuestion(let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
-            
+       
         default: return nil
         }
     }

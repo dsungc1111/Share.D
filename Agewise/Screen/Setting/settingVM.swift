@@ -26,6 +26,7 @@ final class SettingVM: BaseViewModel {
         let showResetAlert: PublishSubject<Void>
         let resetMessage: PublishSubject<String>
         let logoutTap: ControlEvent<Void>
+        let list: PublishSubject<[PostModelToWrite]>
     }
     
     private let disposeBag = DisposeBag()
@@ -37,19 +38,23 @@ final class SettingVM: BaseViewModel {
         let showResetAlert = PublishSubject<Void>()
         let resetMessage = PublishSubject<String>()
         var data: [PostModelToWrite] = []
-        var query = GetPostQuery(next: "", limit: "6", product_id: "")
+        let query = GetPostQuery(next: "", limit: "6", product_id: "")
         let list = PublishSubject<[PostModelToWrite]>()
         //MARK: - 내가 한 질문
         
         input.myQuestionTap
-            .subscribe(with: self, onNext: { owner, _ in
-                PostNetworkManager.shared.networking(api: .viewPost(query: query), model: PostModelToView.self) { result in
-                    switch result {
-                    case .success(let success):
-                        print(success)
-                    case .failure(let failure):
-                        print(failure)
-                    }
+            .flatMap {
+                NetworkManager.shared.viewPost(query: query)
+            }
+            .subscribe(with: self, onNext: { owner, result in
+                
+                switch result {
+                case .success(let value):
+                    data.append(contentsOf: value.data)
+                    list.onNext(data)
+                    owner.nextCursorChange(cursor: value.next_cursor ?? "")
+                case .failure(_):
+                    print("실패")
                 }
             })
             .disposed(by: disposeBag)
@@ -76,7 +81,8 @@ final class SettingVM: BaseViewModel {
             })
             .disposed(by: disposeBag)
         
-        return Output(showResetAlert: showResetAlert, resetMessage: resetMessage, logoutTap: input.logoutTap)
+        
+        return Output(showResetAlert: showResetAlert, resetMessage: resetMessage, logoutTap: input.logoutTap, list: list)
     }
     
     

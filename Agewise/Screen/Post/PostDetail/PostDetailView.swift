@@ -15,11 +15,15 @@ final class PostDetailView: BaseView {
     
     let imageView = {
         let view = UIImageView()
-        view.backgroundColor = .lightGray
         view.contentMode = .scaleAspectFit
         return view
     }()
     
+    let contentLabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        return label
+    }()
     let writerLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
@@ -30,15 +34,23 @@ final class PostDetailView: BaseView {
         label.font = .systemFont(ofSize: 12)
         return label
     }()
-    let contentLabel = {
-        let label = UILabel()
-        label.backgroundColor = .lightGray
-        return label
-    }()
     let productLabel = {
         let label = UILabel()
         label.text = "제목 테이블 예비"
+        label.font = .boldSystemFont(ofSize: 20)
         return label
+    }()
+    let likeButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "heart"), for: .normal)
+        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        return btn
+    }()
+    let bookmarkButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        return btn
     }()
     let deleteButton = {
         let btn = UIButton()
@@ -56,6 +68,8 @@ final class PostDetailView: BaseView {
         addSubview(dateLabel)
         addSubview(contentLabel)
         addSubview(productLabel)
+        addSubview(likeButton)
+        addSubview(bookmarkButton)
         addSubview(deleteButton)
     }
     override func configureLayout() {
@@ -65,22 +79,33 @@ final class PostDetailView: BaseView {
         }
         writerLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(5)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(30)
         }
-        dateLabel.snp.makeConstraints { make in
+        likeButton.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(5)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(10)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(50)
             make.height.equalTo(30)
         }
+        bookmarkButton.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(5)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(30)
+        }
+        
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(imageView.snp.bottom).offset(30)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(200)
         }
         productLabel.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.top).inset(10)
-            make.horizontalEdges.equalTo(contentLabel.snp.horizontalEdges).inset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(40)
+        }
+        dateLabel.snp.makeConstraints { make in
+            make.top.equalTo(productLabel.snp.bottom).inset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
         }
         deleteButton.snp.makeConstraints { make in
@@ -99,6 +124,6 @@ final class PostDetailView: BaseView {
         
         writerLabel.text = "게시자 : " + element.creator.nick
         dateLabel.text = "게시일 : " + dateTool.changeStringForm(dateString: element.createdAt)
-        contentLabel.text = element.content +  "  " + element.postID
+        contentLabel.text = element.content +  "  " + element.postID + "키키"
     }
 }

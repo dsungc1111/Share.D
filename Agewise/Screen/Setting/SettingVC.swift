@@ -21,7 +21,6 @@ final class SettingVC: BaseVC {
         view = settingView
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,8 +29,6 @@ final class SettingVC: BaseVC {
         let input = SettingVM.Input(myQuestionTap: settingView.myQuestionButton.rx.tap, logoutTap: settingView.logoutButton.rx.tap, resetTap: settingView.resetbutton.rx.tap, withdrawButtonTap: withdrawButtonTap)
         
         let output = settingVM.transform(input: input)
-        
-        
         
         
         //MARK: - 프로필 설정
@@ -76,7 +73,11 @@ final class SettingVC: BaseVC {
             .disposed(by: disposeBag)
         
         
-        settingView.nicknameLabel.text = "닉네임" + UserDefaultManager.shared.userNickname
+        output.list
+            .bind(with: self) { owner, result in
+                print(result)
+            }
+            .disposed(by: disposeBag)
     }
     
     override func configureNavigationBar() {

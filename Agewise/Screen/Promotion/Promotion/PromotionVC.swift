@@ -83,7 +83,6 @@ final class PromotionVC: BaseVC {
                 let gender = owner.promotionView.genderButton.titleLabel?.text
                 let searchText = (age ?? "") + " " + (gender ?? "")
                 
-                
                 if age == "연령대" || gender == "성별" {
                     owner.view.makeToast("조건을 선택해주세요!!", duration: 2.0, position: .center)
                 } else {

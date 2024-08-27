@@ -89,7 +89,9 @@ struct PostModelToView: Decodable {
     let next_cursor: String?
 }
 
-
+struct LikeModel: Decodable {
+    let like_status: Bool
+}
 
 
 
@@ -117,9 +119,14 @@ struct PostQuery: Encodable {
     let files: [String]
 }
 struct GetPostQuery: Encodable {
-    
     let next: String
     let limit: String
     var product_id: String
     
+}
+
+
+
+struct LikeQuery: Encodable {
+    let like_status: Bool
 }

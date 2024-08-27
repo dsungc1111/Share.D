@@ -19,12 +19,14 @@ final class SettingView: BaseView {
         let view = UIImageView()
         view.clipsToBounds = true
         view.layer.cornerRadius = 50
+        view.image = UIImage(systemName: "person.circle")
+        view.contentMode = .scaleToFill
         return view
     }()
     let nicknameLabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 18)
-        label.text = "닉네임 \(UserDefaultManager.shared.userNickname)"
+        label.text = "닉네임   \(UserDefaultManager.shared.userNickname)"
         return label
     }()
     let elseInfoLabel = {
@@ -44,8 +46,6 @@ final class SettingView: BaseView {
     let resetbutton = SettingButton(title: "탈퇴하기", image: "rectangle.portrait.and.arrow.right")
     
     let logoutButton = SettingButton(title: "로그아웃", image: "hand.raised.app")
-    
-   
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -83,7 +83,6 @@ final class SettingView: BaseView {
             make.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.size.equalTo(100)
         }
-        profileImageView.backgroundColor = .systemCyan
         
         nicknameLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(45)
@@ -124,8 +123,5 @@ final class SettingView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(80)
         }
-        
-       
     }
-    
 }

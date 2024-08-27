@@ -29,9 +29,11 @@ final class PostDetailVC: BaseVC {
  
     
     override func bind() {
+        
+        
         var title = ""
         
-        let input = DetailPostVM.Input(trigger: Observable.just(element), deleteTap: postDetailView.deleteButton.rx.tap)
+        let input = DetailPostVM.Input(trigger: Observable.just(element), deleteTap: postDetailView.deleteButton.rx.tap, likeTap: postDetailView.likeButton.rx.tap)
         
         let output = detailPostVM.transform(input: input)
         
@@ -61,6 +63,12 @@ final class PostDetailVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
+        
+        let a = postDetailView.likeButton.rx.tap
+//            .bind(with: self) { owner, _ in
+//                print("zmfflr")
+//            }
+//            .disposed(by: disposeBag)
         
        
        
