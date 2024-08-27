@@ -20,6 +20,7 @@ enum PostRouter {
     case delete(query: String)
     case viewPost(query: GetPostQuery)
     case likePost(String, LikeQuery)
+    case viewLikePost(query: LikePostQuery)
 }
 
 extension PostRouter: TargetType {
@@ -32,7 +33,7 @@ extension PostRouter: TargetType {
         switch self {
         case .postQuestion, .likePost:
                 .post
-        case .getPost:
+        case .getPost, .viewLikePost:
                 .get
         case .detailPost:
                 .get
@@ -61,13 +62,15 @@ extension PostRouter: TargetType {
             return "/posts/users/\(UserDefaultManager.shared.userId)"
         case .likePost(let post_id, _):
             return "/posts/\(post_id)/like"
+        case .viewLikePost:
+            return "/posts/likes/me"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost:
             
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
@@ -91,6 +94,15 @@ extension PostRouter: TargetType {
                 URLQueryItem(name: "product_id", value: query.product_id)
             ]
             return param
+            
+        case .viewLikePost(let query):
+            
+            let param = [
+                URLQueryItem(name: "next", value: query.next),
+                URLQueryItem(name: "limit", value: query.limit)
+            ]
+            return param
+            
         default: return nil
         }
     }

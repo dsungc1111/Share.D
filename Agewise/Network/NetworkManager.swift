@@ -172,7 +172,7 @@ extension NetworkManager {
         let param: Parameters = [
             "query" : query,
             "page" : page,
-            "display" : 40
+            "display" : 10
         ]
         
         let header: HTTPHeaders = [

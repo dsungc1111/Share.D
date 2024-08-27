@@ -20,7 +20,8 @@ final class PostVM: BaseViewModel {
     
     
     deinit {
-        print("====deinit======")
+        print("**", #function)
+        print("====PostVM deinit======")
     }
     
     struct Input {
@@ -58,6 +59,7 @@ final class PostVM: BaseViewModel {
             .map { $0.count != 0 }
         
         input.question
+            .debug("sfvcde4c4c4e")
             .bind(with: self) { owner, result in
                 print(result)
             }
@@ -67,9 +69,10 @@ final class PostVM: BaseViewModel {
         
         
         input.saveTap
+            .debug("dfsdf")
             .withLatestFrom(combined)
             .bind(with: self) { owner, result in
-                
+                print("dpfpfpfpfpfpfp")
                 
                 let product = result.0
                 let text = result.1

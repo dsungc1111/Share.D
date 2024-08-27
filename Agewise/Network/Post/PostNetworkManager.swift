@@ -17,22 +17,20 @@ final class PostNetworkManager {
     
     func networking<T: Decodable>(api: PostRouter, model: T.Type, completionHandler: @escaping (Result<(Int, T), NetworkError>) -> Void) {
         
-//        let url = api.baseURL + api.path
-        let request = try! api.asURLRequest()
+      do {
+        let request = try api.asURLRequest()
         AF.request(request)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: T.self) { response in
                 
-//                print("url = ", url)
-                
                 switch response.result {
                 case .success(let value):
                     if let statusCode = response.response?.statusCode {
-                        print("성공 =",statusCode)
+                        print("성공 =", statusCode)
                         completionHandler(.success((statusCode, value)))
                     }
                 case .failure(let error):
-                    print("에러 =",error)
+                    print("에러 =", error)
                     if let statusCode = response.response?.statusCode {
                         completionHandler(.failure(.unknownResponse))
                         print(statusCode)
@@ -46,6 +44,10 @@ final class PostNetworkManager {
                     }
                 }
             }
+    } catch {
+        print("Request creation failed with error:", error)
+        completionHandler(.failure(.unknownResponse))
+    }
     }
     
     

@@ -21,7 +21,7 @@ final class TabBarController: UITabBarController {
         let promotionVC = UINavigationController(rootViewController: PromotionVC())
         let postListVC = UINavigationController(rootViewController: PostListVC())
     
-        settingVC.tabBarItem = UITabBarItem(title: "세팅", image: UIImage(resource: .baseball), tag: 0)
+        settingVC.tabBarItem = UITabBarItem(title: "세팅", image: UIImage(systemName: "gearshape"), tag: 0)
         promotionVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 1)
         postListVC.tabBarItem = UITabBarItem(title: "질문", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
         setViewControllers([postListVC, promotionVC, settingVC], animated: true)

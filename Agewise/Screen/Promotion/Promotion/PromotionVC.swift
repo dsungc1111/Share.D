@@ -75,7 +75,6 @@ final class PromotionVC: BaseVC {
         
         
         
-        
         promotionView.searchButton.rx.tap
             .bind(with: self) { owner, _ in
                 

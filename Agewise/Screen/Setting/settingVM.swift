@@ -18,6 +18,7 @@ final class SettingVM: BaseViewModel {
     
     struct Input {
         let myQuestionTap: ControlEvent<Void>
+        let myLikeTap: ControlEvent<Void>
         let logoutTap: ControlEvent<Void>
         let resetTap: ControlEvent<Void>
         let withdrawButtonTap: PublishSubject<Void>
@@ -47,7 +48,7 @@ final class SettingVM: BaseViewModel {
                 NetworkManager.shared.viewPost(query: query)
             }
             .subscribe(with: self, onNext: { owner, result in
-                
+                data = []
                 switch result {
                 case .success(let value):
                     data.append(contentsOf: value.data)
@@ -59,6 +60,29 @@ final class SettingVM: BaseViewModel {
             })
             .disposed(by: disposeBag)
         
+        
+        //MARK: - 내가 좋아요한 목록
+        
+        input.myLikeTap
+            .map {
+                let query = LikePostQuery(next: "", limit: "")
+                return query
+            }
+            .subscribe(with: self) { owner, query in
+                data = []
+                PostNetworkManager.shared.networking(api: .viewLikePost(query: query), model: PostModelToView.self) { result in
+                    switch result {
+                    case .success(let value):
+                        data.append(contentsOf: value.1.data)
+                        list.onNext(data)
+                        owner.nextCursorChange(cursor: value.1.next_cursor ?? "")
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+            
         
         
         //MARK: - 탈퇴하기

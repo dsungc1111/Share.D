@@ -47,12 +47,18 @@ final class PostVC: BaseVC {
     
     override func bind() {
         
-        print(#function)
+        print("**", #function)
         guard let product = productInfo else { return }
         
         postView.configureView(product: product)
         
-        let input = PostVM.Input(saveTap: postView.saveButton.rx.tap, question: postView.textView.rx.text.orEmpty, category: Observable.just(category), productInfo: Observable.just(product), editOrWrite: Observable.just(editOrWrite))
+        let input = PostVM.Input(
+            saveTap: postView.saveButton.rx.tap,
+            question: postView.textView.rx.text.orEmpty,
+            category: Observable.just(category),
+            productInfo: Observable.just(product),
+            editOrWrite: Observable.just(editOrWrite)
+        )
         
         let output = postVM.transform(input: input)
         

@@ -26,7 +26,7 @@ final class SettingVC: BaseVC {
         
         let withdrawButtonTap = PublishSubject<Void>()
         
-        let input = SettingVM.Input(myQuestionTap: settingView.myQuestionButton.rx.tap, logoutTap: settingView.logoutButton.rx.tap, resetTap: settingView.resetbutton.rx.tap, withdrawButtonTap: withdrawButtonTap)
+        let input = SettingVM.Input(myQuestionTap: settingView.myQuestionButton.rx.tap, myLikeTap: settingView.myLikeButton.rx.tap, logoutTap: settingView.logoutButton.rx.tap, resetTap: settingView.resetbutton.rx.tap, withdrawButtonTap: withdrawButtonTap)
         
         let output = settingVM.transform(input: input)
         
@@ -40,6 +40,13 @@ final class SettingVC: BaseVC {
         
         
         //MARK: - 내가 한 질문
+        output.list
+            .subscribe(with: self) { owner, result in
+                let vc = SettingDetailVC()
+                vc.list = result
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
         
         //MARK: - 좋아요
         

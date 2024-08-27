@@ -122,11 +122,11 @@ struct GetPostQuery: Encodable {
     let next: String
     let limit: String
     var product_id: String
-    
 }
-
-
-
 struct LikeQuery: Encodable {
     let like_status: Bool
+}
+struct LikePostQuery: Encodable {
+    let next: String
+    let limit: String
 }
