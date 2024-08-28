@@ -19,7 +19,6 @@ final class DetailPostVM {
     struct Input {
         let trigger: Observable<String>
         let likeTap: ControlEvent<Void>
-//        let detectChange: Observable<Void>
     }
     struct Output {
         let detailInfo: PublishSubject<PostModelToWrite>
@@ -27,8 +26,6 @@ final class DetailPostVM {
     }
     
     private let disposeBag = DisposeBag()
-    
-    
     
     private var postId = ""
     private var userLike = false

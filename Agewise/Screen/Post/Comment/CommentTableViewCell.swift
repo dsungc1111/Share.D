@@ -72,9 +72,12 @@ final class CommentTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(element: CommentModel) {
+        let date = Date()
         usernameLabel.text = element.creator.nick
         contentLabel.text = element.content
-        dateLabel.text = dateTool.changeStringForm(dateString: element.createdAt)
+        dateLabel.text = dateTool.messageTime(dateString: element.createdAt, currentDate: date)
+        
+        
     }
 
 }

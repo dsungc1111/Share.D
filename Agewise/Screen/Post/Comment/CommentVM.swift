@@ -32,11 +32,26 @@ final class CommentVM {
         
         let commentList = BehaviorSubject(value: [CommentModel]())
         
+        let trigger = BehaviorSubject(value: [CommentModel(comment_id: "", content: "", createdAt: "", creator: Creator(userId: "", nick: "", profileImage: nil))])
+        
+        var data: [CommentModel] = []
+        
         input.trigger
+            .subscribe(with: self, onNext: { owner, result in
+                print(result)
+                data = result.comments ?? []
+                trigger.onNext(data)
+                owner.postId = result.postID
+                
+            })
+            .disposed(by: disposeBag)
+        
+        
+        
+        trigger
             .subscribe(with: self) { owner, value in
-                print("동작")
-                commentList.onNext(value.comments ?? [])
-                owner.postId = value.postID
+                
+                commentList.onNext(value)
             }
             .disposed(by: disposeBag)
         
@@ -60,11 +75,11 @@ final class CommentVM {
                     print("이거 실행?")
                     switch result {
                     case .success(let success):
-                        print("성공성공성공성공성공성공성공성공")
+                        data.insert(success.1, at: 0)
+                        trigger.onNext(data)
                         print(success)
                     case .failure(let failure):
                         print(failure)
-                        print("실패실패실패실패실패실패실패")
                     }
                 }
             }

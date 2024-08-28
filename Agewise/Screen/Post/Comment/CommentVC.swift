@@ -38,11 +38,10 @@ final class CommentVC: BaseVC {
         print(#function)
         
         guard let result = result else {
-            print("없어~")
             return
         }
         
-        print(result)
+        
         
         let input = CommentVM.Input(trigger: Observable.just(result), comment: commentView.textField.rx.text.orEmpty, uploadButtonTap: commentView.uploadButton.rx.tap)
         
