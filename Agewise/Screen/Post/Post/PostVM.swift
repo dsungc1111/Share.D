@@ -55,8 +55,9 @@ final class PostVM: BaseViewModel {
             .disposed(by: disposeBag)
         
         
-        let success = PublishSubject<String>()
-                let result = input.question
+        let successMent = PublishSubject<String>()
+        
+        let result = input.question
             .map { $0.count != 0 }
         
         input.question
@@ -81,35 +82,39 @@ final class PostVM: BaseViewModel {
                 let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: category + "선물용" , files: [product.image])
                 
                 
-//                PostNetworkManager.shared.networking(api: .postQuestion(query: save), model: PostModelToWrite.self) { result in
-//                    
-//                    switch result {
-//                    case .success(let success):
-//                        print("0 = ",success.0)
-//                        print("1 = ",success.1)
-//                    case .failure(let failure):
-//                        print(failure)
-//                        print("실패")
-//                    }
-//                }
-                
-                if owner.editOrWrite == false {
-                    NetworkManager.shared.writePost(query: save) { result in
-                        success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
-                        //
-                    }
-                } else {
-                    PostNetworkManager.shared.networking(api: .editPost(query: save), model: PostModelToWrite.self) { result in
-                        switch result {
-                            
-                        case .success((let statuscode, let value)):
-                            print("수정statuscode",statuscode)
-                            print("수정 value = ", value)
-                        case .failure(let error):
-                            print("에러", error)
-                        }
+                PostNetworkManager.shared.networking(api: .postQuestion(query: save), model: PostModelToWrite.self) { result in
+                    
+                    switch result {
+                    case .success(let success):
+                        print("0 = ",success.0)
+                        print("1 = ",success.1)
+                        successMent.onNext(owner.judgeStatusCode(statusCode: success.0, title: SuccessKeyword.post.rawValue))
+                    case .failure(let failure):
+                        print(failure)
+                        print("실패")
                     }
                 }
+                
+//                if owner.editOrWrite == false {
+//                    
+//                    
+//                    
+//                    NetworkManager.shared.writePost(query: save) { result in
+//                        success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
+//                        //
+//                    }
+//                } else {
+//                    PostNetworkManager.shared.networking(api: .editPost(query: save), model: PostModelToWrite.self) { result in
+//                        switch result {
+//                            
+//                        case .success((let statuscode, let value)):
+//                            print("수정statuscode",statuscode)
+//                            print("수정 value = ", value)
+//                        case .failure(let error):
+//                            print("에러", error)
+//                        }
+//                    }
+//                }
             }
             .disposed(by: disposeBag)
         
@@ -144,7 +149,7 @@ final class PostVM: BaseViewModel {
 //            })
 //            .disposed(by: disposeBag)
         
-        return Output(result: result, success: success)
+        return Output(result: result, success: successMent)
     }
     
     override func judgeStatusCode(statusCode: Int, title: String) -> String {

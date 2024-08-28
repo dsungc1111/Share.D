@@ -10,6 +10,9 @@ import SnapKit
 
 final class CommentTableViewCell: BaseTableViewCell {
 
+    
+    private let dateTool = ReuseDateformatter.shared
+    
     let profileImage = {
         let view = UIImageView()
         view.image = UIImage(systemName: "person.circle")
@@ -66,6 +69,12 @@ final class CommentTableViewCell: BaseTableViewCell {
             
         }
         
+    }
+    
+    func configureCell(element: CommentModel) {
+        usernameLabel.text = element.creator.nick
+        contentLabel.text = element.content
+        dateLabel.text = dateTool.changeStringForm(dateString: element.createdAt)
     }
 
 }

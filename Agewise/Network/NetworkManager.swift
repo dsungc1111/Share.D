@@ -53,7 +53,7 @@ final class NetworkManager {
         return Single.create { observer -> Disposable in
             do {
                 let request = try Router.getPost(query: query).asURLRequest()
-                
+                print(request)
                 AF.request(request).responseDecodable(of: PostModelToView.self) { response in
                     guard let responseCode = response.response?.statusCode else {
                         observer(.failure(NetworkError.invalidURL))

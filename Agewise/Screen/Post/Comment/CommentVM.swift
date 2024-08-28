@@ -16,51 +16,47 @@ final class CommentVM {
     let aa = ["3인분", "1인분", "2인분", "5ㄷ비눙"]
     
     struct Input {
-        let trigger: Observable<String>
+        let trigger: Observable<PostModelToWrite>
         let comment: ControlProperty<String>
         let uploadButtonTap: ControlEvent<Void>
     }
     struct Output {
-        let b: BehaviorSubject<[String]>
+        let commentList: BehaviorSubject<[CommentModel]>
     }
     private let disposeBag = DisposeBag()
     
     private var postId = ""
+    private var comment = ""
     
     func transform(input: Input) -> Output {
         
-        let c = BehaviorSubject(value: [""])
-        let comment = PublishSubject<String>()
+        let commentList = BehaviorSubject(value: [CommentModel]())
         
         input.trigger
-            .bind(with: self) { owner, value in
+            .subscribe(with: self) { owner, value in
                 print("동작")
-                c.onNext(owner.aa)
-                owner.postId = value
+                commentList.onNext(value.comments ?? [])
+                owner.postId = value.postID
             }
             .disposed(by: disposeBag)
         
-        c.bind(with: self) { owner, result in
-            print("Dsfsdfdsfdsf", result)
-        }
-        .disposed(by: disposeBag)
         
         
         input.comment
             .bind(with: self) { owner, value in
-                print(value)
-                comment.onNext(value)
+                owner.comment = value
             }
             .disposed(by: disposeBag)
         
         
         input.uploadButtonTap
-            .withLatestFrom(comment)
+            .map { [weak self] _ in
+                let query = CommentQuery(content: self?.comment ?? "")
+                return query
+            }
             .subscribe(with: self) { owner, value in
                 
-                print(owner.postId, value)
-                
-                PostNetworkManager.shared.networking(api: .uploadComment(owner.postId, value), model: commentModel.self) { result in
+                PostNetworkManager.shared.networking(api: .uploadComment(owner.postId, value), model: CommentModel.self) { result in
                     print("이거 실행?")
                     switch result {
                     case .success(let success):
@@ -76,6 +72,6 @@ final class CommentVM {
         
         
         
-        return Output(b: c)
+        return Output(commentList: commentList)
     }
 }

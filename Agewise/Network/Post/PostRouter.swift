@@ -21,7 +21,7 @@ enum PostRouter {
     case viewPost(query: GetPostQuery)
     case likePost(String, LikeQuery)
     case viewLikePost(query: LikePostQuery)
-    case uploadComment(String, String)
+    case uploadComment(String, CommentQuery)
 }
 
 extension PostRouter: TargetType {

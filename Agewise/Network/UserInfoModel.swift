@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 //MARK: - 받아오는 모델
 struct JoinModel: Decodable {
     let user_id: String
@@ -39,7 +38,6 @@ struct ProfileModel: Decodable {
         case nick
     }
 }
-
 struct Creator: Decodable {
     let userId: String
     let nick: String
@@ -50,6 +48,12 @@ struct Creator: Decodable {
         case nick
         case profileImage
     }
+}
+struct CommentModel: Decodable {
+    let comment_id: String
+    let content: String
+    let createdAt: String
+    let creator: Creator
 }
 struct PostModelToWrite: Decodable {
     let postID: String
@@ -65,7 +69,7 @@ struct PostModelToWrite: Decodable {
     let likes: [String]?
     let likes2: [String]?
     let hashTags: [String]?
-    let comments: [String]?
+    let comments: [CommentModel]?
     
     enum CodingKeys: String, CodingKey {
         case postID = "post_id"
@@ -88,15 +92,8 @@ struct PostModelToView: Decodable {
     let data: [PostModelToWrite]
     let next_cursor: String?
 }
-
 struct LikeModel: Decodable {
     let like_status: Bool
-}
-struct commentModel: Decodable {
-    let commnet_id: String
-    let content: String
-    let createdAt: String
-    let creator: [Creator]
 }
 
 
@@ -134,4 +131,8 @@ struct LikeQuery: Encodable {
 struct LikePostQuery: Encodable {
     let next: String
     let limit: String
+}
+
+struct CommentQuery: Encodable {
+    let content: String
 }

@@ -20,16 +20,11 @@ final class PostNetworkManager {
         print("이거실행")
       do {
           
-          
         let request = try api.asURLRequest()
-          print("do go")
+          print(request)
         AF.request(request)
             .validate(statusCode: 200..<300)
-//            .responseString { result in
-//                print(result)
-//            }
             .responseDecodable(of: T.self) { response in
-                
                 
                 print("안되는 거임?")
                 
@@ -117,7 +112,7 @@ final class PostNetworkManager {
     
     
     
-    func likePost(postId: String, likeStatus: Bool, completionHandler: @escaping (Int) -> Void) {
+    func commentCreate(postId: String, comment: String, completionHandler: @escaping (Int) -> Void) {
         
         let url = APIKey.baseURL  + "v1/posts/\(postId)/comments"
         
@@ -128,11 +123,11 @@ final class PostNetworkManager {
             APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue
         ]
         
-//        let param: [String: Bool] = [
-//            "like_status" : likeStatus
-//        ]
+        let param: [String: String] = [
+            "content" : comment
+        ]
         
-        AF.request(url, method: .post, encoding: JSONEncoding.default, headers: headers)
+        AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: headers)
             .responseDecodable(of: LikeModel.self) { result in
                 switch result.result {
                     

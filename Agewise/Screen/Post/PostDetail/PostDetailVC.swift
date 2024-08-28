@@ -17,7 +17,7 @@ final class PostDetailVC: BaseVC {
     
     var element = ""
     
-    var postID = ""
+    var model: PostModelToWrite?
     
     private let disposeBag = DisposeBag()
     
@@ -46,7 +46,7 @@ final class PostDetailVC: BaseVC {
                 print("바뀌는데")
                 owner.postDetailView.configurePostDetail(element: result)
                 owner.navigationItem.title = result.productId
-                owner.postID = result.postID
+                owner.model = result
             }
             .disposed(by: disposeBag)
         
@@ -54,7 +54,7 @@ final class PostDetailVC: BaseVC {
         postDetailView.commentButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = CommentVC()
-                vc.postId = owner.postID
+                vc.result = owner.model
                 
                 vc.modalPresentationStyle = .pageSheet
                 

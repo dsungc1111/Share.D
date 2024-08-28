@@ -37,8 +37,6 @@ extension TargetType {
         request.allHTTPHeaderFields = header
         request.httpBody = body
         
-        print("여기??/??ㅇㄹㅇ라ㅓㄴ라ㅓㅇ놔런")
-        
         return request
     }
     

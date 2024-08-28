@@ -55,6 +55,7 @@ final class PostListVM: BaseViewModel {
         
         input.trigger
             .flatMap { NetworkManager.shared.getPost(query: query) }
+        
             .subscribe(with: self) { owner, result in
                 
                 switch result {

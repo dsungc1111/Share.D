@@ -43,7 +43,7 @@ final class CommentView: BaseView {
 
         commentTableView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(textField.snp.top)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
         }
         
         textField.snp.makeConstraints { make in

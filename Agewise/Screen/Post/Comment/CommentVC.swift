@@ -15,7 +15,7 @@ final class CommentVC: BaseVC {
     
     private let commentVM = CommentVM()
     
-    var postId = ""
+    var result: PostModelToWrite?
     
     private let disposeBag = DisposeBag()
     
@@ -37,18 +37,22 @@ final class CommentVC: BaseVC {
         
         print(#function)
         
-        let input = CommentVM.Input(trigger: Observable.just(postId), comment: commentView.textField.rx.text.orEmpty, uploadButtonTap: commentView.uploadButton.rx.tap)
+        guard let result = result else {
+            print("없어~")
+            return
+        }
+        
+        print(result)
+        
+        let input = CommentVM.Input(trigger: Observable.just(result), comment: commentView.textField.rx.text.orEmpty, uploadButtonTap: commentView.uploadButton.rx.tap)
         
         let output = commentVM.transform(input: input)
         
-        output.b
-//            .bind(with: self, onNext: { owner, result in
-//                print(result)
-//            })
+        output.commentList
             .bind(to: commentView.commentTableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { (row, element, cell) in
                 
-                print("요소", element)
-                cell.usernameLabel.text = "\(element)"
+                cell.configureCell(element: element)
+                
                 
             }
             .disposed(by: disposeBag)
