@@ -21,6 +21,7 @@ enum PostRouter {
     case viewPost(query: GetPostQuery)
     case likePost(String, LikeQuery)
     case viewLikePost(query: LikePostQuery)
+    case uploadComment(String, String)
 }
 
 extension PostRouter: TargetType {
@@ -31,7 +32,7 @@ extension PostRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .postQuestion, .likePost:
+        case .postQuestion, .likePost, .uploadComment:
                 .post
         case .getPost, .viewLikePost:
                 .get
@@ -64,13 +65,15 @@ extension PostRouter: TargetType {
             return "/posts/\(post_id)/like"
         case .viewLikePost:
             return "/posts/likes/me"
+        case .uploadComment(let postid, _):
+            return "/posts/\(postid)/comments"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment:
             
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
@@ -118,6 +121,10 @@ extension PostRouter: TargetType {
 //            let param: [String : Bool] = ["like_status" : like.like_status]
             let encoder = JSONEncoder()
             return try? encoder.encode(like)
+            
+        case .uploadComment(_, let comment):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(comment)
             
         default: return nil
             

@@ -17,7 +17,10 @@ final class PostDetailVC: BaseVC {
     
     var element = ""
     
+    var postID = ""
+    
     private let disposeBag = DisposeBag()
+    
     
     override func loadView() {
         view = postDetailView
@@ -27,51 +30,45 @@ final class PostDetailVC: BaseVC {
         super.viewDidLoad()
     }
  
+    override func configureNavigationBar() {
+        
+        
+    }
     
     override func bind() {
         
-        
-        var title = ""
-        
-        let input = DetailPostVM.Input(trigger: Observable.just(element), deleteTap: postDetailView.deleteButton.rx.tap, likeTap: postDetailView.likeButton.rx.tap)
+        let input = DetailPostVM.Input(trigger: Observable.just(element), likeTap: postDetailView.likeButton.rx.tap)
         
         let output = detailPostVM.transform(input: input)
         
         output.detailInfo
             .bind(with: self) { owner, result in
+                print("바뀌는데")
                 owner.postDetailView.configurePostDetail(element: result)
                 owner.navigationItem.title = result.productId
+                owner.postID = result.postID
+            }
+            .disposed(by: disposeBag)
+        
+        // clean build cmd + shift + k
+        postDetailView.commentButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let vc = CommentVC()
+                vc.postId = owner.postID
                 
-                if UserDefaultManager.shared.userId == result.creator.userId {
-                    title = "✍️ 수정하기"
-                } else {
-                    owner.navigationItem.rightBarButtonItem = nil
+                vc.modalPresentationStyle = .pageSheet
+                
+                if let sheet = vc.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.prefersGrabberVisible = true
                 }
                 
-                let editButton = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
-                owner.navigationItem.rightBarButtonItem = editButton
                 
-                editButton.rx.tap
-                    .bind(with: self) { owner, _ in
-                        let vc = PostVC()
-                        vc.postView.editView(result: result)
-                        vc.editOrWrite = true
-                        owner.navigationController?.pushViewController(vc, animated: true)
-                    }
-                    .disposed(by: owner.disposeBag)
-                
+                owner.present(vc, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
         
         
-        let a = postDetailView.likeButton.rx.tap
-//            .bind(with: self) { owner, _ in
-//                print("zmfflr")
-//            }
-//            .disposed(by: disposeBag)
-        
-       
-       
         
     }
 }

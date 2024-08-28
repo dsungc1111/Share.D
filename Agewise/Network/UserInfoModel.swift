@@ -92,7 +92,12 @@ struct PostModelToView: Decodable {
 struct LikeModel: Decodable {
     let like_status: Bool
 }
-
+struct commentModel: Decodable {
+    let commnet_id: String
+    let content: String
+    let createdAt: String
+    let creator: [Creator]
+}
 
 
 

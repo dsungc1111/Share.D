@@ -49,13 +49,14 @@ final class PostVM: BaseViewModel {
         input.editOrWrite
             .bind(with: self) { owner, result in
                 owner.editOrWrite = result
+                
+                print("질문 or 작성", owner.editOrWrite)
             }
             .disposed(by: disposeBag)
         
         
         let success = PublishSubject<String>()
-        
-        let result = input.question
+                let result = input.question
             .map { $0.count != 0 }
         
         input.question
@@ -69,7 +70,6 @@ final class PostVM: BaseViewModel {
         
         
         input.saveTap
-            .debug("dfsdf")
             .withLatestFrom(combined)
             .bind(with: self) { owner, result in
                 print("dpfpfpfpfpfpfp")

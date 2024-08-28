@@ -120,7 +120,6 @@ final class PromotionViewModel: BaseViewModel {
         input.timer
             .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
             .bind(with: self) { owner, result in
-                print("11", owner.currentIndex)
                 scrollIndexPath.onNext(IndexPath(item: (owner.currentIndex + 1) % 10, section: 0))
                 owner.currentIndex += 1
                 

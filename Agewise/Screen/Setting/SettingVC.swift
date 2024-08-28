@@ -39,7 +39,7 @@ final class SettingVC: BaseVC {
             .disposed(by: disposeBag)
         
         
-        //MARK: - 내가 한 질문
+        //MARK: - 내가 한 질문, 좋아요
         output.list
             .subscribe(with: self) { owner, result in
                 let vc = SettingDetailVC()
@@ -47,8 +47,6 @@ final class SettingVC: BaseVC {
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
-        
-        //MARK: - 좋아요
         
         
         //MARK: - 로그아웃 버튼

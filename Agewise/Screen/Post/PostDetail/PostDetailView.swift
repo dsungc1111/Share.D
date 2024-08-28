@@ -40,27 +40,52 @@ final class PostDetailView: BaseView {
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
+    let commentButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "bubble.right"), for: .normal)
+        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
+        return btn
+    }()
     let likeButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "heart"), for: .normal)
         btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        btn.setTitle("100", for: .normal)
+        btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
         return btn
     }()
     let bookmarkButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "bookmark"), for: .normal)
         btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
         return btn
     }()
-    let deleteButton = {
-        let btn = UIButton()
-        btn.setTitle("삭제", for: .normal)
-        btn.setTitleColor(.red, for: .normal)
-        btn.backgroundColor = .white
-        btn.layer.borderWidth = 1
-        btn.layer.borderColor = UIColor.red.cgColor
-        return btn
+    let textField = {
+       let text = UITextField()
+        text.placeholder = "댓글을 입력하세요."
+        text.borderStyle = .roundedRect
+        return text
     }()
+//    let editButton = {
+//        let btn = UIButton()
+//        btn.setTitle("수정", for: .normal)
+//        btn.setTitleColor(.red, for: .normal)
+//        btn.backgroundColor = .white
+//        btn.layer.borderWidth = 1
+//        btn.layer.borderColor = UIColor.red.cgColor
+//        return btn
+//    }()
+//    let deleteButton = {
+//        let btn = UIButton()
+//        btn.setTitle("삭제", for: .normal)
+//        btn.setTitleColor(.red, for: .normal)
+//        btn.backgroundColor = .white
+//        btn.layer.borderWidth = 1
+//        btn.layer.borderColor = UIColor.red.cgColor
+//        return btn
+//    }()
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -68,9 +93,10 @@ final class PostDetailView: BaseView {
         addSubview(dateLabel)
         addSubview(contentLabel)
         addSubview(productLabel)
+        addSubview(commentButton)
         addSubview(likeButton)
         addSubview(bookmarkButton)
-        addSubview(deleteButton)
+//        addSubview(textField)
     }
     override func configureLayout() {
         imageView.snp.makeConstraints { make in
@@ -80,18 +106,25 @@ final class PostDetailView: BaseView {
         writerLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(5)
             make.leading.equalTo(safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(30)
-        }
-        likeButton.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(5)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(50)
-            make.height.equalTo(30)
+            make.height.equalTo(40)
         }
         bookmarkButton.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(5)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(30)
+            make.height.equalTo(40)
         }
+        likeButton.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(5)
+            make.trailing.equalTo(bookmarkButton.snp.leading).offset(-10)
+            make.height.equalTo(40)
+        }
+        commentButton.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(5)
+            make.trailing.equalTo(likeButton.snp.leading).offset(-10)
+            make.height.equalTo(40)
+        }
+       
+        
         
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(30)
@@ -108,15 +141,23 @@ final class PostDetailView: BaseView {
             make.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
         }
-        deleteButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
-            make.width.equalTo(100)
-            make.height.equalTo(40)
-        }
+//        editButton.snp.makeConstraints { make in
+//            make.centerX.equalTo(safeAreaLayoutGuide)
+//            make.bottom.equalTo(safeAreaLayoutGuide).inset(50)
+//            make.width.equalTo(100)
+//            make.height.equalTo(40)
+//        }
+//        deleteButton.snp.makeConstraints { make in
+//            make.centerX.equalTo(safeAreaLayoutGuide)
+//            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+//            make.width.equalTo(100)
+//            make.height.equalTo(40)
+//        }
     }
     
     func configurePostDetail(element: PostModelToWrite) {
+        
+        print("여기 실행")
         
         guard let url = element.files?.first else { return }
         let image = URL(string: url)
@@ -125,5 +166,26 @@ final class PostDetailView: BaseView {
         writerLabel.text = "게시자 : " + element.creator.nick
         dateLabel.text = "게시일 : " + dateTool.changeStringForm(dateString: element.createdAt)
         contentLabel.text = element.content +  "  " + element.postID + "키키"
+        
+        if let like = element.likes {
+            let likeCount = like.count
+            likeButton.setTitle(likeCount.formatted(), for: .normal)
+            if like.contains(UserDefaultManager.shared.userId) {
+                likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            } else {
+                likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
+            
+        }
+        
+        
+        let commentCount = element.comments?.count ?? 0
+        commentButton.setTitle(commentCount.formatted(), for: .normal)
+        
+        let bookmarkCount = element.likes2?.count ?? 0
+        bookmarkButton.setTitle(bookmarkCount.formatted(), for: .normal)
+        
+        
+        
     }
 }

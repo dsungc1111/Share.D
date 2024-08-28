@@ -17,6 +17,8 @@ final class PostVC: BaseVC {
     
     var category = ""
     
+    var result: PostModelToWrite?
+    
     let postView = PostView()
     
     private let postVM = PostVM()
@@ -33,6 +35,7 @@ final class PostVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("게시물 포스트 화면")
         
     }
     
