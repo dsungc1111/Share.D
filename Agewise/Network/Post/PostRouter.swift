@@ -22,6 +22,7 @@ enum PostRouter {
     case likePost(String, LikeQuery)
     case viewLikePost(query: LikePostQuery)
     case uploadComment(String, CommentQuery)
+    case deleteComment(String, String)
 }
 
 extension PostRouter: TargetType {
@@ -40,7 +41,7 @@ extension PostRouter: TargetType {
                 .get
         case .editPost:
                 .put
-        case .delete:
+        case .delete, .deleteComment:
                 .delete
         case .viewPost:
                 .get
@@ -65,15 +66,17 @@ extension PostRouter: TargetType {
             return "/posts/\(post_id)/like"
         case .viewLikePost:
             return "/posts/likes/me"
-        case .uploadComment(let postid, _):
-            return "/posts/\(postid)/comments"
+        case .uploadComment(let postId, _):
+            return "/posts/\(postId)/comments"
+        case .deleteComment(let postId, let commentId):
+            return "/posts/\(postId)/comments/\(commentId)"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment, .deleteComment:
             
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,

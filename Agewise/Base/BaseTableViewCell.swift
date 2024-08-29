@@ -14,6 +14,7 @@ class BaseTableViewCell: UITableViewCell {
         configureHierarchy()
         configureLayout()
         configureCell()
+        
         backgroundColor = .clear
     }
     

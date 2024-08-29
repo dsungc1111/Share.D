@@ -33,24 +33,23 @@ final class CommentView: BaseView {
         btn.setImage(UIImage(systemName: "paperplane"), for: .normal)
         return btn
     }()
-    
+   
     
     override func configureLayout() {
-        
-        addSubview(commentTableView)
         addSubview(textField)
+        addSubview(commentTableView)
         addSubview(uploadButton)
-
-        commentTableView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(20)
-        }
         
         textField.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(40)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
+        commentTableView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(textField.snp.top).offset(-5)
+        }
+        
         uploadButton.snp.makeConstraints { make in
             make.verticalEdges.equalTo(textField)
             make.trailing.equalTo(textField).inset(5)

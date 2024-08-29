@@ -8,30 +8,38 @@
 import UIKit
 import SnapKit
 
+protocol DeleteOrEditDelegate: AnyObject {
+    func customView(data: String)
+}
+
 final class CommentTableViewCell: BaseTableViewCell {
 
+    private let commentVM = CommentVM()
+    
+    weak var delegate: DeleteOrEditDelegate?
     
     private let dateTool = ReuseDateformatter.shared
     
-    let profileImage = {
+    private let date = Date()
+    
+    private let profileImage = {
         let view = UIImageView()
         view.image = UIImage(systemName: "person.circle")
-        
         return view
     }()
-    let usernameLabel = {
+    private let usernameLabel = {
         let label = UILabel()
         label.text = "유저이름"
         label.font = .boldSystemFont(ofSize: 12)
         return label
     }()
-    let contentLabel = {
+    private let contentLabel = {
         let label = UILabel()
         label.text = "컨텐트 자리"
         label.font = .systemFont(ofSize: 12)
         return label
     }()
-    let dateLabel = {
+    private let dateLabel = {
         let label = UILabel()
         label.text = "날짜 자리"
         label.font = .systemFont(ofSize: 12)
@@ -44,6 +52,12 @@ final class CommentTableViewCell: BaseTableViewCell {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(contentLabel)
         contentView.addSubview(dateLabel)
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+  
+        setupContextMenu()
     }
     
     override func configureLayout() {
@@ -72,12 +86,38 @@ final class CommentTableViewCell: BaseTableViewCell {
     }
     
     func configureCell(element: CommentModel) {
-        let date = Date()
+
         usernameLabel.text = element.creator.nick
         contentLabel.text = element.content
         dateLabel.text = dateTool.messageTime(dateString: element.createdAt, currentDate: date)
-        
-        
     }
+    
+    private func setupContextMenu() {
+           let interaction = UIContextMenuInteraction(delegate: self)
+           self.addInteraction(interaction)
+       }
 
+}
+extension CommentTableViewCell: UIContextMenuInteractionDelegate {
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider: { suggestedActions in
+                let editAction = UIAction(title: "Edit", image: UIImage(systemName: "pencil.circle")) { action in
+                    
+                    self.delegate?.customView(data: "삭제")
+                    print("edit tapped")
+                }
+                let removeImage = UIImage(systemName: "trash.circle")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+                let removeAction = UIAction(title: "Remove", image: removeImage) { action in
+                    
+                    print("Remove tapped")
+                }
+                
+                return UIMenu(title: "", children: [editAction, removeAction])
+            }
+        )
+    }
 }

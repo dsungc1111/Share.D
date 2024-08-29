@@ -39,8 +39,6 @@ final class ReuseDateformatter {
         
         let targetDate = getDate(dateString: dateString)
         
-        print(targetDate, currentDate)
-        
         let difference = currentDate.timeIntervalSince(targetDate)
         
         let minutes = Int(difference / 60)

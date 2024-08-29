@@ -26,19 +26,20 @@ final class DetailPostVM {
     }
     
     private let disposeBag = DisposeBag()
-    
+    private let delete = BehaviorSubject(value: "")
     private var postId = ""
     private var userLike = false
+    let trigger = BehaviorSubject<String>(value: "")
     
     func transform(input: Input) -> Output {
         
         let detailInfo = PublishSubject<PostModelToWrite>()
-        let trigger = BehaviorSubject<String>(value: "")
+        
         
         input.trigger
             .subscribe(with: self, onNext: { owner, result in
                 print(result)
-                trigger.onNext(result)
+                owner.trigger.onNext(result)
                 
             })
             .disposed(by: disposeBag)
@@ -50,6 +51,7 @@ final class DetailPostVM {
             }
             .subscribe(with: self) { owner, result in
                
+                
                 switch result {
                 case .success(let value):
                     owner.postId = value.postID
@@ -80,7 +82,7 @@ final class DetailPostVM {
                     
                     switch result {
                     case .success(let success):
-                        trigger.onNext(owner.postId)
+                        owner.trigger.onNext(owner.postId)
                     case .failure(let failure):
                         print(failure)
                     }
@@ -88,6 +90,8 @@ final class DetailPostVM {
                 
             }
             .disposed(by: disposeBag)
+        
+       
         
         return Output(detailInfo: detailInfo, likeTap: input.likeTap)
     }

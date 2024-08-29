@@ -11,19 +11,18 @@ import RxCocoa
 
 
 final class CommentVM {
-    
-    
-    let aa = ["3인분", "1인분", "2인분", "5ㄷ비눙"]
-    
+  
     struct Input {
         let trigger: Observable<PostModelToWrite>
         let comment: ControlProperty<String>
         let uploadButtonTap: ControlEvent<Void>
+        let deleteTap: ControlEvent<IndexPath>
     }
     struct Output {
         let commentList: BehaviorSubject<[CommentModel]>
     }
     private let disposeBag = DisposeBag()
+    
     
     private var postId = ""
     private var comment = ""
@@ -46,11 +45,8 @@ final class CommentVM {
             })
             .disposed(by: disposeBag)
         
-        
-        
         trigger
             .subscribe(with: self) { owner, value in
-                
                 commentList.onNext(value)
             }
             .disposed(by: disposeBag)
@@ -72,7 +68,7 @@ final class CommentVM {
             .subscribe(with: self) { owner, value in
                 
                 PostNetworkManager.shared.networking(api: .uploadComment(owner.postId, value), model: CommentModel.self) { result in
-                    print("이거 실행?")
+                    
                     switch result {
                     case .success(let success):
                         data.insert(success.1, at: 0)
@@ -85,6 +81,28 @@ final class CommentVM {
             }
             .disposed(by: disposeBag)
         
+        input.deleteTap
+            .bind(with: self) { owner, indexPath in
+                let commentId = data[indexPath.row].comment_id
+                
+                PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
+                    switch result {
+                    case .success(let success):
+                        print("before", data)
+                        data.remove(at: indexPath.row)
+                        print("after", data)
+                        trigger.onNext(data)
+//                        print(success)
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                    print("before", data)
+                    data.remove(at: indexPath.row)
+                    print("after", data)
+                    trigger.onNext(data)
+                }
+            }
+            .disposed(by: disposeBag)
         
         
         return Output(commentList: commentList)

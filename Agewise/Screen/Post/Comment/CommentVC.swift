@@ -11,6 +11,7 @@ import RxCocoa
 
 final class CommentVC: BaseVC {
     
+    
     private let commentView = CommentView()
     
     private let commentVM = CommentVM()
@@ -28,11 +29,6 @@ final class CommentVC: BaseVC {
         
     }
     
-    override func configureNavigationBar() {
-        navigationItem.title = "댓글"
-    }
-    
-    
     override func bind() {
         
         print(#function)
@@ -43,7 +39,7 @@ final class CommentVC: BaseVC {
         
         
         
-        let input = CommentVM.Input(trigger: Observable.just(result), comment: commentView.textField.rx.text.orEmpty, uploadButtonTap: commentView.uploadButton.rx.tap)
+        let input = CommentVM.Input(trigger: Observable.just(result), comment: commentView.textField.rx.text.orEmpty, uploadButtonTap: commentView.uploadButton.rx.tap, deleteTap: commentView.commentTableView.rx.itemSelected)
         
         let output = commentVM.transform(input: input)
         
@@ -52,9 +48,11 @@ final class CommentVC: BaseVC {
                 
                 cell.configureCell(element: element)
                 
-                
             }
             .disposed(by: disposeBag)
         
+        
     }
+ 
 }
+
