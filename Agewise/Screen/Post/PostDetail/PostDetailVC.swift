@@ -62,13 +62,24 @@ final class PostDetailVC: BaseVC {
                     sheet.detents = [.medium(), .large()]
                     sheet.prefersGrabberVisible = true
                 }
-                
+                NotificationCenter
+                    .default
+                    .addObserver(self,
+                                 selector: #selector(owner.dataReceived(_:)),
+                                 name: NSNotification.Name("commentCount"),
+                                 object: nil
+                    )
                 
                 owner.present(vc, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
         
+    }
+    
+    @objc func dataReceived(_ notification: Notification ) {
         
-        
+        if let count = notification.object as? Int {
+            postDetailView.commentButton.setTitle("\(count)", for: .normal)
+        }
     }
 }

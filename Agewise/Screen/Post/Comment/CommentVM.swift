@@ -73,6 +73,10 @@ final class CommentVM {
                     case .success(let success):
                         data.insert(success.1, at: 0)
                         trigger.onNext(data)
+                       
+                        NotificationCenter.default.post(name: NSNotification.Name("commentCount"), object: data.count)
+                        
+                        
                         print(success)
                     case .failure(let failure):
                         print(failure)
@@ -88,9 +92,9 @@ final class CommentVM {
                 PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
                     switch result {
                     case .success(let success):
-                        print("before", data)
+                        
                         data.remove(at: indexPath.row)
-                        print("after", data)
+                        
                         trigger.onNext(data)
 //                        print(success)
                     case .failure(let failure):
