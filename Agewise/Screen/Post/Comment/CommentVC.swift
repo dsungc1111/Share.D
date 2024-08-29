@@ -31,12 +31,9 @@ final class CommentVC: BaseVC {
     
     override func bind() {
         
-        print(#function)
-        
         guard let result = result else {
             return
         }
-        
         
         
         let input = CommentVM.Input(trigger: Observable.just(result), comment: commentView.textField.rx.text.orEmpty, uploadButtonTap: commentView.uploadButton.rx.tap, deleteTap: commentView.commentTableView.rx.itemSelected)
@@ -48,10 +45,9 @@ final class CommentVC: BaseVC {
                 
                 cell.configureCell(element: element)
                 
+               
             }
             .disposed(by: disposeBag)
-        
-        
         
         
     }

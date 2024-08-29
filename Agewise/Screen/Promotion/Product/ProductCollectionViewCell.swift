@@ -36,14 +36,7 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
-    private let likeButton = {
-        let btn = UIButton()
-        btn.contentMode = .scaleAspectFill
-        btn.layer.cornerRadius = 10
-        btn.setImage(UIImage(systemName: "heart"), for: .normal)
-        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
-        return btn
-    }()
+  
     
     override func prepareForReuse() {
         imageView.image = nil
@@ -57,7 +50,7 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(companyNameLabel)
         contentView.addSubview(productNameLabel)
         contentView.addSubview(priceLabel)
-        contentView.addSubview(likeButton)
+        
     }
     override func configureLayout() {
         imageView.snp.makeConstraints { make in
@@ -78,11 +71,7 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(productNameLabel.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(5)
         }
-        likeButton.snp.makeConstraints { make in
-            make.top.equalTo(productNameLabel.snp.bottom).offset(2)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.size.equalTo(30)
-        }
+        
     }
     
     func configureCell(element: ProductDetail) {

@@ -53,7 +53,7 @@ extension Router: TargetType {
         case .detailPost(query: let query), .editPost(query: let query):
             return "/posts/\(query)"
             
-        case .viewPost(query: let query):
+        case .viewPost:
             return "/posts/users/\(UserDefaultManager.shared.userId)"
        
         }

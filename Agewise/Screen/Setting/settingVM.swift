@@ -12,6 +12,8 @@ import Alamofire
 
 final class SettingVM: BaseViewModel {
     
+    
+    
     enum WithdrawKeyword: String {
         case success = "탈퇴합니다."
     }
@@ -27,7 +29,7 @@ final class SettingVM: BaseViewModel {
         let showResetAlert: PublishSubject<Void>
         let resetMessage: PublishSubject<String>
         let logoutTap: ControlEvent<Void>
-        let list: PublishSubject<[PostModelToWrite]>
+        let list: PublishSubject<([PostModelToWrite],Bool)>
     }
     
     private let disposeBag = DisposeBag()
@@ -36,11 +38,13 @@ final class SettingVM: BaseViewModel {
     private let lastPage = PublishSubject<String>()
     
     func transform(input: Input) -> Output {
+        
+        
         let showResetAlert = PublishSubject<Void>()
         let resetMessage = PublishSubject<String>()
         var data: [PostModelToWrite] = []
         let query = GetPostQuery(next: "", limit: "6", product_id: "")
-        let list = PublishSubject<[PostModelToWrite]>()
+        let list = PublishSubject<([PostModelToWrite], Bool)>()
         //MARK: - 내가 한 질문
         
         input.myQuestionTap
@@ -52,7 +56,7 @@ final class SettingVM: BaseViewModel {
                 switch result {
                 case .success(let value):
                     data.append(contentsOf: value.data)
-                    list.onNext(data)
+                    list.onNext((data, false))
                     owner.nextCursorChange(cursor: value.next_cursor ?? "")
                 case .failure(_):
                     print("실패")
@@ -74,8 +78,9 @@ final class SettingVM: BaseViewModel {
                     switch result {
                     case .success(let value):
                         data.append(contentsOf: value.1.data)
-                        list.onNext(data)
+                        list.onNext((data, true))
                         owner.nextCursorChange(cursor: value.1.next_cursor ?? "")
+                        
                     case .failure(let failure):
                         print(failure)
                     }
@@ -83,7 +88,6 @@ final class SettingVM: BaseViewModel {
             }
             .disposed(by: disposeBag)
             
-        
         
         //MARK: - 탈퇴하기
         input.resetTap
@@ -96,9 +100,9 @@ final class SettingVM: BaseViewModel {
         input.withdrawButtonTap
             .flatMap {
                 UserNetworkManager.shared.userNetwork(api: .withdraw, model: ProfileModel.self)
-                    .map { $0 }
             }
             .subscribe(with: self, onNext: { owner, result in
+                
                 let message = owner.judgeStatusCode(statusCode: result.statuscode, title: WithdrawKeyword.success.rawValue)
                 
                 resetMessage.onNext(message)

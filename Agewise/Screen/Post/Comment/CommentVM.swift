@@ -89,21 +89,21 @@ final class CommentVM {
             .bind(with: self) { owner, indexPath in
                 let commentId = data[indexPath.row].comment_id
                 
-                PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
-                    switch result {
-                    case .success(let success):
-                        
+                if  data[indexPath.row].creator.userId == UserDefaultManager.shared.userId {
+                    PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
+                        switch result {
+                        case .success(let success):
+                            
+                            data.remove(at: indexPath.row)
+                            
+                            trigger.onNext(data)
+                            //                        print(success)
+                        case .failure(let failure):
+                            print(failure)
+                        }
                         data.remove(at: indexPath.row)
-                        
                         trigger.onNext(data)
-//                        print(success)
-                    case .failure(let failure):
-                        print(failure)
                     }
-                    print("before", data)
-                    data.remove(at: indexPath.row)
-                    print("after", data)
-                    trigger.onNext(data)
                 }
             }
             .disposed(by: disposeBag)

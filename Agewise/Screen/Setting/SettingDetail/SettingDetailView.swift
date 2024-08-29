@@ -18,7 +18,7 @@ final class SettingDetailView: BaseView {
         let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: width / 2 - 30, height: 300)
+        layout.itemSize = CGSize(width: width - 2*cellSpacing , height: 250)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)
@@ -26,14 +26,21 @@ final class SettingDetailView: BaseView {
     }
     
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        collectionView.register(SettingDetailCollectionViewCell.self, forCellWithReuseIdentifier: SettingDetailCollectionViewCell.identifier)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func configureLayout() {
         addSubview(collectionView)
-        collectionView.register(SettingDetailCollectionViewCell.self, forCellWithReuseIdentifier: SettingDetailCollectionViewCell.identifier)
         
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
-        collectionView.backgroundColor = .lightGray
     }
     
 }

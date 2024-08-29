@@ -40,10 +40,20 @@ final class SettingVC: BaseVC {
         
         
         //MARK: - 내가 한 질문, 좋아요
+        
+        
+        
         output.list
             .subscribe(with: self) { owner, result in
                 let vc = SettingDetailVC()
-                vc.list = result
+                vc.list = result.0
+                
+                if result.1 == true {
+                    vc.navigationTitle = "좋아요"
+                } else {
+                    vc.navigationTitle = "내가 쓴 글"
+                }
+                
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -77,12 +87,6 @@ final class SettingVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        
-        output.list
-            .bind(with: self) { owner, result in
-                print(result)
-            }
-            .disposed(by: disposeBag)
     }
     
     override func configureNavigationBar() {

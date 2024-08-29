@@ -51,7 +51,6 @@ final class PostDetailView: BaseView {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "heart"), for: .normal)
         btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
-        btn.setTitle("100", for: .normal)
         btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
         return btn
     }()
