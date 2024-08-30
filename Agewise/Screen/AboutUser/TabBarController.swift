@@ -12,7 +12,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setTabBar()
-        
+        customizeTabBarAppearance()
         
     }
     
@@ -23,39 +23,38 @@ final class TabBarController: UITabBarController {
     
         settingVC.tabBarItem = UITabBarItem(title: "세팅", image: UIImage(systemName: "gearshape"), tag: 0)
         promotionVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 1)
-        postListVC.tabBarItem = UITabBarItem(title: "질문", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
+        postListVC.tabBarItem = UITabBarItem(title: "커뮤니티", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
         setViewControllers([postListVC, promotionVC, settingVC], animated: true)
         
-        self.tabBar.tintColor = UIColor(red: 64/255, green: 120/255, blue: 187/255, alpha: 1)
+        self.tabBar.tintColor = UIColor(hexCode: "#c4bee2")
         self.selectedIndex = 1
     }
+    
+    private func customizeTabBarAppearance() {
+           
+           let tabBarHeight = tabBar.frame.height
+           let radius: CGFloat = 20.0 // 원하는 모서리 둥근 정도
+           
+           // 배경 뷰 추가
+           let roundLayer = CAShapeLayer()
+           let shapePath = UIBezierPath(
+               roundedRect: CGRect(x: 10, y: tabBar.bounds.minY - 10, width: tabBar.bounds.width - 20, height: tabBarHeight + 20),
+               cornerRadius: radius
+           )
+           
+           roundLayer.path = shapePath.cgPath
+           roundLayer.fillColor = UIColor.white.cgColor // 배경 색상 설정
+           roundLayer.shadowColor = UIColor.black.cgColor
+           roundLayer.shadowOffset = CGSize(width: 0, height: 5)
+           roundLayer.shadowRadius = 10
+           roundLayer.shadowOpacity = 0.1
+           
+           tabBar.layer.insertSublayer(roundLayer, at: 0)
+           tabBar.layer.cornerRadius = radius
+//           tabBar.layer.masksToBounds = false
+//           tabBar.clipsToBounds = false
+           tabBar.backgroundImage = UIImage() // 기본 배경 제거
+           tabBar.shadowImage = UIImage() // 기본 그림자 제거
+       }
 }
 
-
-/*
- TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
-     print("스테이터스코드", statuscode)
-     
-     if statuscode == 200 {
-         UserDefaultManager.shared.userNickname = result?.nick ?? ""
-         UserDefaultManager.shared.userId = result?.id ?? ""
-         print(UserDefaultManager.shared.userNickname)
-     } else if statuscode == 419 {
-         
-         TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statuscode, result in
-             
-             if statuscode == 200 {
-                 UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
-                 
-                 TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
-                     
-                 }
-             } else if statuscode == 418 {
-                 let message = owner.judgeStatusCode(statusCode: statuscode, title: "로그인 만료")
-                 logout.onNext(message)
-             }
-         }
-     }
- }
- 
- */

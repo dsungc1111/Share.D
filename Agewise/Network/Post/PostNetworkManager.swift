@@ -62,6 +62,7 @@ final class PostNetworkManager {
         return Single.create { observer in
             
             print("실행?")
+            
             AF.request(api)
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in

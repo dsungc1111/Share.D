@@ -15,7 +15,8 @@ final class ListCategoryCollectionViewCell: BaseCollectionViewCell {
         btn.titleLabel?.textAlignment = .center
         btn.isEnabled = false
         btn.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
-        btn.layer.cornerRadius = 10
+        btn.layer.cornerRadius = 30
+        btn.clipsToBounds = true
         return btn
     }()
     
@@ -24,11 +25,12 @@ final class ListCategoryCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(categoryButton)
         
         categoryButton.snp.makeConstraints { make in
-            make.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.top.leading.equalTo(contentView.safeAreaLayoutGuide).inset(5)
+            make.size.equalTo(60)
         }
     }
-    
+
+   
     func configureCell(element: String) {
         categoryButton.setTitle(element, for: .normal)
     }

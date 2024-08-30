@@ -13,9 +13,8 @@ class BaseVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.tintColor = UIColor(hexCode: MainColor.main.rawValue)
 
-        
         bind()
         configureNavigationBar()
     }

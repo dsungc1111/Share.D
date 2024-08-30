@@ -22,6 +22,7 @@ final class TokenNetworkManager {
         
         let url = api.baseURL + api.path
         
+        
         AF.request(url, method: api.method, encoding: URLEncoding(destination: .queryString), headers: HTTPHeaders(api.header))
             .validate(statusCode: 200..<300)
             .responseDecodable(of: T.self) { response in
@@ -41,8 +42,10 @@ final class TokenNetworkManager {
             }
     }
     
-    func tokenNetworkManager<T: Decodable>(api: TokenRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
+    func tokenNetwork<T: Decodable>(api: TokenRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
+        
         return Single.create { observer in
+
             AF.request(api)
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in
@@ -60,18 +63,18 @@ final class TokenNetworkManager {
                         print("실패")
                         if statuscode == 419 {
                             // 토큰 리프레시 요청
-                            self.tokenNetworkManager(api: .refresh, model: T.self)
+                            self.tokenNetwork(api: .refresh, model: RefreshModel.self)
                                 .subscribe(onSuccess: { refreshResult in
                                     
                                     print(refreshResult.statuscode)
                                     if refreshResult.statuscode == 200 {
                                         // 리프레시 성공 시, 갱신된 토큰 저장
-                                        if let newToken = refreshResult.data as? RefreshModel {
+                                        if let newToken = refreshResult.data {
                                             UserDefaultManager.shared.accessToken = newToken.accessToken
                                             print("저장?")
                                         }
                                         // 다시 fetchProfile 요청
-                                        self.tokenNetworkManager(api: .fetchProfile, model: T.self)
+                                        self.tokenNetwork(api: .fetchProfile, model: T.self)
                                             .subscribe(onSuccess: { fetchProfileResult in
                                                 observer(.success((statuscode: fetchProfileResult.statuscode, data: fetchProfileResult.data)))
                                             })

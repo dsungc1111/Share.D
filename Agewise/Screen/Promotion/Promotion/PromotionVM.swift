@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class PromotionViewModel: BaseViewModel {
+final class PromotionVM: BaseViewModel {
     
     enum AgeTitle: String, CaseIterable {
         case teen = "10대"
@@ -21,25 +21,26 @@ final class PromotionViewModel: BaseViewModel {
     }
     
     enum productTitle: String, CaseIterable {
-        case cafe = "카페교환권"
-        case present = "선물세트"
-        case birth = "생일선물"
-        case luxury = "명품선물"
+        case kid = "Kids"
+        case cafe = "Man"
+        case present = "Woman"
+        case birth = "Parent"
+        
     }
     
     struct Input {
         let adTrigger: Observable<Void>
         let trendTap: ControlEvent<String>
-        let ageButtonTap: ControlEvent<Void>
-        let timer: Observable<Int>
-        let currentIndex: ControlEvent<[IndexPath]>
+//        let ageButtonTap: ControlEvent<Void>
+//        let timer: Observable<Int>
+//        let currentIndex: ControlEvent<[IndexPath]>
     }
     
     struct Output {
         let adList: PublishSubject<[ProductDetail]>
         let presentList: PublishSubject<[String]>
         let trendTap: ControlEvent<String>
-        let scrollIndexPath: PublishSubject<IndexPath>
+//        let scrollIndexPath: PublishSubject<IndexPath>
         let logout: PublishSubject<String>
     }
     private var currentIndex: Int = 0
@@ -50,37 +51,18 @@ final class PromotionViewModel: BaseViewModel {
         
         let adList = PublishSubject<[ProductDetail]>()
         let presentList = PublishSubject<[String]>()
-        let scrollIndexPath = PublishSubject<IndexPath>()
+//        let scrollIndexPath = PublishSubject<IndexPath>()
         let logout = PublishSubject<String>()
         //MARK: - About Token
         
         input.adTrigger
-            .subscribe(with: self) { owner, _ in
-                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
-                    print("스테이터스코드", statuscode)
-                    
-                    if statuscode == 200 {
-                        UserDefaultManager.shared.userNickname = result?.nick ?? ""
-                        UserDefaultManager.shared.userId = result?.id ?? ""
-                        print(UserDefaultManager.shared.userNickname)
-                    } else if statuscode == 419 {
-                        
-                        TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statuscode, result in
-                            
-                            if statuscode == 200 {
-                                UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
-                                
-                                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, result in
-                                    
-                                }
-                            } else if statuscode == 418 {
-                                let message = owner.judgeStatusCode(statusCode: statuscode, title: "로그인 만료")
-                                logout.onNext(message)
-                            }
-                        }
-                    }
-                }
-                
+            .flatMap {
+                TokenNetworkManager.shared.tokenNetwork(api: .fetchProfile, model: ProfileModel.self)
+            }
+            .subscribe(with: self) { owner, result in
+
+//                print("데이터",result.data)
+                print("스테이터스 코드", result.statuscode)
             }
             .disposed(by: disposeBag)
         
@@ -117,16 +99,16 @@ final class PromotionViewModel: BaseViewModel {
         //            })
         //            .disposed(by: disposeBag)
         
-        input.timer
-            .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
-            .bind(with: self) { owner, result in
-                scrollIndexPath.onNext(IndexPath(item: (owner.currentIndex + 1) % 10, section: 0))
-                owner.currentIndex += 1
-                
-            }
-            .disposed(by: disposeBag)
+//        input.timer
+//            .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
+//            .bind(with: self) { owner, result in
+//                scrollIndexPath.onNext(IndexPath(item: (owner.currentIndex + 1) % 10, section: 0))
+//                owner.currentIndex += 1
+//                
+//            }
+//            .disposed(by: disposeBag)
         
-        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, scrollIndexPath: scrollIndexPath, logout: logout)
+        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, logout: logout)
     }
     
 }

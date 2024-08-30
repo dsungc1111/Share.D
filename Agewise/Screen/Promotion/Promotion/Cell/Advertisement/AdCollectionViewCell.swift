@@ -12,7 +12,6 @@ import Kingfisher
 final class AdCollectionViewCell: BaseCollectionViewCell {
     
     
-    
     private let productImage = {
         let image = UIImageView()
         image.contentMode = .scaleToFill
@@ -22,11 +21,10 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     }()
     private let rankLabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        label.backgroundColor = UIColor(hexCode: "#9986b3")
         label.textColor = .white
         label.textAlignment = .center
         label.font = UIFont(name: "Copperplate-Bold", size: 25)
-        
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
         return label
@@ -38,6 +36,7 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     }()
     private let titleLabel = {
         let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 12)
         label.numberOfLines = 2
         return label
     }()
@@ -59,7 +58,7 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
         productImage.snp.makeConstraints { make in
             make.horizontalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(20)
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(5)
-            make.height.equalTo(310)
+            make.height.equalTo(280)
         }
         rankLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)
@@ -79,6 +78,8 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
         }
+        
+        
     }
     
     func configureCell(element: ProductDetail, item: Int) {

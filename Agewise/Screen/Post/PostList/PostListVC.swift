@@ -28,10 +28,18 @@ final class PostListVC: BaseVC {
         super.viewDidLoad()
     }
     override func configureNavigationBar() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: nil)
-        navigationItem.title = "질문"
-  
+//        postListView.searchController.searchResultsUpdater = self
+//        postListView.searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.title = "커뮤니티"
+        postListView.searchController.searchBar.placeholder = "Search"
+        
+        // Set the search controller to the navigation item
+        navigationItem.searchController = postListView.searchController
+        
+        // Ensure the search controller does not remain on the screen if the user navigates away from this view
+        definesPresentationContext = true
     }
+   
     override func bind() {
         
         let loadMoreTrigger = PublishSubject<Void>()
@@ -47,11 +55,30 @@ final class PostListVC: BaseVC {
                .disposed(by: disposeBag)
         
         
-        let input = PostListVM.Input(trigger: Observable.just(()), categoryTap: postListView.categoryCollectionView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
+        let input = PostListVM.Input(trigger: Observable.just(()), segmentIndex: postListView.genderSegmentedControl.rx.selectedSegmentIndex, ageString: postListView.agePickerView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
         
         let output = postListViewModel.transform(input: input)
+      
+        
+        // 나이대 선택 컬렉션뷰
+//        output.ageList
+//            .bind(to: postListView.categoryCollectionView.rx.items(cellIdentifier: ListCategoryCollectionViewCell.identifier, cellType: ListCategoryCollectionViewCell.self)) { item, element, cell in
+//                
+//                cell.configureCell(element: element)
+//            }
+//            .disposed(by: disposeBag)
         
         
+        // 결과 컬렉션뷰
+        output.productList
+            .bind(to: postListView.resultCollectionView.rx.items(cellIdentifier: PostListCollectionViewCell.identifier, cellType: PostListCollectionViewCell.self)) { (item, element, cell) in
+                print(element.price)
+                cell.configureCell(element: element)
+                
+            }
+            .disposed(by: disposeBag)
+        
+        // 결과 선택
         postListView.resultCollectionView.rx.modelSelected(PostModelToWrite.self)
             .bind(with: self) { owner, result in
                 let vc = PostDetailVC()
@@ -59,24 +86,15 @@ final class PostListVC: BaseVC {
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+      
+                
         
-        // 나이대 선택 컬렉션뷰
         output.ageList
-            .bind(to: postListView.categoryCollectionView.rx.items(cellIdentifier: ListCategoryCollectionViewCell.identifier, cellType: ListCategoryCollectionViewCell.self)) { item, element, cell in
-                
-                cell.configureCell(element: element)
+            .bind(to: postListView.agePickerView.rx.itemTitles) { (row, element) in
+                return element
             }
             .disposed(by: disposeBag)
         
-        
-        // 결과 컬렉션뷰
-        output.productList
-            .bind(to: postListView.resultCollectionView.rx.items(cellIdentifier: PostListCollectionViewCell.identifier, cellType: PostListCollectionViewCell.self)) { (item, element, cell) in
-                
-                cell.configureCell(element: element)
-                
-            }
-            .disposed(by: disposeBag)
         // 페이지네이션 방지
         output.lastPage
             .bind(with: self) { owner, result in

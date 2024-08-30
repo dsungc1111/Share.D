@@ -88,7 +88,7 @@ final class SettingDetailCollectionViewCell: BaseCollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide)
             make.leading.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(20)
-            make.width.equalTo(220)
+            make.width.equalTo(150)
         }
         writerLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)
@@ -99,24 +99,24 @@ final class SettingDetailCollectionViewCell: BaseCollectionViewCell {
             make.leading.equalTo(imageView.snp.trailing).offset(10)
         }
         companyNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(20)
+            make.bottom.equalTo(imageView.snp.bottom).inset(55)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(5)
             make.height.equalTo(20)
         }
         productNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(companyNameLabel.snp.bottom).offset(5)
+            make.bottom.equalTo(imageView.snp.bottom).inset(35)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(5)
         }
         priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(productNameLabel.snp.bottom).offset(10)
+            make.bottom.equalTo(imageView.snp.bottom).inset(5)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(5)
+            
         }
         likeButton.snp.makeConstraints { make in
             make.bottom.equalTo(imageView.snp.bottom).inset(5)
-            make.leading.equalTo(imageView.snp.trailing).offset(10)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
         }
         checkBox.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(3)

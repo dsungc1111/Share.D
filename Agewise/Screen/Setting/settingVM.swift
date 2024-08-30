@@ -77,6 +77,7 @@ final class SettingVM: BaseViewModel {
                 PostNetworkManager.shared.networking(api: .viewLikePost(query: query), model: PostModelToView.self) { result in
                     switch result {
                     case .success(let value):
+                        print(value.1.data)
                         data.append(contentsOf: value.1.data)
                         list.onNext((data, true))
                         owner.nextCursorChange(cursor: value.1.next_cursor ?? "")

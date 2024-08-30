@@ -9,5 +9,5 @@ import Foundation
 
 
 enum MainColor: String {
-    case main = "#4078bb"
+    case main = "#9986b3"
 }

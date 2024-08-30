@@ -10,16 +10,15 @@ import SnapKit
 
 final class PostListView: BaseView {
     
+    let searchController = UISearchController(searchResultsController: nil)
     
-    let categoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: categoryLayout())
-    
-    private static func categoryLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 80, height: 60)
-        return layout
-    }
-    
+    let genderSegmentedControl: UISegmentedControl = {
+        let items = ["남성", "여성"]
+        let segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
+    let agePickerView = UIPickerView()
     
     let resultCollectionView = UICollectionView(frame: .zero, collectionViewLayout: resultCollectionViewLayout())
     private static func resultCollectionViewLayout() -> UICollectionViewLayout {
@@ -38,9 +37,7 @@ final class PostListView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        categoryCollectionView.register(ListCategoryCollectionViewCell.self, forCellWithReuseIdentifier: ListCategoryCollectionViewCell.identifier)
-        categoryCollectionView.showsHorizontalScrollIndicator = false
-        
+       
         resultCollectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
         resultCollectionView.showsVerticalScrollIndicator = false
     }
@@ -50,17 +47,28 @@ final class PostListView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func configureLayout() {
-        addSubview(categoryCollectionView)
+    override func configureHierarchy() {
+        addSubview(genderSegmentedControl)
+        addSubview(agePickerView)
         addSubview(resultCollectionView)
-       
-        categoryCollectionView.snp.makeConstraints { make in
-            make.top.trailing.equalTo(safeAreaLayoutGuide)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(50)
+    }
+    
+    
+    override func configureLayout() {
+        
+        genderSegmentedControl.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(40)
         }
+        agePickerView.snp.makeConstraints { make in
+            make.top.equalTo(genderSegmentedControl.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(100)
+        }
+        
         resultCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(categoryCollectionView.snp.bottom)
+            make.top.equalTo(agePickerView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }

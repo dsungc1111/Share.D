@@ -12,41 +12,39 @@ import RxCocoa
 final class PostListVM: BaseViewModel {
     
     enum AgeTitle: String, CaseIterable {
-        case teenWoman = "10대 여성"
-        case teenMan = "10대 남성"
-        case graduationWoman = "20대 여성"
-        case graduationMan = "20대 남성"
-        case developerWoman = "30대 여성"
-        case developer = "30대 남성"
-        case parentWoman = "40대 여성"
-        case parent = "40대 남성"
-        case parent50Woman = "50대 여성"
-        case parent50 = "50대 남성"
-        case grandWoman = "60대+ 여성"
-        case grand = "60대+ 남성"
+        case people10 = "10대"
+        case people20 = "20대"
+        case people30 = "30대"
+        case people40 = "40대"
+        case parent50 = "50대"
+        case people60 = "60대+"
     }
     
     struct Input {
         let trigger: Observable<Void>
-        let categoryTap: ControlEvent<String>
+        let segmentIndex: ControlProperty<Int>
+        let ageString: ControlEvent<[String]>
         let loadMore: PublishSubject<Void>
     }
     
     struct Output {
         let productList: PublishSubject<[PostModelToWrite]>
-        let ageList: PublishSubject<[String]>
+        let ageList: Observable<[String]>
         let lastPage: PublishSubject<String>
     }
     
     private let disposeBag = DisposeBag()
+    
     private var isLastPage = false
     private var nextCursor = BehaviorRelay(value: "")
     private let lastPage = PublishSubject<String>()
+    private var searchGenderText = ""
+    private var searchAgeText = ""
     
     
     func transform(input: Input) -> Output {
         
-        let ageList = PublishSubject<[String]>()
+        
         let list = PublishSubject<[PostModelToWrite]>()
         
         let age = AgeTitle.allCases.map { $0.rawValue }
@@ -63,22 +61,36 @@ final class PostListVM: BaseViewModel {
                     data.append(contentsOf: value.data)
                     list.onNext(data)
                     owner.nextCursorChange(cursor: value.next_cursor ?? "")
+                
                 case .failure(_):
                     print("실패")
                 }
-                ageList.onNext(age)
+//                ageList.onNext(age)
             }
             .disposed(by: disposeBag)
         
-        input.categoryTap
-            .map { text in
-                query.product_id = text + "선물용"
+        
+        input.segmentIndex
+            .bind(with: self) { owner, value in
+                if value == 0 {
+                    owner.searchGenderText = "남성"
+                } else {
+                    owner.searchGenderText = "여성"
+                }
+                print(owner.searchGenderText)
+            }
+            .disposed(by: disposeBag)
+        
+        input.ageString
+            .map { [weak self] age in
+                query.product_id =  "\(age.first ?? "") " + (self?.searchGenderText ?? "") + "선물용"
+                print(query)
                 return query
             }
             .flatMap { value in
                 NetworkManager.shared.getPost(query: value)
             }
-            .subscribe(with: self) { owner, result in
+            .subscribe(with: self, onNext: { owner, result in
                 data = []
                 switch result {
                 case .success(let value):
@@ -88,8 +100,31 @@ final class PostListVM: BaseViewModel {
                 case .failure(_):
                     print("실패")
                 }
-            }
+            })
             .disposed(by: disposeBag)
+        
+       
+        
+//        input.categoryTap
+//            .map { text in
+//                query.product_id = text + "선물용"
+//                return query
+//            }
+//            .flatMap { value in
+//                NetworkManager.shared.getPost(query: value)
+//            }
+//            .subscribe(with: self) { owner, result in
+//                data = []
+//                switch result {
+//                case .success(let value):
+//                    data.append(contentsOf: value.data)
+//                    list.onNext(data)
+//                    owner.nextCursorChange(cursor: value.next_cursor ?? "")
+//                case .failure(_):
+//                    print("실패")
+//                }
+//            }
+//            .disposed(by: disposeBag)
         
         input.loadMore
             .filter { [weak self] _ in
@@ -102,6 +137,9 @@ final class PostListVM: BaseViewModel {
                 NetworkManager.shared.getPost(query: value)
             }
             .subscribe(with: self) { owner, result in
+                
+                
+                
                 switch result {
                 case .success(let value):
                     data.append(contentsOf: value.data)
@@ -113,7 +151,7 @@ final class PostListVM: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        return Output(productList: list, ageList: ageList, lastPage: lastPage)
+        return Output(productList: list, ageList: Observable.just(age), lastPage: lastPage)
     }
 }
 
