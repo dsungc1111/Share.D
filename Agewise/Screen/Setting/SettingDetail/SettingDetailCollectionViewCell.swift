@@ -98,12 +98,6 @@ final class SettingDetailCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(writerLabel.snp.bottom).offset(5)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
         }
-        companyNameLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(imageView.snp.bottom).inset(55)
-            make.leading.equalTo(imageView.snp.trailing).offset(10)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(5)
-            make.height.equalTo(20)
-        }
         productNameLabel.snp.makeConstraints { make in
             make.bottom.equalTo(imageView.snp.bottom).inset(35)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
@@ -112,12 +106,18 @@ final class SettingDetailCollectionViewCell: BaseCollectionViewCell {
         priceLabel.snp.makeConstraints { make in
             make.bottom.equalTo(imageView.snp.bottom).inset(5)
             make.leading.equalTo(imageView.snp.trailing).offset(10)
-            
         }
         likeButton.snp.makeConstraints { make in
             make.bottom.equalTo(imageView.snp.bottom).inset(5)
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
         }
+        companyNameLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(productNameLabel.snp.top).offset(-5)
+            make.leading.equalTo(imageView.snp.trailing).offset(10)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(5)
+            make.height.equalTo(20)
+        }
+        
         checkBox.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(3)
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(15)

@@ -74,6 +74,12 @@ final class PostDetailVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
+        output.errorMessage
+            .bind(with: self) { owner, value in
+                owner.logoutUser()
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     @objc func dataReceived(_ notification: Notification ) {

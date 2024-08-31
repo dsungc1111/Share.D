@@ -23,6 +23,7 @@ final class DetailPostVM {
     struct Output {
         let detailInfo: PublishSubject<PostModelToWrite>
         let likeTap: ControlEvent<Void>
+        let errorMessage: PublishSubject<String>
     }
     
     private let disposeBag = DisposeBag()
@@ -30,6 +31,8 @@ final class DetailPostVM {
     private var postId = ""
     private var userLike = false
     let trigger = BehaviorSubject<String>(value: "")
+    private let errorMessage = PublishSubject<String>()
+    
     
     func transform(input: Input) -> Output {
         
@@ -40,36 +43,33 @@ final class DetailPostVM {
             .subscribe(with: self, onNext: { owner, result in
                 print(result)
                 owner.trigger.onNext(result)
-                
             })
             .disposed(by: disposeBag)
         
         
         trigger
-            .flatMap { value in
-                NetworkManager.shared.detailPost(query: value)
-            }
-            .subscribe(with: self) { owner, result in
+            .subscribe(with: self) { owner, value in
                
-                
-                switch result {
-                case .success(let value):
-                    owner.postId = value.postID
-                    detailInfo.onNext(value)
-                    
-                    if let like = value.likes {
-                        if like.contains(UserDefaultManager.shared.userId) {
-                            owner.userLike = true
+                PostNetworkManager.shared.networking(api: .detailPost(query: value), model: PostModelToWrite.self) { result in
+                    switch result {
+                    case .success(let value):
+                        owner.postId = value.1.postID
+                        detailInfo.onNext(value.1)
+                        
+                        if let like = value.1.likes {
+                            if like.contains(UserDefaultManager.shared.userId) {
+                                owner.userLike = true
+                            }
+                        }
+                    case .failure(let error):
+                        if error == .expierdRefreshToken {
+                            owner.errorMessage.onNext("만료됨")
                         }
                     }
-                    
-                case .failure(_):
-                    print("실패")
                 }
             }
             .disposed(by: disposeBag)
              
-        
         input.likeTap
             .map { [weak self] _ in
                 self?.userLike.toggle()
@@ -81,18 +81,18 @@ final class DetailPostVM {
                 PostNetworkManager.shared.networking(api: .likePost(owner.postId, value), model: LikeModel.self) { result in
                     
                     switch result {
-                    case .success(let success):
+                    case .success(_):
                         owner.trigger.onNext(owner.postId)
-                    case .failure(let failure):
-                        print(failure)
+                    case .failure(let error):
+                        if error == .expierdRefreshToken {
+                            owner.errorMessage.onNext("만료됨")
+                        }
                     }
                 }
                 
             }
             .disposed(by: disposeBag)
         
-       
-        
-        return Output(detailInfo: detailInfo, likeTap: input.likeTap)
+        return Output(detailInfo: detailInfo, likeTap: input.likeTap, errorMessage: errorMessage)
     }
 }

@@ -83,10 +83,6 @@ final class PostVC: BaseVC {
                         let vc = TabBarController()
                         owner.resetViewWithoutNavigation(vc: vc)
                         vc.selectedIndex = 0
-                    } else if result == SuccessKeyword.accessError.rawValue {
-                        owner.withdrawUser(title: "로그아웃") {
-                            print("로그아웃")
-                        }
                     } else {
                         owner.view.makeToast(result, duration: 2.0, position: .bottom)
                     }
@@ -96,7 +92,11 @@ final class PostVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        
+        output.errorMaessage
+            .bind(with: self) { owner, result in
+                owner.logoutUser()
+            }
+            .disposed(by: disposeBag)
         
     }
     

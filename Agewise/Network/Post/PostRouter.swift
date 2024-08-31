@@ -23,6 +23,7 @@ enum PostRouter {
     case viewLikePost(query: LikePostQuery)
     case uploadComment(String, CommentQuery)
     case deleteComment(String, String)
+    case payment(query: PaymentQuery)
 }
 
 extension PostRouter: TargetType {
@@ -33,7 +34,7 @@ extension PostRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .postQuestion, .likePost, .uploadComment:
+        case .postQuestion, .likePost, .uploadComment, .payment:
                 .post
         case .getPost, .viewLikePost:
                 .get
@@ -70,13 +71,15 @@ extension PostRouter: TargetType {
             return "/posts/\(postId)/comments"
         case .deleteComment(let postId, let commentId):
             return "/posts/\(postId)/comments/\(commentId)"
+        case .payment:
+            return "/payments/validation"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment, .deleteComment:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment, .deleteComment, .payment:
             
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
@@ -128,6 +131,10 @@ extension PostRouter: TargetType {
         case .uploadComment(_, let comment):
             let encoder = JSONEncoder()
             return try? encoder.encode(comment)
+            
+        case .payment(let query):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(query)
             
         default: return nil
             

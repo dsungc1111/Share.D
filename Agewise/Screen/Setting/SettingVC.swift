@@ -87,6 +87,12 @@ final class SettingVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
+        output.errorMessage
+            .bind(with: self) { owner, result in
+                owner.logoutUser()
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     override func configureNavigationBar() {

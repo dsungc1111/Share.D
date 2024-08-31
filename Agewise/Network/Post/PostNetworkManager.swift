@@ -39,19 +39,19 @@ final class PostNetworkManager {
                     print("에러 =", error)
                     if let statusCode = response.response?.statusCode {
                         completionHandler(.failure(.unknownResponse))
-                        print(statusCode)
                         if statusCode == 419 {
                             TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
                                 print("갱신할 액세스 토큰 ", statusCode)
                                 UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
-                                self.networking(api: api, model: model, completionHandler: completionHandler)
-                                                                  
+                                self.networking(api: api, model: model, completionHandler: completionHandler) 
                             }
                         } else if statusCode == 418 {
-                            print("재로그인")
+                            completionHandler(.failure(.expierdRefreshToken))
                         }
                     }
                 }
+                
+                
             }
     } catch {
         print("Request creation failed with error:")

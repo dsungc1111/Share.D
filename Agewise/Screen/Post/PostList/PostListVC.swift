@@ -33,10 +33,8 @@ final class PostListVC: BaseVC {
         navigationItem.title = "커뮤니티"
         postListView.searchController.searchBar.placeholder = "Search"
         
-        // Set the search controller to the navigation item
         navigationItem.searchController = postListView.searchController
         
-        // Ensure the search controller does not remain on the screen if the user navigates away from this view
         definesPresentationContext = true
     }
    
@@ -47,8 +45,8 @@ final class PostListVC: BaseVC {
         postListView.resultCollectionView.rx.prefetchItems
             .bind(with: self, onNext: { owner, indexPaths in
                 guard let lastIndexPath = indexPaths.last else { return }
-                
-                if lastIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 3 {
+                print("dldl", lastIndexPath.item)
+                if lastIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 4 {
                     loadMoreTrigger.onNext(())
                 }
             })
@@ -99,6 +97,13 @@ final class PostListVC: BaseVC {
         output.lastPage
             .bind(with: self) { owner, result in
                 owner.view.makeToast(result, duration: 2.0, position: .bottom)
+            }
+            .disposed(by: disposeBag)
+        
+        
+        output.errorMessage
+            .bind(with: self) { owner, value in
+                owner.logoutUser()
             }
             .disposed(by: disposeBag)
     }

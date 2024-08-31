@@ -49,6 +49,11 @@ final class CommentVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
+        output.errorMessage
+            .bind(with: self) { owner, value in
+                owner.logoutUser()
+            }
+            .disposed(by: disposeBag)
         
     }
  

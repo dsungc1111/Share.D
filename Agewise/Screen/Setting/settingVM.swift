@@ -30,12 +30,15 @@ final class SettingVM: BaseViewModel {
         let resetMessage: PublishSubject<String>
         let logoutTap: ControlEvent<Void>
         let list: PublishSubject<([PostModelToWrite],Bool)>
+        let errorMessage: PublishSubject<String>
     }
     
     private let disposeBag = DisposeBag()
     private var isLastPage = false
     private var nextCursor = BehaviorRelay(value: "")
     private let lastPage = PublishSubject<String>()
+    
+    private let errorMessage = PublishSubject<String>()
     
     func transform(input: Input) -> Output {
         
@@ -75,6 +78,7 @@ final class SettingVM: BaseViewModel {
             .subscribe(with: self) { owner, query in
                 data = []
                 PostNetworkManager.shared.networking(api: .viewLikePost(query: query), model: PostModelToView.self) { result in
+                    
                     switch result {
                     case .success(let value):
                         print(value.1.data)
@@ -82,8 +86,10 @@ final class SettingVM: BaseViewModel {
                         list.onNext((data, true))
                         owner.nextCursorChange(cursor: value.1.next_cursor ?? "")
                         
-                    case .failure(let failure):
-                        print(failure)
+                    case .failure(let error):
+                        if error == .expierdRefreshToken {
+                            owner.errorMessage.onNext("만료됨")
+                        }
                     }
                 }
             }
@@ -111,7 +117,7 @@ final class SettingVM: BaseViewModel {
             .disposed(by: disposeBag)
         
         
-        return Output(showResetAlert: showResetAlert, resetMessage: resetMessage, logoutTap: input.logoutTap, list: list)
+        return Output(showResetAlert: showResetAlert, resetMessage: resetMessage, logoutTap: input.logoutTap, list: list, errorMessage: errorMessage)
     }
     
     

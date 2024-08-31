@@ -12,6 +12,7 @@ enum NetworkError: Error {
     case invalidURL
     case unknownResponse
     case statusError
+    case expierdRefreshToken
 }
 
 struct Product: Decodable, Hashable {

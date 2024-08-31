@@ -20,10 +20,11 @@ final class CommentVM {
     }
     struct Output {
         let commentList: BehaviorSubject<[CommentModel]>
+        let errorMessage: PublishSubject<String>
     }
     private let disposeBag = DisposeBag()
     
-    
+    private let errorMessage = PublishSubject<String>()
     private var postId = ""
     private var comment = ""
     
@@ -51,8 +52,6 @@ final class CommentVM {
             }
             .disposed(by: disposeBag)
         
-        
-        
         input.comment
             .bind(with: self) { owner, value in
                 owner.comment = value
@@ -78,8 +77,10 @@ final class CommentVM {
                         
                         
                         print(success)
-                    case .failure(let failure):
-                        print(failure)
+                    case .failure(let error):
+                        if error == .expierdRefreshToken {
+                            owner.errorMessage.onNext("만료됨")
+                        }
                     }
                 }
             }
@@ -92,14 +93,16 @@ final class CommentVM {
                 if  data[indexPath.row].creator.userId == UserDefaultManager.shared.userId {
                     PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
                         switch result {
-                        case .success(let success):
+                        case .success(_):
                             
                             data.remove(at: indexPath.row)
                             
                             trigger.onNext(data)
-                            //                        print(success)
-                        case .failure(let failure):
-                            print(failure)
+                            
+                        case .failure(let error):
+                            if error == .expierdRefreshToken {
+                                owner.errorMessage.onNext("만료됨")
+                            }
                         }
                         data.remove(at: indexPath.row)
                         trigger.onNext(data)
@@ -109,6 +112,6 @@ final class CommentVM {
             .disposed(by: disposeBag)
         
         
-        return Output(commentList: commentList)
+        return Output(commentList: commentList, errorMessage: errorMessage)
     }
 }

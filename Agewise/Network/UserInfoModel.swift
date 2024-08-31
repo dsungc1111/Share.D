@@ -95,6 +95,17 @@ struct PostModelToView: Decodable {
 struct LikeModel: Decodable {
     let like_status: Bool
 }
+struct PayModel: Decodable {
+    let buy_id: String
+    let post_id: String
+    let merchant_uid: String
+    let productName: String
+    let price: Int
+    let paidAt: String
+}
+struct MyPayModel: Decodable {
+    
+}
 
 
 
@@ -135,4 +146,9 @@ struct LikePostQuery: Encodable {
 
 struct CommentQuery: Encodable {
     let content: String
+}
+
+struct PaymentQuery: Encodable {
+    let imp_uid: String
+    let post_id: String
 }

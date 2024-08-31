@@ -57,7 +57,7 @@ final class NetworkManager {
                 let request = try Router.getPost(query: query).asURLRequest()
                 
 //                session.request(request)
-                AF.request(request)
+                AF.request(request, interceptor: MyNetworkInterceptor())
                     .validate(statusCode: 200..<300)
 //                    .responseString { result in
 //                        print(result)
@@ -71,6 +71,7 @@ final class NetworkManager {
 //                            observer(.failure(NetworkError.invalidURL))
 //                            return
 //                        }
+                        
                         
                         
                         switch response.result {
@@ -199,6 +200,9 @@ extension NetworkManager {
 
 class MyNetworkInterceptor: RequestInterceptor {
     
+    
+    private let disposeBag = DisposeBag()
+    
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         print(#function)
         var request = urlRequest
@@ -230,6 +234,6 @@ class MyNetworkInterceptor: RequestInterceptor {
             }, onFailure: { _ in
                 completion(.doNotRetry)
             })
-            .disposed(by: DisposeBag())
+            .disposed(by: disposeBag)
     }
 }

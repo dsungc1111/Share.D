@@ -58,6 +58,7 @@ final class CommentTableViewCell: BaseTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
   
         setupContextMenu()
+        selectionStyle = .none
     }
     
     override func configureLayout() {

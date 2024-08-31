@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B09B3EE2C82F1BF006EF5A8 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 8B09B3ED2C82F1BF006EF5A8 /* iamport-ios */; };
 		8B2BA0FA2C7D5A0400206F8B /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BA0F92C7D5A0400206F8B /* SettingDetailVC.swift */; };
 		8B2BA1092C7E910C00206F8B /* SettingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BA1082C7E910C00206F8B /* SettingDetailView.swift */; };
 		8B2BA10B2C7E95C800206F8B /* SettingDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BA10A2C7E95C800206F8B /* SettingDetailCollectionViewCell.swift */; };
@@ -185,6 +186,7 @@
 				8B3231992C6F72C00095DF0B /* Kingfisher in Frameworks */,
 				8B32311A2C6C1F790095DF0B /* RxSwift in Frameworks */,
 				8B32316D2C6C72380095DF0B /* Alamofire in Frameworks */,
+				8B09B3EE2C82F1BF006EF5A8 /* iamport-ios in Frameworks */,
 				8B3231182C6C1F790095DF0B /* RxCocoa in Frameworks */,
 				8B3231CD2C731A1C0095DF0B /* FirebaseCrashlytics in Frameworks */,
 				8B3231122C6C13820095DF0B /* SnapKit in Frameworks */,
@@ -296,11 +298,12 @@
 			children = (
 				8B3231692C6C721E0095DF0B /* TargetType.swift */,
 				8B3231702C6C74B60095DF0B /* UserInfoModel.swift */,
+				8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */,
 				8B32318C2C6E28350095DF0B /* User */,
 				8B93B3862C78251800A68DB5 /* Token */,
 				8B93B3892C783F9400A68DB5 /* Post */,
-				8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */,
 				8B32318B2C6E28270095DF0B /* Product */,
+				8B3231642C6C6FCD0095DF0B /* NetworkManager.swift */,
 				8B3231672C6C71590095DF0B /* UrlComponent.swift */,
 			);
 			path = Network;
@@ -345,7 +348,6 @@
 			isa = PBXGroup;
 			children = (
 				8B93B37C2C774B1E00A68DB5 /* UserNetworkManager.swift */,
-				8B32316E2C6C74240095DF0B /* UserDefaultManager.swift */,
 				8B93B3822C77E61500A68DB5 /* UserRouter.swift */,
 			);
 			path = User;
@@ -569,6 +571,7 @@
 				8B3231982C6F72C00095DF0B /* Kingfisher */,
 				8B3231CA2C731A1C0095DF0B /* FirebaseAnalyticsWithoutAdIdSupport */,
 				8B3231CC2C731A1C0095DF0B /* FirebaseCrashlytics */,
+				8B09B3ED2C82F1BF006EF5A8 /* iamport-ios */,
 			);
 			productName = Agewise;
 			productReference = 8BC986372C6C0BAA00B69112 /* Agewise.app */;
@@ -606,6 +609,7 @@
 				8B32317C2C6D9E220095DF0B /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				8B3231972C6F72C00095DF0B /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				8B3231C92C731A1C0095DF0B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				8B09B3EC2C82F1BF006EF5A8 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
 			productRefGroup = 8BC986382C6C0BAA00B69112 /* Products */;
 			projectDirPath = "";
@@ -931,6 +935,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8B09B3EC2C82F1BF006EF5A8 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.2;
+			};
+		};
 		8B3231102C6C13820095DF0B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -990,6 +1002,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8B09B3ED2C82F1BF006EF5A8 /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B09B3EC2C82F1BF006EF5A8 /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
+		};
 		8B3231112C6C13820095DF0B /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8B3231102C6C13820095DF0B /* XCRemoteSwiftPackageReference "SnapKit" */;
