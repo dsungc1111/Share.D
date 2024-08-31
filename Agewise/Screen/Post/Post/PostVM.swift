@@ -72,33 +72,35 @@ final class PostVM: BaseViewModel {
         
         input.saveTap
             .withLatestFrom(combined)
-            .bind(with: self) { owner, result in
-                print("dpfpfpfpfpfpfp")
-                
+            .map { result in
                 let product = result.0
                 let text = result.1
                 let category = result.2
                 
                 let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: category + "선물용" , files: [product.image])
+                return save
+                
+            }
+            .flatMap { query in
+                
+                PostNetworkManager.shared.postNetworkManager(api: .postQuestion(query: query), model: PostModelToWrite.self)
+            }
+            .bind(with: self) { owner, result in
                 
                 
-                PostNetworkManager.shared.networking(api: .postQuestion(query: save), model: PostModelToWrite.self) { result in
+                print("09090909090909090909090909",result.statusCode)
+                
+                print("저장 성공")
+                switch result {
                     
-                    switch result {
-                    case .success(let success):
-                        print("0 = ",success.0)
-                        print("1 = ",success.1)
-                        successMent.onNext(owner.judgeStatusCode(statusCode: success.0, title: SuccessKeyword.post.rawValue))
-                    case .failure(let failure):
-                        print(failure)
-                        print("실패")
-                    }
+                case (let statuscode, let data):
+                    print("저장 성공ㅇㄹㅇㄹㅇㄹㅇㅇㄹㅇㄹㅇㅇㄹ")
+                    print(statuscode, data?.productId ?? "")
                 }
                 
+              
+                
 //                if owner.editOrWrite == false {
-//                    
-//                    
-//                    
 //                    NetworkManager.shared.writePost(query: save) { result in
 //                        success.onNext(owner.judgeStatusCode(statusCode: result, title: SuccessKeyword.post.rawValue))
 //                        //

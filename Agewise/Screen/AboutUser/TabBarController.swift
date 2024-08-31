@@ -43,7 +43,7 @@ final class TabBarController: UITabBarController {
            )
            
            roundLayer.path = shapePath.cgPath
-           roundLayer.fillColor = UIColor.white.cgColor // 배경 색상 설정
+           roundLayer.fillColor = UIColor.white.cgColor 
            roundLayer.shadowColor = UIColor.black.cgColor
            roundLayer.shadowOffset = CGSize(width: 0, height: 5)
            roundLayer.shadowRadius = 10
@@ -53,8 +53,8 @@ final class TabBarController: UITabBarController {
            tabBar.layer.cornerRadius = radius
 //           tabBar.layer.masksToBounds = false
 //           tabBar.clipsToBounds = false
-           tabBar.backgroundImage = UIImage() // 기본 배경 제거
-           tabBar.shadowImage = UIImage() // 기본 그림자 제거
+           tabBar.backgroundImage = UIImage()
+           tabBar.shadowImage = UIImage()
        }
 }
 

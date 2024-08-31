@@ -48,7 +48,7 @@ final class PostListVC: BaseVC {
             .bind(with: self, onNext: { owner, indexPaths in
                 guard let lastIndexPath = indexPaths.last else { return }
                 
-                if lastIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 1 {
+                if lastIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 3 {
                     loadMoreTrigger.onNext(())
                 }
             })
@@ -72,7 +72,7 @@ final class PostListVC: BaseVC {
         // 결과 컬렉션뷰
         output.productList
             .bind(to: postListView.resultCollectionView.rx.items(cellIdentifier: PostListCollectionViewCell.identifier, cellType: PostListCollectionViewCell.self)) { (item, element, cell) in
-                print(element.price)
+                
                 cell.configureCell(element: element)
                 
             }

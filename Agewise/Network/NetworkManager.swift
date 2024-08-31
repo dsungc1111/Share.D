@@ -48,45 +48,50 @@ final class NetworkManager {
     }
     
     //MARK: - 포스트 조회
-    
     func getPost(query: GetPostQuery) -> Single<Result<PostModelToView, NetworkError>> {
         return Single.create { observer -> Disposable in
+            
+//            let session = Session(interceptor: MyNetworkInterceptor())
+            
             do {
                 let request = try Router.getPost(query: query).asURLRequest()
-                print(request)
-                AF.request(request).responseDecodable(of: PostModelToView.self) { response in
-                    guard let responseCode = response.response?.statusCode else {
-                        observer(.failure(NetworkError.invalidURL))
-                        return
-                    }
-                    
-                    print("포스트 조회 = ", responseCode)
-                    
-                    switch response.result {
-                    case .success(let value):
-                        observer(.success(.success(value)))
-                    case .failure( _):
-                        if let statusCode = response.response?.statusCode {
-                            print(statusCode)
-                            if statusCode == 419 {
-                                TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
-                                    UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
-                                }
-                            } else if statusCode == 418 {
-                                print("재로그인")
-                            }
+                
+//                session.request(request)
+                AF.request(request)
+                    .validate(statusCode: 200..<300)
+//                    .responseString { result in
+//                        print(result)
+//                    }
+                    .responseDecodable(of: PostModelToView.self) { response in
+                   
+//                        if let responseCode = response.response?.statusCode {
+//                            print("포스트 조회 = ", responseCode)
+//                        } else {
+//                            print("Response is nil")
+//                            observer(.failure(NetworkError.invalidURL))
+//                            return
+//                        }
+                        
+                        
+                        switch response.result {
+                        case .success(let value):
+                            
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(.unknownResponse)))
                         }
-                        observer(.success(.failure(.unknownResponse)))
                     }
-                }
             } catch {
                 observer(.failure(NetworkError.unknownResponse))
             }
+            
             return Disposables.create()
         }
     }
     func viewPost(query: GetPostQuery) -> Single<Result<PostModelToView, NetworkError>> {
         return Single.create { observer -> Disposable in
+            
             do {
                 let request = try Router.viewPost(query: query).asURLRequest()
                 
@@ -125,10 +130,6 @@ final class NetworkManager {
         }
     }
     
-    
-    
-    
-    
     func detailPost(query: String) -> Single<Result<PostModelToWrite, NetworkError>> {
         return Single.create { observer -> Disposable in
             do {
@@ -143,13 +144,12 @@ final class NetworkManager {
                     
                     print("포스트 조회 = ", responseCode)
                     
-                    if responseCode == 419 {
-                        //                        TokenNetworkManager.shared.refreshToken()
-                    }
+                    
                     switch response.result {
                     case .success(let value):
                         observer(.success(.success(value)))
-                    case .failure( _):
+                    case .failure(let error):
+                        print(error)
                         observer(.success(.failure(.unknownResponse)))
                     }
                 }
@@ -179,13 +179,11 @@ extension NetworkManager {
             "X-Naver-Client-Id" : APIKey.searchClientID,
             "X-Naver-Client-Secret" : APIKey.searchClientSecret
         ]
-        
         return Single.create { observer -> Disposable in
             
             AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: Product.self) { response in
-                    
                     switch response.result {
                     case .success(let value):
                         observer(.success(.success(value)))
@@ -195,5 +193,43 @@ extension NetworkManager {
                 }
             return Disposables.create()
         }
+    }
+}
+
+
+class MyNetworkInterceptor: RequestInterceptor {
+    
+    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+        print(#function)
+        var request = urlRequest
+        
+        
+        request.setValue(UserDefaultManager.shared.accessToken, forHTTPHeaderField: APIKey.HTTPHeaderName.authorization.rawValue)
+        
+        print("adator 적용 \(urlRequest.headers)")
+        completion(.success(request))
+    }
+    
+    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+        
+        print("retry 진입")
+        
+        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 419 else {
+            completion(.doNotRetryWithError(error))
+            return
+        }
+        
+        TokenNetworkManager.shared.tokenNetwork(api: .refresh, model: RefreshModel.self)
+            .subscribe(onSuccess: { result in
+                if let newToken = result.data?.accessToken {
+                    UserDefaultManager.shared.accessToken = newToken
+                    completion(.retry)
+                } else {
+                    completion(.doNotRetry)
+                }
+            }, onFailure: { _ in
+                completion(.doNotRetry)
+            })
+            .disposed(by: DisposeBag())
     }
 }
