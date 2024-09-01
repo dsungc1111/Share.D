@@ -67,6 +67,9 @@ final class DetailPostVM {
                         }
                     }
                 }
+                
+                
+                
             }
             .disposed(by: disposeBag)
              

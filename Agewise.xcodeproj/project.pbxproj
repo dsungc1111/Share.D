@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8B09B3EE2C82F1BF006EF5A8 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 8B09B3ED2C82F1BF006EF5A8 /* iamport-ios */; };
+		8B09B3F02C83310A006EF5A8 /* PaymentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B09B3EF2C83310A006EF5A8 /* PaymentVC.swift */; };
 		8B2BA0FA2C7D5A0400206F8B /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BA0F92C7D5A0400206F8B /* SettingDetailVC.swift */; };
 		8B2BA1092C7E910C00206F8B /* SettingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BA1082C7E910C00206F8B /* SettingDetailView.swift */; };
 		8B2BA10B2C7E95C800206F8B /* SettingDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BA10A2C7E95C800206F8B /* SettingDetailCollectionViewCell.swift */; };
@@ -96,6 +97,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B09B3EF2C83310A006EF5A8 /* PaymentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentVC.swift; sourceTree = "<group>"; };
 		8B2BA0F92C7D5A0400206F8B /* SettingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailVC.swift; sourceTree = "<group>"; };
 		8B2BA1082C7E910C00206F8B /* SettingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailView.swift; sourceTree = "<group>"; };
 		8B2BA10A2C7E95C800206F8B /* SettingDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -467,8 +469,8 @@
 			isa = PBXGroup;
 			children = (
 				8B3231D42C73277F0095DF0B /* PostView.swift */,
-				8B3231D22C73272E0095DF0B /* PostVC.swift */,
 				8B3231D62C735CB40095DF0B /* PostVM.swift */,
+				8B3231D22C73272E0095DF0B /* PostVC.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -488,6 +490,7 @@
 				8B93B3542C7616B400A68DB5 /* PostDetailView.swift */,
 				8B93B3522C76139600A68DB5 /* PostDetailVC.swift */,
 				8B93B3562C76A04E00A68DB5 /* PostDetailVM.swift */,
+				8B09B3EF2C83310A006EF5A8 /* PaymentVC.swift */,
 			);
 			path = PostDetail;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 				8B32310C2C6C12980095DF0B /* OnBoardingView.swift in Sources */,
 				8B93B3932C7AF19500A68DB5 /* SettingButton.swift in Sources */,
 				8B3231912C6E2BCE0095DF0B /* RecommendCollectionViewCell.swift in Sources */,
+				8B09B3F02C83310A006EF5A8 /* PaymentVC.swift in Sources */,
 				8B93B3812C7759FC00A68DB5 /* settingVM.swift in Sources */,
 				8B3231A02C700B760095DF0B /* ProductVC.swift in Sources */,
 				8B93B3882C78252500A68DB5 /* TokenRouter.swift in Sources */,

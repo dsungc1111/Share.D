@@ -30,6 +30,8 @@ final class ProductVC: BaseVC {
     
     override func bind() {
         
+        print("서치아이템", searchItem)
+        
         let loadMoreTrigger = PublishSubject<Void>()
         
         productView.collectionView.rx.prefetchItems

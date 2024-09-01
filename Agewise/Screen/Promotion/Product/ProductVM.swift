@@ -36,7 +36,6 @@ final class ProductVM {
         
         searchWithPage
             .flatMapLatest { query, page in
-                
                 NetworkManager.shared.naverAPI(query: query, page: page)
             }
             .subscribe(with: self, onNext: { owner, result in

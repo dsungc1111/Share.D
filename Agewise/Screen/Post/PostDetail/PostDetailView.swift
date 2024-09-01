@@ -56,7 +56,7 @@ final class PostDetailView: BaseView {
     }()
     let bookmarkButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        btn.setImage(UIImage(systemName: "basket"), for: .normal)
         btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
         btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
         return btn
@@ -66,6 +66,13 @@ final class PostDetailView: BaseView {
         text.placeholder = "댓글을 입력하세요."
         text.borderStyle = .roundedRect
         return text
+    }()
+    
+    let buyButton = {
+        let btn = UIButton()
+        btn.setTitle("구매하기", for: .normal)
+        btn.backgroundColor = .systemGray
+        return btn
     }()
 //    let editButton = {
 //        let btn = UIButton()
@@ -95,6 +102,7 @@ final class PostDetailView: BaseView {
         addSubview(commentButton)
         addSubview(likeButton)
         addSubview(bookmarkButton)
+        addSubview(buyButton)
 //        addSubview(textField)
     }
     override func configureLayout() {
@@ -124,7 +132,6 @@ final class PostDetailView: BaseView {
         }
        
         
-        
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(30)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
@@ -139,6 +146,12 @@ final class PostDetailView: BaseView {
             make.top.equalTo(productLabel.snp.bottom).inset(10)
             make.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
+        }
+        
+        buyButton.snp.makeConstraints { make in
+            make.top.equalTo(contentLabel.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(50)
+            make.height.equalTo(50)
         }
 //        editButton.snp.makeConstraints { make in
 //            make.centerX.equalTo(safeAreaLayoutGuide)
@@ -183,6 +196,7 @@ final class PostDetailView: BaseView {
         
         let bookmarkCount = element.likes2?.count ?? 0
         bookmarkButton.setTitle(bookmarkCount.formatted(), for: .normal)
+        
         
         
         

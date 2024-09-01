@@ -51,7 +51,7 @@ final class PostListVM: BaseViewModel {
         
         let age = AgeTitle.allCases.map { $0.rawValue }
         var data: [PostModelToWrite] = []
-        var query = GetPostQuery(next: "", limit: "10", product_id: "10대 남성선물용")
+        var query = GetPostQuery(next: "", limit: "10", product_id: "10대Man 선물용")
         
         input.trigger
             .flatMap {
@@ -81,14 +81,14 @@ final class PostListVM: BaseViewModel {
         
         input.segmentIndex
             .bind(with: self) { owner, value in
-                
                 print("===========성별 실행===============")
                 if value == 0 {
-                    owner.searchGenderText = "남성"
+                    owner.searchGenderText = "Man"
                 } else {
-                    owner.searchGenderText = "여성"
+                    owner.searchGenderText = "Woman"
                 }
-                query.product_id = owner.searchAgeText + " " + owner.searchGenderText + "선물용"
+                query.product_id = owner.searchAgeText + owner.searchGenderText + " 선물용"
+                print("세그먼트 선태시, ", query.product_id)
                 print("세그먼트 선택 >>> ", owner.searchAgeText)
                 PostNetworkManager.shared.networking(api: .getPost(query: query), model: PostModelToView.self) { result in
                     switch result {

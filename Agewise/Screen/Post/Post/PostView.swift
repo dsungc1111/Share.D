@@ -29,6 +29,16 @@ final class PostView: BaseView {
 //        return button
 //    }()
     
+    let ageButton = {
+        let btn = UIButton()
+        btn.setTitle("나이 선택", for: .normal)
+        btn.layer.cornerRadius = 10
+        btn.titleLabel?.font = .systemFont(ofSize: 15)
+        btn.layer.borderWidth = 1
+        btn.setTitleColor(.black, for: .normal)
+        return btn
+    }()
+    
     let infoLabel = {
         let label = UILabel()
         label.text = "제품정보란"
@@ -62,7 +72,7 @@ final class PostView: BaseView {
     let saveButton = {
         let btn = UIButton()
         btn.setTitle("저장", for: .normal)
-        btn.backgroundColor = .systemGray
+        btn.backgroundColor = .lightGray
         btn.layer.cornerRadius = 20
         return btn
     }()
@@ -84,6 +94,7 @@ final class PostView: BaseView {
         addSubview(mallnameLabel)
         addSubview(saveButton)
         addSubview(priceLabel)
+        addSubview(ageButton)
     }
     override func configureLayout() {
         imageContainer.snp.makeConstraints { make in
@@ -103,9 +114,17 @@ final class PostView: BaseView {
             make.top.equalTo(infoLabel.snp.bottom).offset(10)
             make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
         }
+        ageButton.snp.makeConstraints { make in
+            make.top.equalTo(priceLabel.snp.bottom).offset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(15)
+            make.width.equalTo(70)
+            make.height.equalTo(40)
+        }
+        
         textView.snp.makeConstraints { make in
             make.top.equalTo(priceLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(15)
+            make.leading.equalTo(ageButton.snp.trailing).offset(5)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(15)
             make.height.equalTo(200)
         }
         saveButton.snp.makeConstraints { make in

@@ -5,8 +5,6 @@
 //  Created by 최대성 on 8/23/24.
 //
 
-import Foundation
-
 
 import Foundation
 import Alamofire
@@ -24,6 +22,7 @@ enum PostRouter {
     case uploadComment(String, CommentQuery)
     case deleteComment(String, String)
     case payment(query: PaymentQuery)
+    case getBuyerInfo
 }
 
 extension PostRouter: TargetType {
@@ -36,7 +35,7 @@ extension PostRouter: TargetType {
         switch self {
         case .postQuestion, .likePost, .uploadComment, .payment:
                 .post
-        case .getPost, .viewLikePost:
+        case .getPost, .viewLikePost, .getBuyerInfo:
                 .get
         case .detailPost:
                 .get
@@ -73,13 +72,15 @@ extension PostRouter: TargetType {
             return "/posts/\(postId)/comments/\(commentId)"
         case .payment:
             return "/payments/validation"
+        case .getBuyerInfo:
+            return "/payments/me"
         }
     }
     
     var header: [String : String] {
         switch self {
             
-        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment, .deleteComment, .payment:
+        case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment, .deleteComment, .payment, .getBuyerInfo:
             
             return [
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,

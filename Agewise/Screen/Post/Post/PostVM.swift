@@ -36,7 +36,7 @@ final class PostVM: BaseViewModel {
         let errorMaessage: PublishSubject<String>
     }
     private let disposeBag = DisposeBag()
-    
+    var age = ""
     private var editOrWrite = false
     private let errorMessage = PublishSubject<String>()
     
@@ -65,12 +65,12 @@ final class PostVM: BaseViewModel {
         
         input.saveTap
             .withLatestFrom(combined)
-            .map { result in
+            .map { [weak self] result in
                 let product = result.0
                 let text = result.1
                 let category = result.2
                 
-                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: category + "선물용" , files: [product.image])
+                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: (self?.age ?? "") + category + " 선물용" , files: [product.image])
                 return save
                 
             }
@@ -83,6 +83,7 @@ final class PostVM: BaseViewModel {
                     case .success(let success):
                         let message = owner.judgeStatusCode(statusCode: success.0, title: SuccessKeyword.post.rawValue)
                         successMent.onNext(message)
+                        print("프로덕트 아이디", success.1.productId)
                     case .failure(let error):
                         if error == .expierdRefreshToken {
                             owner.errorMessage.onNext("만료됨")

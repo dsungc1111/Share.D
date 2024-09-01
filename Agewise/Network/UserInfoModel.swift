@@ -96,15 +96,16 @@ struct LikeModel: Decodable {
     let like_status: Bool
 }
 struct PayModel: Decodable {
-    let buy_id: String
+    let buyer_id: String
     let post_id: String
     let merchant_uid: String
     let productName: String
     let price: Int
     let paidAt: String
 }
+
 struct MyPayModel: Decodable {
-    
+    let data: [PayModel]
 }
 
 

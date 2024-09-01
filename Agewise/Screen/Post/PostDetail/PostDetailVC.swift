@@ -17,6 +17,8 @@ final class PostDetailVC: BaseVC {
     
     var element = ""
     
+    var productPrice = 0
+    
     var model: PostModelToWrite?
     
     private let disposeBag = DisposeBag()
@@ -46,6 +48,7 @@ final class PostDetailVC: BaseVC {
                 print("바뀌는데")
                 owner.postDetailView.configurePostDetail(element: result)
                 owner.navigationItem.title = result.productId
+                owner.productPrice = result.price ?? 100
                 owner.model = result
             }
             .disposed(by: disposeBag)
@@ -79,6 +82,15 @@ final class PostDetailVC: BaseVC {
                 owner.logoutUser()
             }
             .disposed(by: disposeBag)
+        
+        postDetailView.buyButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let vc = PaymentVC()
+                vc.payInfo = owner.model
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         
     }
     
