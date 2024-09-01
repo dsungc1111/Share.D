@@ -13,6 +13,7 @@ enum UserRouter {
     case emailValidation(query: EmailValidationQuery)
     case login(query: LoginQuery)
     case withdraw
+    case edit(query: EditProfile)
 }
 
 extension UserRouter: TargetType {
@@ -30,6 +31,8 @@ extension UserRouter: TargetType {
                 .post
         case .withdraw:
                 .get
+        case .edit:
+                .put
         }
     }
     
@@ -43,6 +46,8 @@ extension UserRouter: TargetType {
             return "/users/login"
         case .withdraw:
             return "/users/withdraw"
+        case .edit:
+            return "/users/me/profile"
         }
     }
     
@@ -58,6 +63,12 @@ extension UserRouter: TargetType {
                 APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
+            ]
+        case .edit:
+            return [
+                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
+                APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
+                APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.mutipart.rawValue,
             ]
         }
     }
@@ -88,6 +99,17 @@ extension UserRouter: TargetType {
         default: return nil
         }
     }
-    
+      
+      var multipartFormData: MultipartFormData {
+          let formData = MultipartFormData()
+          switch self {
+          case .edit(let query):
+              formData.append(query.nick.data(using: .utf8)!, withName: "nick")
+              formData.append(query.profile, withName: "profile", fileName: "profile.png", mimeType: "image/png")
+          default:
+              break
+          }
+          return formData
+      }
     
 }

@@ -34,7 +34,8 @@ final class SettingVC: BaseVC {
         //MARK: - 프로필 설정
         settingView.editButton.rx.tap
             .bind(with: self) { owner, _ in
-                print("클릭")
+                let vc = EditUserVC()
+                owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
         

@@ -83,28 +83,6 @@ final class PromotionVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        
-        
-//        promotionView.searchButton.rx.tap
-//            .bind(with: self) { owner, _ in
-//                
-//                let age = owner.promotionView.ageButton.titleLabel?.text
-//                let gender = owner.promotionView.genderButton.titleLabel?.text
-//                let searchText = (age ?? "") + " " + (gender ?? "")
-//                
-//                if age == "연령대" || gender == "성별" {
-//                    owner.view.makeToast("조건을 선택해주세요!!", duration: 2.0, position: .center)
-//                } else {
-//                    let vc = ProductVC()
-//                    vc.searchItem = searchText
-//                    vc.navigationItem.title = "For " + searchText
-//                    owner.navigationController?.pushViewController(vc, animated: true)
-//                }
-//            }
-//            .disposed(by: disposeBag)
-        
 //        output.scrollIndexPath
 //            .bind(with: self, onNext: { owner, indexPath in
 //                owner.promotionView.adCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)

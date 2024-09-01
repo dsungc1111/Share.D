@@ -28,11 +28,36 @@ final class UserNetworkManager {
                     switch response.result {
                     case .success(let value):
                         observer(.success((statuscode: statuscode, data: value)))
-                    case .failure(_):
+                    case .failure(let error):
+                        print(error)
                         observer(.success((statuscode: statuscode, data: nil)))
                     }
                 }
             return Disposables.create()
         }
     }
+    
+    func userUploadNetwork<T: Decodable>(api: UserRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
+        return Single.create { observer in
+            AF.upload(multipartFormData: api.multipartFormData, with: api)
+                .validate(statusCode: 200..<300)
+                .responseDecodable(of: T.self) { response in
+                    
+                    guard let statuscode = response.response?.statusCode else { return }
+                    
+                    switch response.result {
+                    case .success(let value):
+                        observer(.success((statuscode: statuscode, data: value)))
+                        
+                        
+                    case .failure(let error):
+                        print(error)
+                        observer(.success((statuscode: statuscode, data: nil)))
+                    }
+                }
+            return Disposables.create()
+        }
+    }
+   
+    
 }

@@ -108,6 +108,21 @@ struct MyPayModel: Decodable {
     let data: [PayModel]
 }
 
+struct Follow: Decodable {
+    let user_id: String
+    let nick: String
+    let profileImage: String?
+}
+struct EditProfileModel: Decodable {
+    let user_id: String
+    let email: String
+    let nick: String
+    let profileImage: String
+    let followers: [Follow]
+    let following: [Follow]
+    let posts: [String]
+}
+
 
 
 //MARK: - 요청 쿼리
@@ -132,6 +147,10 @@ struct PostQuery: Encodable {
     let product_id: String
     let files: [String]
 }
+struct EditPostQuery: Encodable {
+    let nick: String
+    let profileImage: String
+}
 struct GetPostQuery: Encodable {
     let next: String
     let limit: String
@@ -152,4 +171,8 @@ struct CommentQuery: Encodable {
 struct PaymentQuery: Encodable {
     let imp_uid: String
     let post_id: String
+}
+struct EditProfile: Encodable {
+    let nick: String
+    let profile: Data
 }
