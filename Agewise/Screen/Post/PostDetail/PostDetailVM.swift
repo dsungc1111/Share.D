@@ -43,54 +43,45 @@ final class DetailPostVM {
             .subscribe(with: self, onNext: { owner, result in
                 print(result)
                 owner.trigger.onNext(result)
+                
             })
             .disposed(by: disposeBag)
         
         
         trigger
-            .subscribe(with: self) { owner, value in
-               
-                PostNetworkManager.shared.networking(api: .detailPost(query: value), model: PostModelToWrite.self) { result in
-                    switch result {
-                    case .success(let value):
-                        owner.postId = value.1.postID
-                        detailInfo.onNext(value.1)
-                        
-                        if let like = value.1.likes {
-                            if like.contains(UserDefaultManager.userId) {
-                                owner.userLike = true
-                            }
-                        }
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
+            .flatMap { query in
+                PostNetworkManager.shared.postNetwork(api: .detailPost(query: query), model: PostModelToWrite.self)
+            }
+            .bind(with: self) { owner, result in
+                
+                if let result = result.data {
+                    owner.postId = result.postID
+                    detailInfo.onNext(result)
+                    if let like = result.likes {
+                        if like.contains(UserDefaultManager.userId) {
+                            owner.userLike = true
                         }
                     }
+                    
                 }
-                
-                
-                
             }
             .disposed(by: disposeBag)
-             
+        
         input.likeTap
             .map { [weak self] _ in
                 self?.userLike.toggle()
                 let like = LikeQuery(like_status: self?.userLike ?? true)
                 return like
             }
-            .subscribe(with: self) { owner, value in
+            .flatMap { [weak self] query in
+                PostNetworkManager.shared.postNetwork(api: .likePost(self?.postId ?? "", query), model: LikeModel.self)
+            }
+            .bind(with: self) { owner, result in
                 
-                PostNetworkManager.shared.networking(api: .likePost(owner.postId, value), model: LikeModel.self) { result in
-                    
-                    switch result {
-                    case .success(_):
-                        owner.trigger.onNext(owner.postId)
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
+                owner.trigger.onNext(owner.postId)
+                
+                if result.statusCode == 418 {
+                    owner.errorMessage.onNext("만료됨")
                 }
                 
             }

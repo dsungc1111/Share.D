@@ -16,6 +16,7 @@ import RxSwift
 final class PaymentVC: BaseVC {
     
     var payInfo: PostModelToWrite?
+    private let disposeBag = DisposeBag()
     
     let webView: WKWebView = {
         var view = WKWebView()
@@ -57,14 +58,14 @@ final class PaymentVC: BaseVC {
                 print(String(describing: iamportResponse))
                 
                 let payInfoDetail = PaymentQuery(imp_uid: iamportResponse?.imp_uid ?? "", post_id: self?.payInfo?.postID ?? "" )
-                PostNetworkManager.shared.networking(api: .payment(query: payInfoDetail), model: PayModel.self) { result in
-                    switch result {
-                    case .success(let success):
-                        print("결제 성공", success)
-                    case .failure(let failure):
-                        print("결제 실패", failure)
-                    }
-                }
+                
+                PostNetworkManager.shared.postNetwork(api: .payment(query: payInfoDetail), model: PayModel.self)
+                    .subscribe(onSuccess: { (statusCode, success) in
+                        print("결제 성공 statusCode = \(statusCode)")
+                    }, onFailure: { error in
+                        print("결제 실패", error)
+                    })
+                    .disposed(by: self?.disposeBag ?? DisposeBag())
             }
     }
 }

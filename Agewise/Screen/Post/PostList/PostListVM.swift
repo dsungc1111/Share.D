@@ -50,7 +50,7 @@ final class PostListVM: BaseViewModel {
         
         let age = AgeTitle.allCases.map { $0.rawValue }
         var data: [PostModelToWrite] = []
-        var query = GetPostQuery(next: "", limit: "4", product_id: "10대Man 선물용")
+        var query = GetPostQuery(next: "", limit: "4", product_id: "")
         
         
         input.segmentIndex
@@ -65,7 +65,7 @@ final class PostListVM: BaseViewModel {
                 return query
             }
             .flatMap { query in
-                PostNetworkManager.shared.postNetworkManager(api: .getPost(query: query), model: PostModelToView.self)
+                PostNetworkManager.shared.postNetwork(api: .getPost(query: query), model: PostModelToView.self)
             }
             .bind(with: self, onNext: { owner, result in
                 if let searchResult = result.data {
@@ -86,7 +86,7 @@ final class PostListVM: BaseViewModel {
                 return query
             }
             .flatMap { query in
-                PostNetworkManager.shared.postNetworkManager(api: .getPost(query: query), model: PostModelToView.self)
+                PostNetworkManager.shared.postNetwork(api: .getPost(query: query), model: PostModelToView.self)
             }
             .bind(with: self, onNext: { owner, result in
                 if let searchResult = result.data {
@@ -106,7 +106,7 @@ final class PostListVM: BaseViewModel {
                 GetPostQuery(next: self?.nextCursor.value ?? "", limit: "10", product_id: query.product_id)
             }
             .flatMap { query in
-                PostNetworkManager.shared.postNetworkManager(api: .getPost(query: query), model: PostModelToView.self)
+                PostNetworkManager.shared.postNetwork(api: .getPost(query: query), model: PostModelToView.self)
             }
             .subscribe(with: self) { owner, result in
                 if let searchResult = result.data {
@@ -114,28 +114,6 @@ final class PostListVM: BaseViewModel {
                     list.onNext(data)
                     owner.nextCursorChange(cursor: searchResult.next_cursor ?? "")
                 }
-//                PostNetworkManager.shared.networking(api: .getPost(query: query), model: PostModelToView.self) { result in
-//                    switch result {
-//                    case .success(let value):
-//                        let newData = value.1
-//                        data.append(contentsOf: newData.data)
-//                        list.onNext(data)
-//                        owner.nextCursorChange(cursor: newData.next_cursor ?? "")
-//                        print("성공리스트부분", newData.next_cursor ?? "쉽")
-//                    case .failure(let failure):
-//                        print("실패")
-//                    }
-//                }
-//                switch result {
-//                case .success(let value):
-//                    data.append(contentsOf: value.data)
-//                    list.onNext(data)
-//                    owner.nextCursorChange(cursor: value.next_cursor)
-//                case .failure(let error):
-//                    if error == .expierdRefreshToken {
-//                        owner.errorMessage.onNext("만료됨")
-//                    }
-//                }
             }
             .disposed(by: disposeBag)
         
@@ -155,7 +133,5 @@ extension PostListVM {
             isLastPage = true
             lastPage.onNext("마지막 페이지입니다.")
         }
-        
     }
-    
 }

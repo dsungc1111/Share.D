@@ -27,6 +27,8 @@ final class CommentVM {
     private let errorMessage = PublishSubject<String>()
     private var postId = ""
     private var comment = ""
+    private var indexPath: IndexPath?
+    private var commentOn = false
     
     func transform(input: Input) -> Output {
         
@@ -64,50 +66,46 @@ final class CommentVM {
                 let query = CommentQuery(content: self?.comment ?? "")
                 return query
             }
-            .subscribe(with: self) { owner, value in
+            .flatMap { [weak self] query in
+                PostNetworkManager.shared.postNetwork(api: .uploadComment(self?.postId ?? "", query), model: CommentModel.self)
+            }
+            .subscribe(with: self) { owner, result in
                 
-                PostNetworkManager.shared.networking(api: .uploadComment(owner.postId, value), model: CommentModel.self) { result in
-                    
-                    switch result {
-                    case .success(let success):
-                        data.insert(success.1, at: 0)
-                        trigger.onNext(data)
-                       
-                        NotificationCenter.default.post(name: NSNotification.Name("commentCount"), object: data.count)
-                        
-                        
-                        print(success)
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
+                if let result = result.data {
+                    data.insert(result, at: 0)
+                    trigger.onNext(data)
                 }
+                if result.statusCode == 418 {
+                    owner.errorMessage.onNext("만료됨")
+                }
+                
+                NotificationCenter.default.post(name: NSNotification.Name("commentCount"), object: data.count)
+            
             }
             .disposed(by: disposeBag)
         
         input.deleteTap
-            .bind(with: self) { owner, indexPath in
+            .map { [weak self] indexPath in
                 let commentId = data[indexPath.row].comment_id
-                
-                if  data[indexPath.row].creator.userId == UserDefaultManager.userId {
-                    PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
-                        switch result {
-                        case .success(_):
-                            
-                            data.remove(at: indexPath.row)
-                            
-                            trigger.onNext(data)
-                            
-                        case .failure(let error):
-                            if error == .expierdRefreshToken {
-                                owner.errorMessage.onNext("만료됨")
-                            }
-                        }
-                        data.remove(at: indexPath.row)
-                        trigger.onNext(data)
-                    }
+                self?.indexPath = indexPath
+                return commentId
+            }
+            .filter { [weak self] _ in
+                if data[self?.indexPath?.row ?? 0].creator.userId == UserDefaultManager.userId {
+                    return true
+                } else {
+                    return false
                 }
+            }
+            .flatMap { [weak self] commentId in
+                PostNetworkManager.shared.postNetwork(api: .deleteComment(self?.postId ?? "", commentId), model: CommentModel.self)
+            }
+            .bind(with: self) { owner, result in
+                
+                data.remove(at: owner.indexPath?.row ?? 0)
+                
+                trigger.onNext(data)
+                
             }
             .disposed(by: disposeBag)
         

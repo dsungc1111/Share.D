@@ -16,38 +16,38 @@ final class TokenNetworkManager {
     static let shared = TokenNetworkManager()
     
     private init() {}
-    
-    
-    func networking<T: Decodable>(api: TokenRouter, model: T.Type, completionHandler: @escaping (Int, T?) -> Void) {
-        
-        let url = api.baseURL + api.path
-        
-        
-        AF.request(url, method: api.method, encoding: URLEncoding(destination: .queryString), headers: HTTPHeaders(api.header))
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: T.self) { response in
-                
-                switch response.result {
-                case .success(let value):
-                    if let statusCode = response.response?.statusCode {
-                        print(statusCode)
-                        completionHandler(statusCode, value)
-                    }
-                case .failure(let error):
-                    print("실패 에러 = ", error)
-                    if let statusCode = response.response?.statusCode {
-                        completionHandler(statusCode, nil)
-                        if statusCode == 419 {
-                            TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
-                                print("갱신할 액세스 토큰 ", statusCode)
-                                UserDefaultManager.accessToken = result?.accessToken ?? ""
-                                self.networking(api: api, model: model, completionHandler: completionHandler)
-                            }
-                        }
-                    }
-                }
-            }
-    }
+//    
+//    
+//    func networking<T: Decodable>(api: TokenRouter, model: T.Type, completionHandler: @escaping (Int, T?) -> Void) {
+//        
+//        let url = api.baseURL + api.path
+//        
+//        
+//        AF.request(url, method: api.method, encoding: URLEncoding(destination: .queryString), headers: HTTPHeaders(api.header))
+//            .validate(statusCode: 200..<300)
+//            .responseDecodable(of: T.self) { response in
+//                
+//                switch response.result {
+//                case .success(let value):
+//                    if let statusCode = response.response?.statusCode {
+//                        print(statusCode)
+//                        completionHandler(statusCode, value)
+//                    }
+//                case .failure(let error):
+//                    print("실패 에러 = ", error)
+//                    if let statusCode = response.response?.statusCode {
+//                        completionHandler(statusCode, nil)
+//                        if statusCode == 419 {
+//                            TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
+//                                print("갱신할 액세스 토큰 ", statusCode)
+//                                UserDefaultManager.accessToken = result?.accessToken ?? ""
+//                                self.networking(api: api, model: model, completionHandler: completionHandler)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//    }
     func tokenNetwork<T: Decodable>(api: TokenRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
         return Single.create { observer in
 

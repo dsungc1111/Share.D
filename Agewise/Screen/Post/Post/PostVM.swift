@@ -17,7 +17,6 @@ enum SuccessKeyword: String {
 
 final class PostVM: BaseViewModel {
     
-    
     deinit {
         print("**", #function)
         print("====PostVM deinit======")
@@ -40,20 +39,13 @@ final class PostVM: BaseViewModel {
     private var editOrWrite = false
     private let errorMessage = PublishSubject<String>()
     
-    override init() {
-        print("postVM init")
-    }
-    
     func transform(input: Input) -> Output {
         
         input.editOrWrite
             .bind(with: self) { owner, result in
                 owner.editOrWrite = result
-                
-                print("질문 or 작성", owner.editOrWrite)
             }
             .disposed(by: disposeBag)
-        
         
         let successMent = PublishSubject<String>()
         
@@ -72,29 +64,17 @@ final class PostVM: BaseViewModel {
                 
                 let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: (self?.age ?? "") + " " + category + "선물용" , files: [product.image])
                 return save
-                
+            }
+            .flatMap { query in
+                PostNetworkManager.shared.postNetwork(api: .postQuestion(query: query), model: PostModelToWrite.self)
             }
             .bind(with: self) { owner, result in
                 
-                print(result)
-                
-                PostNetworkManager.shared.networking(api: .postQuestion(query: result), model: PostModelToWrite.self) { result in
-                    
-                    switch result {
-                    case .success(let success):
-                        let message = owner.judgeStatusCode(statusCode: success.0, title: SuccessKeyword.post.rawValue)
-                        successMent.onNext(message)
-                        print("프로덕트 아이디", success.1.productId)
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
-                }
-                
+                let message = owner.judgeStatusCode(statusCode: result.statusCode, title: SuccessKeyword.post.rawValue)
+                successMent.onNext(message)
+                                
             }
             .disposed(by: disposeBag)
-        
         
         
         return Output(result: result, success: successMent, errorMaessage: errorMessage)

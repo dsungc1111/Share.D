@@ -58,17 +58,21 @@ final class PromotionVM: BaseViewModel {
         //MARK: - About Token
         
         input.adTrigger
+            .flatMap {
+                TokenNetworkManager.shared.tokenNetwork(api: .fetchProfile, model: ProfileModel.self)
+            }
             .bind(with: self) { owner, result in
-                print("쓰레드 확인용1 = ", Thread.isMainThread)
                 
-                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, data in
-                    print("쓰레드 확인용2 = ", Thread.isMainThread)
-                    print("스테이터스코드1010", statuscode)
-                    profileImage.onNext(data?.profileImage ?? "")
+//                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, data in
+//                    print("쓰레드 확인용2 = ", Thread.isMainThread)
+//                    print("스테이터스코드1010", statuscode)
+                //                    profileImage.onNext(data?.profileImage ?? "")
+                //                }
+//                profileImage.onNext(result?.profileImage ?? "")
+                
+                if let result = result.data {
+                    profileImage.onNext(result.profileImage)
                 }
-                
-                
-                print("쓰레드 확인용3 = ", Thread.isMainThread)
                 
             }
             .disposed(by: disposeBag)

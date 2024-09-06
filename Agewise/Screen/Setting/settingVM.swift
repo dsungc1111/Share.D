@@ -54,22 +54,15 @@ final class SettingVM: BaseViewModel {
 //            .flatMap {
 //                NetworkManager.shared.viewPost(query: query)
 //            }
-            .subscribe(with: self, onNext: { owner, result in
+            .flatMap { _ in
+                PostNetworkManager.shared.postNetwork(api: .viewPost(query: query), model: PostModelToView.self)
+            }
+            .bind(with: self, onNext: { owner, result in
                 data = []
-                PostNetworkManager.shared.networking(api: .viewPost(query: query), model: PostModelToView.self) { result in
-                    
-                    switch result {
-                    case .success(let value):
-                        print(value.1.data)
-                        data.append(contentsOf: value.1.data)
-                        list.onNext((data, true))
-                        owner.nextCursorChange(cursor: value.1.next_cursor ?? "")
-                        
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
+                if let result = result.data {
+                    data.append(contentsOf: result.data)
+                    list.onNext((data, true))
+                    owner.nextCursorChange(cursor: result.next_cursor ?? "")
                 }
             })
             .disposed(by: disposeBag)
@@ -82,22 +75,19 @@ final class SettingVM: BaseViewModel {
                 let query = LikePostQuery(next: "", limit: "")
                 return query
             }
-            .subscribe(with: self) { owner, query in
+            .flatMap { query in
+                PostNetworkManager.shared.postNetwork(api: .viewLikePost(query: query), model: PostModelToView.self)
+            }
+            .bind(with: self) { owner, result in
                 data = []
-                PostNetworkManager.shared.networking(api: .viewLikePost(query: query), model: PostModelToView.self) { result in
-                    
-                    switch result {
-                    case .success(let value):
-                        print(value.1.data)
-                        data.append(contentsOf: value.1.data)
-                        list.onNext((data, true))
-                        owner.nextCursorChange(cursor: value.1.next_cursor ?? "")
-                        
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
+                if let result = result.data {
+                    data.append(contentsOf: result.data)
+                    list.onNext((data, true))
+                    owner.nextCursorChange(cursor: result.next_cursor ?? "")
+                }
+                
+                if result.statusCode == 418 {
+                    owner.errorMessage.onNext("만료됨")
                 }
             }
             .disposed(by: disposeBag)
