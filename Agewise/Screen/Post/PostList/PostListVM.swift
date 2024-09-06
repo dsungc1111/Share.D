@@ -21,7 +21,6 @@ final class PostListVM: BaseViewModel {
     }
     
     struct Input {
-        let trigger: Observable<Void>
         let segmentIndex: ControlProperty<Int>
         let ageString: ControlEvent<[String]>
         let loadMore: PublishSubject<Void>
@@ -51,64 +50,31 @@ final class PostListVM: BaseViewModel {
         
         let age = AgeTitle.allCases.map { $0.rawValue }
         var data: [PostModelToWrite] = []
-        var query = GetPostQuery(next: "", limit: "10", product_id: "10대Man 선물용")
-        
-        input.trigger
-            .flatMap {
-                NetworkManager.shared.getPost(query: query)
-            }
-            .subscribe(with: self) { owner, result in
-            
-                PostNetworkManager.shared.networking(api: .getPost(query: query), model: PostModelToView.self) { result in
-                    switch result {
-                    case .success(let value):
-                        data = []
-                        let newData = value.1
-                        data.append(contentsOf: newData.data)
-                        list.onNext(data)
-                        owner.nextCursorChange(cursor: newData.next_cursor ?? "")
-                        owner.searchAgeText = "10대"
-                        print("성공리스트부분")
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
-                }
-            }
-            .disposed(by: disposeBag)
+        var query = GetPostQuery(next: "", limit: "4", product_id: "10대Man 선물용")
         
         
         input.segmentIndex
-            .bind(with: self) { owner, value in
-                print("===========성별 실행===============")
+            .map { [weak self] value in
                 if value == 0 {
-                    owner.searchGenderText = "Man"
+                    self?.searchGenderText = "Man"
                 } else {
-                    owner.searchGenderText = "Woman"
+                    self?.searchGenderText = "Woman"
                 }
-                query.product_id = owner.searchAgeText + owner.searchGenderText + " 선물용"
-                print("세그먼트 선태시, ", query.product_id)
-                print("세그먼트 선택 >>> ", owner.searchAgeText)
-                PostNetworkManager.shared.networking(api: .getPost(query: query), model: PostModelToView.self) { result in
-                    switch result {
-                    case .success(let value):
-                        data = []
-                        let newData = value.1
-                        data.append(contentsOf: newData.data)
-                        list.onNext(data)
-                        print("여기서 개수가?", data.count)
-                        owner.nextCursorChange(cursor: newData.next_cursor ?? "")
-                        
-                        print("성공리스트부분")
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
-                }
-
+                query.product_id = (self?.searchAgeText ?? "") + " " + (self?.searchGenderText ?? "") + "선물용"
+                
+                return query
             }
+            .flatMap { query in
+                PostNetworkManager.shared.postNetworkManager(api: .getPost(query: query), model: PostModelToView.self)
+            }
+            .bind(with: self, onNext: { owner, result in
+                if let searchResult = result.data {
+                    data = []
+                    data.append(contentsOf: searchResult.data)
+                    list.onNext(data)
+                    owner.nextCursorChange(cursor: searchResult.next_cursor ?? "")
+                }
+            })
             .disposed(by: disposeBag)
         
         
@@ -119,27 +85,16 @@ final class PostListVM: BaseViewModel {
                 print(query)
                 return query
             }
-            .subscribe(with: self, onNext: { owner, result in
-               
-                print("===========나이값 실행===============")
-                data = []
-                PostNetworkManager.shared.networking(api: .getPost(query: query), model: PostModelToView.self) { result in
-                    switch result {
-                    case .success(let value):
-                        let newData = value.1
-                        data.append(contentsOf: newData.data)
-                        list.onNext(data)
-                        owner.nextCursorChange(cursor: newData.next_cursor ?? "")
-                        
-                        print("성공리스트부분")
-                    case .failure(let error):
-                        if error == .expierdRefreshToken {
-                            owner.errorMessage.onNext("만료됨")
-                        }
-                    }
+            .flatMap { query in
+                PostNetworkManager.shared.postNetworkManager(api: .getPost(query: query), model: PostModelToView.self)
+            }
+            .bind(with: self, onNext: { owner, result in
+                if let searchResult = result.data {
+                    data = []
+                    data.append(contentsOf: searchResult.data)
+                    list.onNext(data)
+                    owner.nextCursorChange(cursor: searchResult.next_cursor ?? "")
                 }
-                
-                
             })
             .disposed(by: disposeBag)
         
@@ -150,13 +105,15 @@ final class PostListVM: BaseViewModel {
             .map { [weak self] _ in
                 GetPostQuery(next: self?.nextCursor.value ?? "", limit: "10", product_id: query.product_id)
             }
-            .flatMap { value in
-                NetworkManager.shared.getPost(query: value)
+            .flatMap { query in
+                PostNetworkManager.shared.postNetworkManager(api: .getPost(query: query), model: PostModelToView.self)
             }
             .subscribe(with: self) { owner, result in
-                
-                print("===========페이지네이션 실행===============")
-                
+                if let searchResult = result.data {
+                    data.append(contentsOf: searchResult.data)
+                    list.onNext(data)
+                    owner.nextCursorChange(cursor: searchResult.next_cursor ?? "")
+                }
 //                PostNetworkManager.shared.networking(api: .getPost(query: query), model: PostModelToView.self) { result in
 //                    switch result {
 //                    case .success(let value):
@@ -169,16 +126,16 @@ final class PostListVM: BaseViewModel {
 //                        print("실패")
 //                    }
 //                }
-                switch result {
-                case .success(let value):
-                    data.append(contentsOf: value.data)
-                    list.onNext(data)
-                    owner.nextCursorChange(cursor: value.next_cursor)
-                case .failure(let error):
-                    if error == .expierdRefreshToken {
-                        owner.errorMessage.onNext("만료됨")
-                    }
-                }
+//                switch result {
+//                case .success(let value):
+//                    data.append(contentsOf: value.data)
+//                    list.onNext(data)
+//                    owner.nextCursorChange(cursor: value.next_cursor)
+//                case .failure(let error):
+//                    if error == .expierdRefreshToken {
+//                        owner.errorMessage.onNext("만료됨")
+//                    }
+//                }
             }
             .disposed(by: disposeBag)
         

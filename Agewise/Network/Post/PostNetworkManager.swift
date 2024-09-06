@@ -52,55 +52,35 @@ final class PostNetworkManager {
         return Single.create { observer in
             print("실행?")
             
-            AF.request(api)
+            
+//            let request = try api.asURLRequest()
+
+            AF.request(api, interceptor: MyNetworkInterceptor())
+//            AF.request(api)
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in
                     print("실행?????")
                     
-                    guard let statusCode = response.response?.statusCode else {
+                    guard let statuscode = response.response?.statusCode else {
                         observer(.success((statusCode: 0, data: nil)))
                         return
                     }
                     
-                    print("스테이터스 코드", statusCode)
-                    
-                    if statusCode == 419 {
-                        // 토큰 갱신 요청
-                        TokenNetworkManager.shared.tokenNetwork(api: .refresh, model: RefreshModel.self)
-                            .flatMap { refreshResult -> Single<(statusCode: Int, data: T?)> in
-                                
-                                print("왜 여기로 안오지?")
-                                if refreshResult.statuscode == 200, 
-                                    let newToken = refreshResult.data {
-                                    UserDefaultManager.accessToken = newToken.accessToken
-                                    print("토큰 저장")
-                                    
-                                    // 토큰 갱신 후 다시 요청
-                                    return Single.create { innerObserver in
-                                        AF.request(api)
-                                            .validate(statusCode: 200..<300)
-                                            .responseDecodable(of: T.self) { retryResponse in
-                                                let statusCode = retryResponse.response?.statusCode ?? 0
-                                                let data = try? retryResponse.result.get()
-                                                innerObserver(.success((statusCode: statusCode, data: data)))
-                                            }
-                                        return Disposables.create()
-                                    }
-                                    
-                                } else {
-                                    return Single.just((statusCode: refreshResult.statuscode, data: nil))
-                                }
-                            }
-                            .subscribe(observer)
-                            .disposed(by: DisposeBag())
-                    } // 419
-                    else if statusCode == 418 { // 418
-                        print("418임")
-                    } else {
-                        // 일반 응답 처리
-                        let data = try? response.result.get()
-                        observer(.success((statusCode: statusCode, data: data)))
+                    print("스테이터스 코드", statuscode)
+                    switch response.result {
+                    case .success(let value):
+                        
+                        print("성공 statuscode =", statuscode)
+                        observer(.success((statuscode, value)))
+                        
+                    case .failure(let error):
+                        print("에러 = ", error)
+                        
+                        print("실패에러코드 =", statuscode)
+                        observer(.success((statuscode, nil)))
+                        
                     }
+
                 }
             
             return Disposables.create()

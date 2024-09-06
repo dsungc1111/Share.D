@@ -41,30 +41,23 @@ final class PostListVC: BaseVC {
     override func bind() {
         
         let loadMoreTrigger = PublishSubject<Void>()
-        
+                
         postListView.resultCollectionView.rx.prefetchItems
             .bind(with: self, onNext: { owner, indexPaths in
-                guard let lastIndexPath = indexPaths.last else { return }
-                print("dldl", lastIndexPath.item)
-                if lastIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 4 {
+                print("프리패치가 되고있긴해?", indexPaths)
+                guard let lastVisibleIndexPath = owner.postListView.resultCollectionView.indexPathsForVisibleItems.last else { return }
+                print("현재 화면에 보이는 마지막 아이템:", lastVisibleIndexPath.item)
+                if lastVisibleIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 2 {
                     loadMoreTrigger.onNext(())
                 }
             })
-               .disposed(by: disposeBag)
+            .disposed(by: disposeBag)
         
         
-        let input = PostListVM.Input(trigger: Observable.just(()), segmentIndex: postListView.genderSegmentedControl.rx.selectedSegmentIndex, ageString: postListView.agePickerView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
+        let input = PostListVM.Input(segmentIndex: postListView.genderSegmentedControl.rx.selectedSegmentIndex, ageString: postListView.agePickerView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
         
         let output = postListViewModel.transform(input: input)
-      
-        
-        // 나이대 선택 컬렉션뷰
-//        output.ageList
-//            .bind(to: postListView.categoryCollectionView.rx.items(cellIdentifier: ListCategoryCollectionViewCell.identifier, cellType: ListCategoryCollectionViewCell.self)) { item, element, cell in
-//                
-//                cell.configureCell(element: element)
-//            }
-//            .disposed(by: disposeBag)
+ 
         
         
         // 결과 컬렉션뷰
@@ -86,7 +79,7 @@ final class PostListVC: BaseVC {
             .disposed(by: disposeBag)
       
                 
-        
+        // 피커뷰 생성 코드
         output.ageList
             .bind(to: postListView.agePickerView.rx.itemTitles) { (row, element) in
                 return element
