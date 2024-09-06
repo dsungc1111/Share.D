@@ -26,7 +26,7 @@ final class SettingView: BaseView {
     let nicknameLabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 18)
-        label.text = "닉네임   \(UserDefaultManager.shared.userNickname)"
+        label.text = "닉네임   \(UserDefaultManager.userNickname)"
         return label
     }()
     let elseInfoLabel = {

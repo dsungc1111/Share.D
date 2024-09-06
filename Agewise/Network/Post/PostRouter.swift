@@ -57,11 +57,11 @@ extension PostRouter: TargetType {
         case .detailPost(query: let query):
             return "/posts/\(query)"
         case .editPost:
-            return "/posts/\(UserDefaultManager.shared.userId)"
+            return "/posts/\(UserDefaultManager.userId)"
         case .delete(query: let query) :
             return "/posts/\(query)"
         case .viewPost:
-            return "/posts/users/\(UserDefaultManager.shared.userId)"
+            return "/posts/users/\(UserDefaultManager.userId)"
         case .likePost(let post_id, _):
             return "/posts/\(post_id)/like"
         case .viewLikePost:
@@ -83,7 +83,7 @@ extension PostRouter: TargetType {
         case .getPost, .detailPost, .postQuestion, .editPost, .delete, .viewPost, .likePost, .viewLikePost, .uploadComment, .deleteComment, .payment, .getBuyerInfo:
             
             return [
-                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
+                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
             ]

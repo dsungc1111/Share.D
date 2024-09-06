@@ -54,7 +54,7 @@ extension Router: TargetType {
             return "/posts/\(query)"
             
         case .viewPost:
-            return "/posts/users/\(UserDefaultManager.shared.userId)"
+            return "/posts/users/\(UserDefaultManager.userId)"
        
         }
     }
@@ -64,7 +64,7 @@ extension Router: TargetType {
         
         case .editProfile, .getPost, .detailPost, .postQuestion, .editPost, .viewPost:
             return [
-                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
+                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
             ]       

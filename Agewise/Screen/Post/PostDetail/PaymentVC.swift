@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 import iamport_ios
+import SnapKit
 import RxCocoa
 import RxSwift
 
@@ -28,7 +29,7 @@ final class PaymentVC: BaseVC {
         amount: "\(payInfo?.price ?? 1000)").then {
             $0.pay_method = PayMethod.card.rawValue
             $0.name = "결제 수단 선택"
-            $0.buyer_name = "\(UserDefaultManager.shared.userNickname)"
+            $0.buyer_name = "\(UserDefaultManager.userNickname)"
             $0.app_scheme = "sesac"
         }
     
@@ -38,14 +39,11 @@ final class PaymentVC: BaseVC {
         requestPayment()
     }
     
-    
-    
     func configureLayout() {
         view.addSubview(webView)
         webView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        webView.backgroundColor = .lightGray
     }
     
     func requestPayment() {
@@ -58,8 +56,8 @@ final class PaymentVC: BaseVC {
             payment: payment) { [weak self] iamportResponse in
                 print(String(describing: iamportResponse))
                 
-                let payInfo = PaymentQuery(imp_uid: iamportResponse?.imp_uid ?? "", post_id: self?.payInfo?.postID ?? "" )
-                PostNetworkManager.shared.networking(api: .payment(query: payInfo), model: PayModel.self) { result in
+                let payInfoDetail = PaymentQuery(imp_uid: iamportResponse?.imp_uid ?? "", post_id: self?.payInfo?.postID ?? "" )
+                PostNetworkManager.shared.networking(api: .payment(query: payInfoDetail), model: PayModel.self) { result in
                     switch result {
                     case .success(let success):
                         print("결제 성공", success)
@@ -67,12 +65,6 @@ final class PaymentVC: BaseVC {
                         print("결제 실패", failure)
                     }
                 }
-                
             }
-        
-    
-        
     }
-    
-    
 }

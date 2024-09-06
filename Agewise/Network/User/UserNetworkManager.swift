@@ -19,7 +19,7 @@ final class UserNetworkManager {
     func userNetwork<T: Decodable>(api: UserRouter, model: T.Type) -> Single<(statuscode: Int, data: T?)> {
         return Single.create { observer in
             
-            AF.request(api)
+            AF.request(api, interceptor: MyNetworkInterceptor())
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in
                     
@@ -59,5 +59,26 @@ final class UserNetworkManager {
         }
     }
    
+    func fetchProfileImage(imageURL: String, completionHandler: @escaping (Data?) -> Void)   {
+        
+        let url = APIKey.baseURL + "v1/" + imageURL
+        
+        let header: HTTPHeaders = [
+            APIKey.HTTPHeaderName.authorization.rawValue: UserDefaultManager.accessToken,
+            APIKey.HTTPHeaderName.sesacKey.rawValue: APIKey.DeveloperKey,
+        ]
+        
+        AF.request(url, method: .get, headers: header)
+            .validate(statusCode: 200..<300)
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    completionHandler(data)
+                case .failure(let error):
+                    print(error)
+                    completionHandler(nil)
+                }
+            }
+    }
     
 }

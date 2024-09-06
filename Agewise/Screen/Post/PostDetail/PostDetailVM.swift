@@ -57,7 +57,7 @@ final class DetailPostVM {
                         detailInfo.onNext(value.1)
                         
                         if let like = value.1.likes {
-                            if like.contains(UserDefaultManager.shared.userId) {
+                            if like.contains(UserDefaultManager.userId) {
                                 owner.userLike = true
                             }
                         }

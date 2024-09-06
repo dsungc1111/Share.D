@@ -146,7 +146,7 @@ final class SettingDetailCollectionViewCell: BaseCollectionViewCell {
             likeButton.setTitle(likeCount.formatted(), for: .normal)
             
             for i in 0..<likeCount {
-                if UserDefaultManager.shared.userId == element.likes?[i] {
+                if UserDefaultManager.userId == element.likes?[i] {
                     likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                     break
                 }

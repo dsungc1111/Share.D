@@ -16,7 +16,8 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
         let image = UIImageView()
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
-        image.contentMode = .scaleToFill
+        image.contentMode = .scaleAspectFill
+        image.backgroundColor = .lightGray
         return image
     }()
     private let companyNameLabel = {
@@ -76,9 +77,8 @@ final class ProductCollectionViewCell: BaseCollectionViewCell {
     
     func configureCell(element: ProductDetail) {
         
-        priceLabel.text = (Int(element.lprice)?.formatted() ?? "0") + "원"
+        priceLabel.text = (Int(element.lprice)?.formatted() ?? "0") + " 원"
         productNameLabel.text = element.title.removeHtmlTag
-        priceLabel.text = Int(element.lprice)?.formatted()
         
         let image = URL(string: element.image)
         

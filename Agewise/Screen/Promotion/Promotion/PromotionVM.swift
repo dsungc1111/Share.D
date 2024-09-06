@@ -42,6 +42,7 @@ final class PromotionVM: BaseViewModel {
         let trendTap: ControlEvent<String>
 //        let scrollIndexPath: PublishSubject<IndexPath>
         let logout: PublishSubject<String>
+        let profileImage: PublishSubject<String>
     }
     private var currentIndex: Int = 0
     private let disposeBag = DisposeBag()
@@ -53,16 +54,22 @@ final class PromotionVM: BaseViewModel {
         let presentList = PublishSubject<[String]>()
 //        let scrollIndexPath = PublishSubject<IndexPath>()
         let logout = PublishSubject<String>()
+        let profileImage = PublishSubject<String>()
         //MARK: - About Token
         
         input.adTrigger
-            .flatMap {
-                TokenNetworkManager.shared.tokenNetwork(api: .fetchProfile, model: ProfileModel.self)
-            }
-            .subscribe(with: self) { owner, result in
-
-//                print("데이터",result.data)
-                print("스테이터스 코드", result.statuscode)
+            .bind(with: self) { owner, result in
+                print("쓰레드 확인용1 = ", Thread.isMainThread)
+                
+                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, data in
+                    print("쓰레드 확인용2 = ", Thread.isMainThread)
+                    print("스테이터스코드1010", statuscode)
+                    profileImage.onNext(data?.profileImage ?? "")
+                }
+                
+                
+                print("쓰레드 확인용3 = ", Thread.isMainThread)
+                
             }
             .disposed(by: disposeBag)
         
@@ -73,7 +80,7 @@ final class PromotionVM: BaseViewModel {
             .flatMap { value in
                 NetworkManager.shared.naverAPI(query: value, page: 1)
             }
-            .subscribe(with: self) { owner, result in
+            .bind(with: self) { owner, result in
                 
                 switch result {
                 case .success(let value):
@@ -108,7 +115,7 @@ final class PromotionVM: BaseViewModel {
 //            }
 //            .disposed(by: disposeBag)
         
-        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, logout: logout)
+        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, logout: logout, profileImage: profileImage)
     }
     
 }

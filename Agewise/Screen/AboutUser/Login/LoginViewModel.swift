@@ -59,10 +59,11 @@ final class LoginViewModel: BaseViewModel {
             }
             .subscribe(with: self, onNext: { owner, result in
                 let message = owner.judgeStatusCode(statusCode: result.statuscode, title: SuccessKeyword.login.rawValue)
-                UserDefaultManager.shared.accessToken = result.data?.accessToken ?? ""
-                UserDefaultManager.shared.refreshToken = result.data?.refreshToken ?? ""
-                UserDefaultManager.shared.userNickname = result.data?.nick ?? ""
-                UserDefaultManager.shared.userId = result.data?.user_id ?? ""
+                UserDefaultManager.accessToken = result.data?.accessToken ?? ""
+                UserDefaultManager.refreshToken = result.data?.refreshToken ?? ""
+                UserDefaultManager.userNickname = result.data?.nick ?? ""
+                UserDefaultManager.userId = result.data?.user_id ?? ""
+                UserDefaultManager.profileImage = result.data?.profileImage ?? ""
                 
                 success.onNext(message)
             })

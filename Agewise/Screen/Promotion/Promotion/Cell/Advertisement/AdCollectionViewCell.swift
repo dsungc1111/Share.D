@@ -56,9 +56,9 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     
     override func configureLayout() {
         productImage.snp.makeConstraints { make in
-            make.horizontalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(10)
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(5)
-            make.height.equalTo(280)
+            make.height.equalTo(320)
         }
         rankLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)
@@ -84,7 +84,10 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     
     func configureCell(element: ProductDetail, item: Int) {
         let image = URL(string: element.image)
+        
         productImage.kf.setImage(with: image)
+        
+        
         
         rankLabel.text = "\(item+1)"
         mallLabel.text = element.mallName

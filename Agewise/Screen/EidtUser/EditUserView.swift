@@ -25,7 +25,7 @@ final class EditUserView: BaseView {
         imageView.layer.cornerRadius = 50
         return imageView
     }()
-    let nicknameTextField = LoginTextField(placeholderText: UserDefaultManager.shared.userNickname)
+    let nicknameTextField = LoginTextField(placeholderText: UserDefaultManager.userNickname)
     
     let editButton = {
         let btn = UIButton()

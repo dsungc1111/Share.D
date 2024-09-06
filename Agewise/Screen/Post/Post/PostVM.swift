@@ -70,12 +70,13 @@ final class PostVM: BaseViewModel {
                 let text = result.1
                 let category = result.2
                 
-                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: (self?.age ?? "") + category + " 선물용" , files: [product.image])
+                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: (self?.age ?? "") + " " + category + "선물용" , files: [product.image])
                 return save
                 
             }
             .bind(with: self) { owner, result in
                 
+                print(result)
                 
                 PostNetworkManager.shared.networking(api: .postQuestion(query: result), model: PostModelToWrite.self) { result in
                     

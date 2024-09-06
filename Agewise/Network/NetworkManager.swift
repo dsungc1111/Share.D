@@ -115,7 +115,7 @@ final class NetworkManager {
                                 print(statusCode)
                                 if statusCode == 419 {
                                     TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
-                                        UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
+                                        UserDefaultManager.accessToken = result?.accessToken ?? ""
                                     }
                                 } else if statusCode == 418 {
                                     print("재로그인")
@@ -208,7 +208,7 @@ class MyNetworkInterceptor: RequestInterceptor {
         var request = urlRequest
         
         
-        request.setValue(UserDefaultManager.shared.accessToken, forHTTPHeaderField: APIKey.HTTPHeaderName.authorization.rawValue)
+        request.setValue(UserDefaultManager.accessToken, forHTTPHeaderField: APIKey.HTTPHeaderName.authorization.rawValue)
         
         print("adator 적용 \(urlRequest.headers)")
         completion(.success(request))
@@ -226,7 +226,7 @@ class MyNetworkInterceptor: RequestInterceptor {
         TokenNetworkManager.shared.tokenNetwork(api: .refresh, model: RefreshModel.self)
             .subscribe(onSuccess: { result in
                 if let newToken = result.data?.accessToken {
-                    UserDefaultManager.shared.accessToken = newToken
+                    UserDefaultManager.accessToken = newToken
                     completion(.retry)
                 } else {
                     completion(.doNotRetry)

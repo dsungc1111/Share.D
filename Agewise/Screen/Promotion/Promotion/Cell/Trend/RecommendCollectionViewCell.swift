@@ -54,8 +54,8 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
             make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(20)
         }
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(20)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(50)
+            make.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
         }
     }
     

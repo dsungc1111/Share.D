@@ -47,7 +47,6 @@ final class PostDetailVC: BaseVC {
             .bind(with: self) { owner, result in
                 print("바뀌는데")
                 owner.postDetailView.configurePostDetail(element: result)
-                owner.navigationItem.title = result.productId
                 owner.productPrice = result.price ?? 100
                 owner.model = result
             }

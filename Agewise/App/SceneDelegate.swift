@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         
-        let access = UserDefaultManager.shared.accessToken
+        let access = UserDefaultManager.accessToken
         window = UIWindow(windowScene: scene)
         
       

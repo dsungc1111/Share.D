@@ -18,7 +18,7 @@ final class ProductView: BaseView {
         let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: width / 2 - 30, height: 300)
+        layout.itemSize = CGSize(width: width / 2 - 20, height: 300)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)

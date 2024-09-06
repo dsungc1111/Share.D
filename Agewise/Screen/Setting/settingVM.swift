@@ -51,18 +51,25 @@ final class SettingVM: BaseViewModel {
         //MARK: - 내가 한 질문
         
         input.myQuestionTap
-            .flatMap {
-                NetworkManager.shared.viewPost(query: query)
-            }
+//            .flatMap {
+//                NetworkManager.shared.viewPost(query: query)
+//            }
             .subscribe(with: self, onNext: { owner, result in
                 data = []
-                switch result {
-                case .success(let value):
-                    data.append(contentsOf: value.data)
-                    list.onNext((data, false))
-                    owner.nextCursorChange(cursor: value.next_cursor ?? "")
-                case .failure(_):
-                    print("실패")
+                PostNetworkManager.shared.networking(api: .viewPost(query: query), model: PostModelToView.self) { result in
+                    
+                    switch result {
+                    case .success(let value):
+                        print(value.1.data)
+                        data.append(contentsOf: value.1.data)
+                        list.onNext((data, true))
+                        owner.nextCursorChange(cursor: value.1.next_cursor ?? "")
+                        
+                    case .failure(let error):
+                        if error == .expierdRefreshToken {
+                            owner.errorMessage.onNext("만료됨")
+                        }
+                    }
                 }
             })
             .disposed(by: disposeBag)

@@ -27,7 +27,7 @@ final class PostListView: BaseView {
         let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: width, height: 150)
+        layout.itemSize = CGSize(width: width - 20, height: 150)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)
@@ -40,6 +40,7 @@ final class PostListView: BaseView {
        
         resultCollectionView.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
         resultCollectionView.showsVerticalScrollIndicator = false
+
     }
     
     @available(*, unavailable)

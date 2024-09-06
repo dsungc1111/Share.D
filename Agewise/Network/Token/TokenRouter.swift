@@ -41,15 +41,15 @@ extension TokenRouter: TargetType {
             
         case .refresh:
             return [
-                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
-                APIKey.HTTPHeaderName.refresh.rawValue : UserDefaultManager.shared.refreshToken,
+                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.accessToken,
+                APIKey.HTTPHeaderName.refresh.rawValue : UserDefaultManager.refreshToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
             ]
 
         case .fetchProfile:
             return [
-                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
+                APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.accessToken,
                 APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
                 APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue,
             ]

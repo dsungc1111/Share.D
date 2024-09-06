@@ -30,12 +30,14 @@ struct ProfileModel: Decodable {
     let id: String
     let email: String
     let nick: String
+    let profileImage: String
     
     
     enum CodingKeys: String, CodingKey {
         case id = "user_id"
         case email
         case nick
+        case profileImage
     }
 }
 struct Creator: Decodable {

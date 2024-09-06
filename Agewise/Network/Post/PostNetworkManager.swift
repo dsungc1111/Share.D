@@ -17,46 +17,35 @@ final class PostNetworkManager {
     
     
     func networking<T: Decodable>(api: PostRouter, model: T.Type, completionHandler: @escaping (Result<(Int, T), NetworkError>) -> Void) {
-        print("이거실행")
-      do {
-          
-        let request = try api.asURLRequest()
+        print("포스트관련 네트워크 로직")
 
-        AF.request(request)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: T.self) { response in
-                
-                print("안되는 거임?")
-                
-                switch response.result {
-                case .success(let value):
-                    print("성공")
-                    if let statusCode = response.response?.statusCode {
-                        print("성공 =", statusCode)
-                        completionHandler(.success((statusCode, value)))
-                    }
-                case .failure(let error):
-                    print("에러 =", error)
-                    if let statusCode = response.response?.statusCode {
+        do {
+            let request = try api.asURLRequest()
+
+            AF.request(request, interceptor: MyNetworkInterceptor())
+                .validate(statusCode: 200..<300)
+                .responseDecodable(of: T.self) { response in
+                    
+                    guard let statuscode = response.response?.statusCode else { return }
+                    
+                    switch response.result {
+                    case .success(let value):
+                        
+                        print("성공 statuscode =", statuscode)
+                        completionHandler(.success((statuscode, value)))
+                        
+                    case .failure(let error):
+                        print("에러 = ", error)
+                        
+                        print("실패에러코드 =", statuscode)
                         completionHandler(.failure(.unknownResponse))
-                        if statusCode == 419 {
-                            TokenNetworkManager.shared.networking(api: .refresh, model: RefreshModel.self) { statusCode, result in
-                                print("갱신할 액세스 토큰 ", statusCode)
-                                UserDefaultManager.shared.accessToken = result?.accessToken ?? ""
-                                self.networking(api: api, model: model, completionHandler: completionHandler) 
-                            }
-                        } else if statusCode == 418 {
-                            completionHandler(.failure(.expierdRefreshToken))
-                        }
+                        
                     }
                 }
-                
-                
-            }
-    } catch {
-        print("Request creation failed with error:")
-        completionHandler(.failure(.unknownResponse))
-    }
+        } catch {
+            print("캬치에러", error)
+            completionHandler(.failure(.unknownResponse))
+        }
     }
     
     func postNetworkManager<T: Decodable>(api: PostRouter, model: T.Type) -> Single<(statusCode: Int, data: T?)> {
@@ -83,7 +72,7 @@ final class PostNetworkManager {
                                 print("왜 여기로 안오지?")
                                 if refreshResult.statuscode == 200, 
                                     let newToken = refreshResult.data {
-                                    UserDefaultManager.shared.accessToken = newToken.accessToken
+                                    UserDefaultManager.accessToken = newToken.accessToken
                                     print("토큰 저장")
                                     
                                     // 토큰 갱신 후 다시 요청
@@ -153,7 +142,7 @@ final class PostNetworkManager {
         
         
         let headers: HTTPHeaders = [
-            APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.shared.accessToken,
+            APIKey.HTTPHeaderName.authorization.rawValue : UserDefaultManager.accessToken,
             APIKey.HTTPHeaderName.sesacKey.rawValue : APIKey.DeveloperKey,
             APIKey.HTTPHeaderName.contentType.rawValue :  APIKey.HTTPHeaderName.json.rawValue
         ]
@@ -182,3 +171,4 @@ final class PostNetworkManager {
     
     
 }
+

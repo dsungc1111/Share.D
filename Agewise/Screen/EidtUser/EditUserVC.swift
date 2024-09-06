@@ -66,7 +66,7 @@ final class EditUserVC: BaseVC, PHPickerViewControllerDelegate {
             
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (object, error) in
                 if let image = object as? UIImage,
-                   let imageData = image.pngData(){
+                   let imageData = image.pngData() {
                     DispatchQueue.main.async {
                         self?.selectedImageViews?.image = image
                         self?.selectedImage.accept(imageData)

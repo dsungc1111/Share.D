@@ -90,7 +90,7 @@ final class CommentVM {
             .bind(with: self) { owner, indexPath in
                 let commentId = data[indexPath.row].comment_id
                 
-                if  data[indexPath.row].creator.userId == UserDefaultManager.shared.userId {
+                if  data[indexPath.row].creator.userId == UserDefaultManager.userId {
                     PostNetworkManager.shared.networking(api: .deleteComment(owner.postId, commentId), model: CommentModel.self) { result in
                         switch result {
                         case .success(_):

@@ -74,8 +74,8 @@ final class EditUserVM {
             .bind(with: self) { owner, result in
                 
                     print("수정 겨로가", result)
-                UserDefaultManager.shared.userNickname = result.data?.nick
-            
+                UserDefaultManager.userNickname = result.data?.nick ?? ""
+                UserDefaultManager.profileImage = result.data?.profileImage ?? ""
                 
             }
             .disposed(by: disposeBag)
