@@ -77,22 +77,12 @@ final class PromotionVC: BaseVC {
                 
                 cell.configureCell(element: element, image: UIImage(named: image[item]))
                 
-                
-                
             }
             .disposed(by: disposeBag)
-        
-        //        output.scrollIndexPath
-        //            .bind(with: self, onNext: { owner, indexPath in
-        //                owner.promotionView.adCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        //            })
-        //            .disposed(by: disposeBag)
-        
-        
+      
         output.logout
             .bind(with: self) { owner, result in
                 owner.logoutUser()
-                print(result)
             }
             .disposed(by: disposeBag)
         

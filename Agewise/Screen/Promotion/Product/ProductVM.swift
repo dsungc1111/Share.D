@@ -25,27 +25,31 @@ final class ProductVM {
     private let disposeBag = DisposeBag()
     
     private var data: [ProductDetail] = []
-    var page = BehaviorRelay<Int>(value: 1)
+    var start = BehaviorRelay<Int>(value: 1)
     
     func transform(input: Input) -> Output {
         
         let list = PublishSubject<[ProductDetail]>()
         let searchDetail = PublishSubject<ProductDetail>()
         
-        let searchWithPage = Observable.combineLatest(input.searchItem, page.asObservable())
+        let searchWithPage = Observable.combineLatest(input.searchItem, start.asObservable())
+        
+        
         
         searchWithPage
-            .flatMapLatest { query, page in
-                NetworkManager.shared.naverAPI(query: query, page: page)
+            .flatMapLatest { query, start in
+                NetworkManager.shared.naverAPI(query: query, start: start)
             }
             .subscribe(with: self, onNext: { owner, result in
                 switch result {
                 case .success(let value):
-                    print(owner.page.value)
-                    if owner.page.value == 1 {
+                    print(owner.start.value)
+                    if owner.start.value == 1 {
+                        print("여기")
                         owner.data = value.items
                     } else {
                         owner.data.append(contentsOf: value.items)
+                       print( value.items[0].title.removeHtmlTag)
                     }
                     list.onNext(owner.data)
                 case .failure(let error):
@@ -54,12 +58,13 @@ final class ProductVM {
             })
             .disposed(by: disposeBag)
         
-        
-//        input.loadMore
-//            .subscribe(with: self, onNext: { owner, _ in
-//                owner.page.accept(owner.page.value + 1)
-//            })
-//            .disposed(by: disposeBag)
+        input.loadMore
+            .subscribe(with: self, onNext: { owner, _ in
+                let currentItemCount = owner.data.count
+                owner.start.accept(currentItemCount + 1)
+                print("새로운 start 값: \(owner.start.value)")
+            })
+            .disposed(by: disposeBag)
         
         input.searchDetail
             .bind(with: self) { owner, result in
@@ -67,7 +72,6 @@ final class ProductVM {
             }
             .disposed(by: disposeBag)
             
-        
         return Output(searchList: list, searchDetail: searchDetail)
     }
     

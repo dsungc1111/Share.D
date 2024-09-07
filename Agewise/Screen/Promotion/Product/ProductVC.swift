@@ -30,19 +30,39 @@ final class ProductVC: BaseVC {
     
     override func bind() {
         
-        print("서치아이템", searchItem)
-        
         let loadMoreTrigger = PublishSubject<Void>()
         
-        productView.collectionView.rx.prefetchItems
-            .bind(with: self, onNext: { owner, indexPaths in
-                //
-                guard let lastIndexPath = indexPaths.last else { return }
-                if lastIndexPath.row >= owner.productView.collectionView.numberOfItems(inSection: 0) - 1 {
-                    loadMoreTrigger.onNext(())
-                }
+        // rx 사용했을 때 페이지네이션 UX 활용도 up
+//        productView.collectionView.rx.prefetchItems
+//            .bind(with: self, onNext: { owner, indexPaths in
+//                
+//                guard let lastVisibleIndexPath = owner.productView.collectionView.indexPathsForVisibleItems.last else { return }
+//                print("lastVisibleIndexPath = ", lastVisibleIndexPath.item)
+//                if lastVisibleIndexPath.item >= owner.productView.collectionView.numberOfItems(inSection: 0) - 4 {
+//                    loadMoreTrigger.onNext(())
+//                    
+//                    
+//                    print("아이템 넘버", owner.productView.collectionView.numberOfItems(inSection: 0))
+//                }
+//            })
+//            .disposed(by: disposeBag)
+        productView.collectionView.rx.contentOffset
+            .map { [weak self] offset -> Bool in
+                guard let self = self else { return false }
+                let contentHeight = self.productView.collectionView.contentSize.height
+                let frameHeight = self.productView.collectionView.frame.size.height
+                let yOffset = offset.y
+                let distanceToBottom = contentHeight - yOffset - frameHeight
+                // 스크롤이 끝에서 200pt 이내로 도달했을 때
+                return distanceToBottom < 200
+            }
+            .distinctUntilChanged()
+            .filter { $0 == true }  // 조건에 맞을 때만 호출
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                loadMoreTrigger.onNext(())
             })
-               .disposed(by: disposeBag)
+            .disposed(by: disposeBag)
            
         let input = ProductVM.Input(searchItem: Observable.just(searchItem), loadMore: loadMoreTrigger, searchDetail: productView.collectionView.rx.modelSelected(ProductDetail.self))
       

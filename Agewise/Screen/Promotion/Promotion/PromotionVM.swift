@@ -63,13 +63,6 @@ final class PromotionVM: BaseViewModel {
             }
             .bind(with: self) { owner, result in
                 
-//                TokenNetworkManager.shared.networking(api: .fetchProfile, model: ProfileModel.self) { statuscode, data in
-//                    print("쓰레드 확인용2 = ", Thread.isMainThread)
-//                    print("스테이터스코드1010", statuscode)
-                //                    profileImage.onNext(data?.profileImage ?? "")
-                //                }
-//                profileImage.onNext(result?.profileImage ?? "")
-                
                 if let result = result.data {
                     profileImage.onNext(result.profileImage)
                 }
@@ -82,7 +75,7 @@ final class PromotionVM: BaseViewModel {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .map { "요즘 인기 선물" }
             .flatMap { value in
-                NetworkManager.shared.naverAPI(query: value, page: 1)
+                NetworkManager.shared.naverAPI(query: value, start: 1)
             }
             .bind(with: self) { owner, result in
                 
@@ -95,29 +88,10 @@ final class PromotionVM: BaseViewModel {
                 
                 let present = productTitle.allCases.map { $0.rawValue }
                 
-                
                 presentList.onNext(present)
                 
             }
             .disposed(by: disposeBag)
-        
-        
-        //        input.currentIndex
-        //            .bind(with: self, onNext: { owner, indexPath in
-        //
-        ////                owner.currentIndex = indexPath.item
-        //
-        //            })
-        //            .disposed(by: disposeBag)
-        
-//        input.timer
-//            .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
-//            .bind(with: self) { owner, result in
-//                scrollIndexPath.onNext(IndexPath(item: (owner.currentIndex + 1) % 10, section: 0))
-//                owner.currentIndex += 1
-//                
-//            }
-//            .disposed(by: disposeBag)
         
         return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, logout: logout, profileImage: profileImage)
     }

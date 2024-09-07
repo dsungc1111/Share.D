@@ -9,21 +9,21 @@ import UIKit
 import Alamofire
 import RxSwift
 
-
-
 final class NetworkManager {
     
     static let shared = NetworkManager()
     
     private init() {}
     
-    func naverAPI(query: String, page: Int) -> Single<Result<Product, NetworkError>> {
+    func naverAPI(query: String, start: Int) -> Single<Result<Product, NetworkError>> {
+        
+        print("쿼리는 \(query), 페이지는 \(start)")
         
         let url = "https://openapi.naver.com/v1/search/shop.json"
         
         let param: Parameters = [
             "query" : query,
-            "page" : page,
+            "start" : start,
             "display" : 10
         ]
         
@@ -48,7 +48,6 @@ final class NetworkManager {
     }
     
 }
-
 
 class MyNetworkInterceptor: RequestInterceptor {
     

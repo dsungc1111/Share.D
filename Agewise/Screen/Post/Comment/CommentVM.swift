@@ -109,7 +109,6 @@ final class CommentVM {
             }
             .disposed(by: disposeBag)
         
-        
         return Output(commentList: commentList, errorMessage: errorMessage)
     }
 }
