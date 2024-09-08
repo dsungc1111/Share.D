@@ -10,7 +10,7 @@ import SnapKit
 
 final class PostListView: BaseView {
     
-    let searchController = UISearchController(searchResultsController: nil)
+//    let searchController = UISearchController(searchResultsController: nil)
     
     let genderSegmentedControl: UISegmentedControl = {
         let items = ["남성", "여성"]
@@ -27,7 +27,7 @@ final class PostListView: BaseView {
         let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: width - 20, height: 150)
+        layout.itemSize = CGSize(width: width - 20, height: 200)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)

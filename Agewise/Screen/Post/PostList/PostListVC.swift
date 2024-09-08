@@ -31,9 +31,9 @@ final class PostListVC: BaseVC {
 //        postListView.searchController.searchResultsUpdater = self
 //        postListView.searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.title = "커뮤니티"
-        postListView.searchController.searchBar.placeholder = "Search"
-        
-        navigationItem.searchController = postListView.searchController
+//        postListView.searchController.searchBar.placeholder = "Search"
+//        
+//        navigationItem.searchController = postListView.searchController
         
         definesPresentationContext = true
     }
