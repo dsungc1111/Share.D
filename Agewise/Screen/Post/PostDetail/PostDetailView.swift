@@ -231,10 +231,6 @@ final class PostDetailView: BaseView {
         
         let profileURL = element.creator.profileImage ?? ""
         
-        let header: HTTPHeaders = [
-            APIKey.HTTPHeaderName.authorization.rawValue: UserDefaultManager.accessToken,
-            APIKey.HTTPHeaderName.sesacKey.rawValue: APIKey.DeveloperKey
-        ]
         
         UserNetworkManager.shared.fetchProfileImage(imageURL: profileURL) { [weak self] data in
             guard let data = data else { return }

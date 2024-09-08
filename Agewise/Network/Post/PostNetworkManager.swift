@@ -17,21 +17,15 @@ final class PostNetworkManager {
     
     func postNetwork<T: Decodable>(api: PostRouter, model: T.Type) -> Single<(statusCode: Int, data: T?)> {
         return Single.create { observer in
-            print("실행?")
-            
-            
 
             AF.request(api, interceptor: MyNetworkInterceptor())
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in
-                    print("실행?????")
                     
                     guard let statuscode = response.response?.statusCode else {
-                        observer(.success((statusCode: 0, data: nil)))
+                        observer(.success((statusCode: 500, data: nil)))
                         return
                     }
-                    
-                    print("스테이터스 코드", statuscode)
                     switch response.result {
                     case .success(let value):
                         

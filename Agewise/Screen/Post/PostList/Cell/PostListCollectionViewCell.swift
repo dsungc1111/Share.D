@@ -95,6 +95,8 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
         }
         contentLabel.text = element.content
         
+//        element.creator.nick
+        
         
     }
 }

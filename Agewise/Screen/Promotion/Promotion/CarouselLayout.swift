@@ -34,9 +34,9 @@ class CarouselLayout: UICollectionViewFlowLayout {
         let itemWidth = self.itemSize.width
         let itemHeight = self.itemSize.height
         
-        // 화면 양쪽 여백을 설정하여 다음 셀이 약간 보이도록 함
-        let xInset = (collectionViewSize.width - itemWidth) / 2
-        let yInset = (collectionViewSize.height - itemHeight) / 2
+//        // 화면 양쪽 여백을 설정하여 다음 셀이 약간 보이도록 함
+//        let xInset = (collectionViewSize.width - itemWidth) / 2
+//        let yInset = (collectionViewSize.height - itemHeight) / 2
         
         // 여백 조정 (여기서 `xInset`의 값을 작게 설정하여 셀 간의 간격을 조정)
         //          self.sectionInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset + 20)

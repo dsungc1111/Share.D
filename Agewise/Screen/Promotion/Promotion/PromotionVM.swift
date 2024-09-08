@@ -21,9 +21,9 @@ final class PromotionVM: BaseViewModel {
     }
     
     enum productTitle: String, CaseIterable {
+        case woman = "Woman"
+        case man = "Man"
         case kid = "Kids"
-        case cafe = "Man"
-        case present = "Woman"
         case birth = "Parent"
         
     }

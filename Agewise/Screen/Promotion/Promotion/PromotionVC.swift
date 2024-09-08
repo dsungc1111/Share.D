@@ -73,7 +73,7 @@ final class PromotionVC: BaseVC {
         output.presentList
             .bind(to: promotionView.recommendCollectionView.rx.items(cellIdentifier: RecommendCollectionViewCell.identifier, cellType: RecommendCollectionViewCell.self)) { (item, element, cell) in
                 
-                let image = ["kids","young", "Woman", "family"]
+                let image = ["Woman", "young", "kids", "family"]
                 
                 cell.configureCell(element: element, image: UIImage(named: image[item]))
                 
@@ -88,6 +88,8 @@ final class PromotionVC: BaseVC {
         
         output.profileImage
             .bind(with: self) { owner, value in
+                
+                print("왜 안되냐 갑자기")
                 
                 let url = APIKey.baseURL + "v1/" + value
                 
