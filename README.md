@@ -77,7 +77,7 @@ class BaseViewModel {
 
 ###  - **토큰 관리**
  - Access 토큰과 Refresh 토큰을 UserDefaults에 저장
- - Alamofire의 `RequestInterceptor`  를 사용하여 토큰 재발급 후, 사용자가 실행한 동작 자동으로 재실행하도록 구현
+ - Alamofire의 `RequestInterceptor`  를 사용하여 토큰 재발급 후, 사용자가 실행한 동작을 자동으로 재실행하도록 구현
 
 <br>
 
