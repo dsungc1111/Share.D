@@ -171,7 +171,7 @@ class BaseViewModel {
 ## UserDefaults 값 저장 에러
 
 - 토큰의 키값은 모두 같을 때, 
-- UserDefault.accessToken = "token" **VS** UserDefaults.standard.setValue(newToken, forKey: "newToken")
+- UserDefault.accessToken = "token" **VS** UserDefaults.standard.setValue(token, forKey: "newToken")
 
 
 ```swift
