@@ -40,6 +40,69 @@
 
 <br> <br> 
 
+# 👉  상세 기능 구현 설명
+
+-  **네트워크 로직 관리**
+    - Alamofire의 URLRequestConvertible을 사용하여 라우터 패턴 구성
+        - 라우터 패턴을 사용해 각 API 엔드포인트의 URL, 헤더, 파라미터 등을 중앙에서 관리할 수 있어 확장성과 유지보수가 용이
+    - 제네릭 타입 활용하여 다양한 Decodable 모델에 대응
+    - Single을 통한 비동기 처리
+- **네트워크 에러 상태코드 처리**
+    - 네트워크 결과에 따른 처리 결과 > 뷰모델에서 핸들링
+    - 일반적인 오류 처리를 위한 BaseViewModel에 judgeStatusCode메서드 구현
+```swift
+class BaseViewModel {
+    
+    func judgeStatusCode(statusCode: Int, title: String) -> String {
+        
+        switch statusCode {
+        case 403:
+            return  "접근권한이 없습니다."
+        case 418:
+            return "로그인 만료되었습니다. 로그인화면으로 이동합니다."
+        case 419:
+            return  "액세스 토큰 만료"
+        case 420 :
+            return "개발자 접근 Key를 확인하세요"
+        default:
+            return "다시 시도해주세요."
+        }
+    }
+}
+
+```
+- 에러 처리 유연성을 위한 함수 재정의
+    - 일반적인 경우가 아닌 특정 페이지에 한정된 오류 시나리오의 경우 개별 ViewModel 클래스가 judgeStatusCode(statusCode:title:) 메서드를 재정의
+    - 예시, 로그인화면의 뷰모델
+- 오류 처리 방법이 일관된고, 유저에게 보여줄 에러문과 그렇지 않은 에러문 역시 쉽게 구별 가능.
+
+<br>
+
+- **토큰 관리**
+    - UserDefaults에 Access 토큰과 Refresh 토큰 저장
+    - Alamofire의 `RequestInterceptor`  를 사용하여, 토큰 재발급 후, 사용자가 실행한 동작 자동으로 재실행하도록 구현
+
+<br>
+
+- **결제**
+    - `포트원 SDK`를 사용하여 PG사를 웹뷰에 띄워 결제 진행
+    - 결제 검증 작업을 요청하여 최종 결제 완료 판단
+
+ <br>
+
+- **페이지네이션**
+    - 서버 API
+        - 커서 기반 페이지네이션
+        - 마지막 페이지일 때, cursor를 0으로 받아와 네트워크 요청 X
+    - 네이버 쇼핑 API
+        - 오프셋 기반 페이지네이션
+
+
+
+
+<br><br>
+
+
 
 # 👿 트러블슈팅 😈
 
