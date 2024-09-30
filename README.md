@@ -90,13 +90,10 @@
                     switch response.result {
                     case .success(let value):
                         
-                        print("성공 statuscode =", statuscode)
                         observer(.success((statuscode, value)))
                         
                     case .failure(let error):
 
-                        print("에러 = ", error)
-                        print("실패에러코드 =", statuscode)
                         observer(.success((statuscode, nil)))   
                     }
                 }
