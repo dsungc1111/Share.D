@@ -20,31 +20,26 @@
 
 # 🧑🏻‍💻 프로젝트 개발환경
 - 1인 개발(iOS)
-- 개발기간
-    - 2024.08.14 ~ 2024.09.01(약 2주)
-- iOS 최소 버전
-    - iOS 15.0+   
+- 개발기간 : 2024.08.14 ~ 2024.09.01 (약 2주)
+- iOS 최소 버전: iOS 15.0+   
 
 
 <br> <br> 
 
    
 # 🛠 프로젝트 기술스택
-- 아키텍처 및 디자인 패턴
-    - MVVM
-    - RxSwift Input, Output pattern
-- 네트워크 통신 및 API
-    - Alamofire, iamport-iOS
-- UI 및 이미지 처리
-    - UIKit, PhotosUI, Kingfisher
+- 아키텍처 및 디자인 패턴: MVVM(Model-View-ViewModel)
+- 반응형 프로그래밍: RxSwift(Input, Output 패턴)
+- 네트워크 통신 및 API: Alamofire, iamport-iOS
+- UI 및 이미지 처리: UIKit, PhotosUI, Kingfisher
 
 <br> <br> 
 
 # 👉  상세 기능 구현 설명
 
 ###   - **네트워크 로직 관리**
-   - Alamofire의 URLRequestConvertible을 사용하여 라우터 패턴 구성
-- 라우터 패턴을 사용해 각 API 엔드포인트의 URL, 헤더, 파라미터 등을 중앙에서 관리할 수 있어 확장성과 유지보수가 용이
+- URLRequestConvertible로 라우터 패턴을 구성하기 위해 Alamofire 사용
+- 각 API 엔드포인트의 URL, 헤더 및 매개변수를 중앙 집중식으로 관리할 수 있어 확장성 및 유지관리성이 향상
 - 제네릭 타입 활용하여 다양한 Decodable 모델에 대응
 - Single을 통한 비동기 처리
  
@@ -81,14 +76,16 @@ class BaseViewModel {
 <br>
 
 ###  - **토큰 관리**
- - UserDefaults에 Access 토큰과 Refresh 토큰 저장
- - Alamofire의 `RequestInterceptor`  를 사용하여, 토큰 재발급 후, 사용자가 실행한 동작 자동으로 재실행하도록 구현
+ - Access 토큰과 Refresh 토큰을 UserDefaults에 저장
+ - Alamofire의 `RequestInterceptor`  를 사용하여 토큰 재발급 후, 사용자가 실행한 동작 자동으로 재실행하도록 구현
 
 <br>
 
 ###  - **결제**
-  - `포트원 SDK`를 사용하여 PG사를 웹뷰에 띄워 결제 진행
-  - 결제 검증 작업을 요청하여 최종 결제 완료 판단
+- 아이엠포트 라이브러리를 활용하여 인증 결제 진행
+- 결제가 성공적으로 처리된 후, 서버와 통신하여 인증 프로세스를 수행
+-  거래가 완료되기 전, 결제 세부 정보가 정확한지 서버에서 유효성 검사 진행
+- 유효성 검사가 완료되면 거래가 완료되고 사용자에게 구매 성공 알림 전송
 
  <br>
 
@@ -98,9 +95,6 @@ class BaseViewModel {
      - 마지막 페이지일 때, cursor를 0으로 받아와 네트워크 요청 X
  - 네이버 쇼핑 API   
       - 오프셋 기반 페이지네이션
-
-
-
 
 <br><br>
 
@@ -112,28 +106,28 @@ class BaseViewModel {
 
 ###  - 해결 과정 Flow
 
-1. 네트워킹 방식이 기본적인 API 요청과 응답을 처리하도록 설계. 토큰 만료 또는 리프레시 메커니즘에 대한 특별한 처리 X.       
+1.  **문제**:  네트워킹 방식이 기본적인 API 요청과 응답을 처리하도록 설계. 토큰 만료 또는 리프레시 메커니즘에 대한 특별한 처리 X.       
 👉 **토큰이 만료되면 앱 종료 후, 재로그인하여 토큰갱신**  
 👉 좋은 UX 저해, 지속적인 작업에 방해
- 
 
-2.  특정 상태 코드,  419(액세스 토큰 만료)를 처리하는 코드를 네트워크 메서드에 직접 추가   
-     👉 네트워크 메서드가 토큰을 새로 고치거나 오류를 반환(다른 에러코드일 경우)    
-     👉  토큰 만료로 인해 사용자가 경험하는 앱 종료 후, 재로그인 감소  
-     👉  But, 리프레시 토큰을 활용하여, 액세스 토큰 갱신까지는 성공이지만 그런데 왜 기능이 실행되지 않을까?   
-     👉 토큰을 갱신했다고 해서, 해당 메서드를 자동으로 재실행 시켜주는 것은 아니므로, **사용자가 두 번 해당 메서드를 클릭하여 실행 시켜야하는 문제가 다시 발생**  
+2. **해결**: 특정 상태 코드,  419(액세스 토큰 만료)를 처리하는 코드를 네트워크 메서드에 직접 추가   
+    👉 네트워크 메서드가 토큰을 새로 고치거나 오류를 반환(다른 에러코드일 경우)    
+    👉  토큰 만료로 인해 사용자가 경험하는 앱 종료 후, 재로그인 감소  
+
+3.  **문제**: But, 리프레시 토큰을 활용하여, 액세스 토큰 갱신까지는 성공이지만 기능이 실행 X.  
+     👉 토큰을 갱신했다고 해서, 해당 메서드를 자동으로 재실행 시켜주는 것은 아니므로, **사용자가 해당 기능을 두 번 클릭하여 실행 시켜야하는 문제 발생**  
 
 
-3. 토큰 갱신 후, 요청 메서드를 다시 실행하도록 코드 수정   
-👉 메서드 내의 코드가 비대해지고, 관리가 힘들어짐
+4. **해결**: 토큰 갱신 후, 요청 메서드를 다시 실행하도록 코드 수정   
 
-4. Alamofire의 RequestInterceptor 사용    
+5. **문제**: 메서드 내의 코드가 비대해지고, 관리가 힘들어짐
+
+
+6. **해결**: Alamofire의 RequestInterceptor 사용    
 👉 토큰 갱신과 관련된 로직 중앙화 가능   
-
-- 토큰 갱신과 관련된 로직 중앙화 가능
-- **adapt Function**으로 저장된 액세스 토큰을 가져와, 요청의 HTTP 헤더 중 Authorization 필드에 추가
-- 헤더에 토큰을 추가한 후, completion(.success(request))를 호출하여 수정된 request를 성공적으로 반환
-- **retry Function**의 경우(토큰 만료(HTTP 419)), 토큰 갱신 API를 호출하여 새 토큰을 받아온 후, 해당 요청을 다시 시도  
+ 👉 **adapt Function**으로 저장된 액세스 토큰을 가져와, 요청의 HTTP 헤더 중 Authorization 필드에 추가   
+ 👉 헤더에 토큰을 추가한 후, completion(.success(request))를 호출하여 수정된 request를 성공적으로 반환   
+👉 **retry Function**의 경우(토큰 만료(HTTP 419)), 토큰 갱신 API를 호출하여 새 토큰을 받아온 후, 해당 요청을 다시 시도  
 
 
 ###  네트워크 통신 메서드에 적용
@@ -169,62 +163,16 @@ class BaseViewModel {
 
 ## UserDefaults 값 저장 에러
 
-- 토큰의 키값은 모두 같을 때, 
-- UserDefault.accessToken = "token" **VS** UserDefaults.standard.setValue(token, forKey: "newToken")
+1. **문제**: 
+로그인 시, 액세스 토큰 저장 방법   
+`UserDefault.accessToken = "token"`,   
+토큰 갱신 시, 액세스 토큰 저장 방법(Key값은 동일) `UserDefaults.standard.setValue(token, forKey: "newToken")`
+Key값만 같다면 값이 갱신될 것이라고 생각했지만, 갱신이 되지 않아 무한 리콜 발생   
+
+2. **해결**: UserDefault 속성 래퍼가 해당 값을 UserDefaults.standard와 제대로 동기화하지 않거나 UserDefaults를 업데이트하는 서로 다른 방법을 혼합하는 경우 **Old Value**가 발생  
+그러므로 토큰 갱신시에도,  `UserDefault.accessToken` 에 값을 대입하는 형식으로 해결   
 
 
-```swift
-@propertyWrapper
-struct UserDefault<T> {
-    
-    let key: String
-    let defaultValue: T
-    
-    var wrappedValue: T {
-        get {
-            UserDefaults.standard.string(forKey: key) as? T ?? defaultValue
-        }
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: key)
-        }
-    }
-}
 
-final class UserDefaultManager {
-    
-    private enum UserDefaultKey: String {
-        case access
-        case refresh
-        case userNickname
-        case userId
-        case profile
-    }
-    
-    
-    static let shared = UserDefaultManager()
-    
-    private init() {}
-    
-    @UserDefault(key: UserDefaultKey.access.rawValue, defaultValue: "")
-    static var accessToken
-    
-    @UserDefault(key: UserDefaultKey.refresh.rawValue, defaultValue: "")
-    static var refreshToken
-    
-    @UserDefault(key: UserDefaultKey.userNickname.rawValue, defaultValue: "")
-    static var userNickname
-    
-    @UserDefault(key: UserDefaultKey.userId.rawValue, defaultValue: "")
-    static var userId
-    
-    @UserDefault(key: UserDefaultKey.profile.rawValue, defaultValue: "")
-    static var profileImage
-}
-```
-- 최초 로그인 시, UserDefault.accessToken = "token" 를 활용하여, 토큰 저장
-- 리프레시 코드 실행시, UserDefaults.standard.setValue(newToken, forKey: "newToken")로 토큰 갱신
-- **key**값만 같다면, 어떤 방법을 활용하던, 값이 갱신될 것이라고 생각했지만, 갱신이 되지 않아 무제한 리콜 발생
--  print했을 때, 값은 같게 나오지만 접근하는 메모리의 주소가 달라 갱신이 안됨
-- 토큰 갱신시에도,  UserDefault.accessToken 에 값을 대입하는 형식으로 해결
-- UserDefault를 정의해 놓았기 때문에, 이를 구현해놓은 UserDefaultsManager파일 이외의 파일에서 
-UserDefaults.standard.setValue코드를 굳이 사용할 이유가 없음.
+
+
