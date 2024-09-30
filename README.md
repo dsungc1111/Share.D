@@ -67,48 +67,7 @@
 
 4. Alamofire의 RequestInterceptor 사용    
 👉 토큰 갱신과 관련된 로직 중앙화 가능   
-###  RequestInterceptor 코드
-```swift
 
-class MyNetworkInterceptor: RequestInterceptor {
-    
-    private let disposeBag = DisposeBag()
-    
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        print(#function)
-        var request = urlRequest
-        
-        request.setValue(UserDefaultManager.shared.accessToken, forHTTPHeaderField: APIKey.HTTPHeaderName.authorization.rawValue)
-        
-        print("adator 적용 \(urlRequest.headers)")
-        completion(.success(request))
-    }
-    
-    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        
-        print("retry 진입")
-        
-        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 419 else {
-            completion(.doNotRetryWithError(error))
-            return
-        }
-        
-        TokenNetworkManager.shared.tokenNetwork(api: .refresh, model: RefreshModel.self)
-            .subscribe(onSuccess: { result in
-                if let newToken = result.data?.accessToken {
-                    UserDefaultManager.shared.accessToken = newToken
-                    completion(.retry)
-                } else {
-                    completion(.doNotRetry)
-                }
-            }, onFailure: { _ in
-                completion(.doNotRetry)
-            })
-            .disposed(by: disposeBag)
-    }
-}
-
-```
 - 토큰 갱신과 관련된 로직 중앙화 가능
 - **adapt Function**으로 저장된 액세스 토큰을 가져와, 요청의 HTTP 헤더 중 Authorization 필드에 추가
 - 헤더에 토큰을 추가한 후, completion(.success(request))를 호출하여 수정된 request를 성공적으로 반환
