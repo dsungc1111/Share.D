@@ -31,15 +31,12 @@
    
 # 🛠 프로젝트 기술스택
 - 아키텍처 및 디자인 패턴
-    - MVVM: Model-View-ViewModel 패턴
-    - RxSwift Input, Output pattern: 반응형 프로그래밍을 활용한 데이터 흐름 처리
+    - MVVM
+    - RxSwift Input, Output pattern
 - 네트워크 통신 및 API
-    - Alamofire: HTTP 네트워킹 라이브러리
-    - iamport-iOS: 결제 모듈
+    - Alamofire, iamport-iOS
 - UI 및 이미지 처리
-    - UIKit: iOS 앱 UI 구성 라이브러리
-    - PhotosUI: 사진 및 미디어 관련 UI 구성
-    - Kingfisher: 이미지 다운로드 및 캐싱 라이브러리
+    - UIKit, PhotosUI, Kingfisher
 
 <br> <br> 
 
