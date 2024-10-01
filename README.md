@@ -28,10 +28,15 @@
 
    
 # 🛠 프로젝트 기술스택
-- 아키텍처 및 디자인 패턴: MVVM(Model-View-ViewModel)
+- 아키텍처 및 디자인 패턴: MVVM(Model-View-ViewModel), Singleton﹒Repository﹒Router Pattern
 - 반응형 프로그래밍: RxSwift(Input, Output 패턴)
 - 네트워크 통신 및 API: Alamofire, iamport-iOS
-- UI 및 이미지 처리: UIKit, PhotosUI, Kingfisher
+- UI 및 이미지 처리: UIKit, PhotosUI, Kingfisher, SnapKit
+ 
+
+Repository
+
+
 
 <br> <br> 
 
@@ -46,8 +51,8 @@
 <br>
 
 ###  - **네트워크 에러 상태코드 처리**
-- 네트워크 결과에 따른 처리 결과 > 뷰모델에서 핸들링
-- 일반적인 오류 처리를 위한 BaseViewModel에 judgeStatusCode메서드 구현
+- 뷰모델에서 네트워크 결과에 따른 분기처리 진행
+- 공통 응답코드 처리를 위한 BaseViewModel에 judgeStatusCode메서드 구현
 ```swift
 class BaseViewModel {
     
@@ -70,8 +75,8 @@ class BaseViewModel {
 
 ```
 - 에러 처리 유연성을 위한 함수 재정의
-    - 일반적인 경우가 아닌 특정 페이지에 한정된 오류 시나리오의 경우 개별 ViewModel 클래스가 judgeStatusCode(statusCode:title:) 메서드를 재정의
-- 오류 처리 방법이 일관된고, 유저에게 보여줄 에러문과 그 외의 에러문 역시 쉽게 구별 가능.
+    - 공통 응답코드를 제외한 각 API 요청에 대한 응답코드의 경우 개별 ViewModel 클래스가 judgeStatusCode(statusCode:title:) 메서드를 재정의   
+  - 일관성을 보장하며 사용자를 위한 오류 메시지와 내부 목적으로 사용되는 오류 메시지를 명확하게 구분
 
 <br>
 
