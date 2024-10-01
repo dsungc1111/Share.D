@@ -166,13 +166,13 @@ class BaseViewModel {
 
 ## UserDefaults 값 저장 에러
 
-1. **문제**: 
+### **문제**: 
 로그인 시, 액세스 토큰 저장 방법   
 `UserDefault.accessToken = "token"`,   
 토큰 갱신 시, 액세스 토큰 저장 방법(Key값은 동일) `UserDefaults.standard.setValue(token, forKey: "newToken")`
 Key값만 같다면 값이 갱신될 것이라고 생각했지만, 갱신이 되지 않아 무한 리콜 발생   
 
-2. **해결**: UserDefault 속성 래퍼가 해당 값을 UserDefaults.standard와 제대로 동기화하지 않거나 UserDefaults를 업데이트하는 서로 다른 방법을 혼합하는 경우 **Old Value**가 발생  
+### **해결**: UserDefault 속성 래퍼가 해당 값을 UserDefaults.standard와 제대로 동기화하지 않거나 UserDefaults를 업데이트하는 서로 다른 방법을 혼합하는 경우 **Old Value**가 발생  
 그러므로 토큰 갱신시에도,  `UserDefault.accessToken` 에 값을 대입하는 형식으로 해결   
 
 
