@@ -124,7 +124,7 @@ class BaseViewModel {
 
 ### **문제3**:  메서드 내의 코드가 비대해지고, 관리가 힘들어짐
 
-- **해결3**:   Alamofire의 RequestInterceptor 사용    
+- **해결**:   Alamofire의 RequestInterceptor 사용    
 👉 토큰 갱신과 관련된 로직 중앙화 가능   
  👉 **adapt Function**으로 저장된 액세스 토큰을 가져와, 요청의 HTTP 헤더 중 Authorization 필드에 추가   
  👉 헤더에 토큰을 추가한 후, completion(.success(request))를 호출하여 수정된 request를 성공적으로 반환   
