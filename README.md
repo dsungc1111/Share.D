@@ -103,7 +103,7 @@ class BaseViewModel {
 ###  - **메모리 관리**
  - RxSwift에서 DisposeBag을 사용하여 메모리 누수 방지
 - 각 ViewModel 마다 자신만의 DisposeBag을 갖고 있어, 해당 ViewModel이 메모리에서 해제될 때, RxSwift 스트림도 함께 정리되도록 구현
--  클로저 내부에서 ViewModel이나 View에 대한 강한참조가 생기지 않도록. [weak self] 를 사용하여 메모리 순환참조 방지
+-  클로저 내부에서 ViewModel이나 View에 대한 강한참조가 생기지 않도록 [weak self] 를 사용하여 메모리 순환참조 방지
   
 <br><br>
 
