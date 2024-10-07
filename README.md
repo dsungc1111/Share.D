@@ -115,28 +115,16 @@ class BaseViewModel {
 ### **해결**: Alamofire의 RequestInterceptor를 사용하여 토큰 만료시 갱신, 그리고 기존 요청 재실행을 하나의 통합된 로직으로 처리
 
 
-###  네트워크 통신 메서드에 적용
+###  RequestInterceptor를 채택한 NetworkInterceptor 적용
 ```swift
  func postNetwork<T: Decodable>(api: PostRouter, model: T.Type) -> Single<(statusCode: Int, data: T?)> {
         return Single.create { observer in
 
-            AF.request(api, interceptor: MyNetworkInterceptor())
+            AF.request(api, interceptor: NetworkInterceptor())
                 .validate(statusCode: 200..<300)
                 .responseDecodable(of: T.self) { response in
                     
-                    guard let statuscode = response.response?.statusCode else {
-                        observer(.success((statusCode: 500, data: nil)))
-                        return
-                    }
-                    switch response.result {
-                    case .success(let value):
-                        
-                        observer(.success((statuscode, value)))
-                        
-                    case .failure(let error):
-
-                        observer(.success((statuscode, nil)))   
-                    }
+                   ...
                 }
             return Disposables.create()
         }
