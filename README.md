@@ -41,10 +41,7 @@
 # 👉  상세 기능 구현 설명
 
 ###   - **네트워크 로직 관리**
-- URLRequestConvertible로 라우터 패턴을 구성하기 위해 Alamofire 사용
-- 각 API 엔드포인트의 URL, 헤더 및 매개변수를 중앙 집중식으로 관리할 수 있어 확장성 및 유지관리성이 향상
-- 제네릭 타입 활용하여 다양한 Decodable 모델에 대응
-- Single을 활용해 API 요청 비동기 처리, 성공/실패에 대한 단일 응답 보장
+- Alamofire를 사용해 URLRequestConvertible로 라우터 패턴을 구성하여 각 API 엔드포인트의 URL, 헤더 및 매개변수를 중앙에서 관리하며, 제네릭 타입을 활용해 다양한 Decodable 모델에 유연하게 대응하여 확장성과 유지보수성을 향상
  
 <br>
 
