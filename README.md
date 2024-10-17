@@ -132,7 +132,7 @@ class BaseViewModel {
 
 ## 토큰 저장 및 갱신 시 UserDefaults 동기화 문제
 
-### **문제**: 
+### **문제**: 토큰 갱신 실패
 - 로그인 시, 액세스 토큰 저장 방법 `UserDefault.accessToken = "token"`,   
 - 토큰 갱신 시, 액세스 토큰 저장 방법(Key값은 동일) `UserDefaults.standard.setValue(token, forKey: "newToken")`
 - Key값만 같다면 값이 갱신될 것이라고 생각했지만, 갱신이 되지 않아 무한 리콜 발생   
