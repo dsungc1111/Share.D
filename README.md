@@ -101,8 +101,6 @@ class BaseViewModel {
 
 # 👿 트러블슈팅 
 
-###  Refresh Token 갱신
-
 ### **문제**: Refresh Token을 갱신했지만 사용자가 실행한 기능이 자동으로 재실행되지 않는 상황
 
 ### **해결**: Alamofire의 RequestInterceptor를 사용하여 토큰 만료시 갱신, 그리고 기존 요청 재실행을 하나의 통합된 로직으로 처리
@@ -126,8 +124,6 @@ class BaseViewModel {
 ```
 <br>
 <br>
-
-## 토큰 저장 및 갱신 시 UserDefaults 동기화 문제
 
 ### **문제**: 토큰 갱신 실패
 - 로그인 시, 액세스 토큰 저장 방법 `UserDefault.accessToken = "token"`,   
