@@ -101,7 +101,7 @@ class BaseViewModel {
 
 # 👿 트러블슈팅 
 
-##  Refresh Token 갱신
+###  Refresh Token 갱신
 
 ### **문제**: Refresh Token을 갱신했지만 사용자가 실행한 기능이 자동으로 재실행되지 않는 상황
 
