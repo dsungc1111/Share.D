@@ -33,7 +33,7 @@
 - 반응형 프로그래밍: RxSwift,RxCocoa
 - 네트워크 통신 및 API: Alamofire, WebView
 - UI 및 이미지 처리: UIKit, PhotosUI, Kingfisher, SnapKit
-
+- 앱 모니터링 및 분석: Firebase Crashlytics, Firebase Analytics, Firebase Messaging
 
 
 <br> <br> 
