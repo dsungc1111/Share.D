@@ -101,9 +101,9 @@ class BaseViewModel {
 
 # 👿 트러블슈팅 
 
-### **문제**: Refresh Token을 갱신했지만 사용자가 실행한 기능이 자동으로 재실행되지 않는 상황
+### **문제 상황** - Refresh Token을 갱신했지만 사용자가 실행한 기능이 자동으로 재실행되지 않는 상황
 
-### **해결**: Alamofire의 RequestInterceptor를 사용하여 토큰 만료시 갱신, 그리고 기존 요청 재실행을 하나의 통합된 로직으로 처리
+### **해결** - Alamofire의 RequestInterceptor를 사용하여 토큰 만료시 갱신, 그리고 기존 요청 재실행을 하나의 통합된 로직으로 처리
 
 
 ###  RequestInterceptor를 채택한 NetworkInterceptor 적용
@@ -125,12 +125,12 @@ class BaseViewModel {
 <br>
 <br>
 
-### **문제**: 토큰 갱신 실패
+### **문제 상황** - 토큰 갱신 실패
 - 로그인 시, 액세스 토큰 저장 방법 `UserDefault.accessToken = "token"`,   
 - 토큰 갱신 시, 액세스 토큰 저장 방법(Key값은 동일) `UserDefaults.standard.setValue(token, forKey: "newToken")`
 - Key값만 같다면 값이 갱신될 것이라고 생각했지만, 갱신이 되지 않아 무한 리콜 발생   
 
-### **해결**: 
+### **해결** - UserDefaults 저장 로직 통일
 - UserDefault 속성 래퍼가 해당 값을 UserDefaults.standard와 제대로 동기화하지 않거나 UserDefaults를 업데이트하는 서로 다른 방법을 혼합하는 경우 **Old Value**(이전 값)가 반환  
 - 그러므로 토큰 갱신시에도,  `UserDefault.accessToken` 에 값을 대입하는 형식으로 해결   
 
