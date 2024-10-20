@@ -41,6 +41,11 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
         btn.contentMode = .center
         btn.clipsToBounds = true
         btn.layer.borderWidth = 0.5
+        btn.isEnabled = false
+        
+        
+        btn.setTitleColor(UIColor.black, for: .disabled)
+        btn.backgroundColor = UIColor.lightGray
         return btn
     }()
     let categoryLabel = {
@@ -83,6 +88,7 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
         let image = UIImage(named: CategoryLogoImage.allCases[item].rawValue)
         
         categoryBtn.setImage(image, for: .normal)
+        categoryBtn.setImage(image, for: .disabled)
         
         categoryLabel.text = CategoryTitle.allCases[item].rawValue
     }

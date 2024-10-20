@@ -18,7 +18,7 @@ final class PostListView: BaseView {
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
-    let agePickerView = UIPickerView()
+//    let agePickerView = UIPickerView()
     
     let resultCollectionView = UICollectionView(frame: .zero, collectionViewLayout: resultCollectionViewLayout())
     private static func resultCollectionViewLayout() -> UICollectionViewLayout {
@@ -50,7 +50,7 @@ final class PostListView: BaseView {
     
     override func configureHierarchy() {
         addSubview(genderSegmentedControl)
-        addSubview(agePickerView)
+//        addSubview(agePickerView)
         addSubview(resultCollectionView)
     }
     
@@ -62,14 +62,14 @@ final class PostListView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(40)
         }
-        agePickerView.snp.makeConstraints { make in
-            make.top.equalTo(genderSegmentedControl.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(100)
-        }
+//        agePickerView.snp.makeConstraints { make in
+//            make.top.equalTo(genderSegmentedControl.snp.bottom).offset(10)
+//            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+//            make.height.equalTo(100)
+//        }
         
         resultCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(agePickerView.snp.bottom).offset(10)
+            make.top.equalTo(genderSegmentedControl.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }

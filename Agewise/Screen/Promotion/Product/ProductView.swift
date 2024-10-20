@@ -29,6 +29,7 @@ final class ProductView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.identifier)
+        collectionView.showsVerticalScrollIndicator = false
     }
     
     @available(*, unavailable)

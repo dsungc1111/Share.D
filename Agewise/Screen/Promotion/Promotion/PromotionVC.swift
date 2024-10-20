@@ -57,7 +57,25 @@ final class PromotionVC: BaseVC {
                 cell.configureCell(element: element, item: row)
             }
             .disposed(by: disposeBag)
-      
+        
+        
+        
+        promotionView.categoryCollectionView.rx.modelSelected(String.self)
+            .bind(with: self) { owner, category in
+                
+                print(category)
+                
+                let vc = ProductVC()
+                vc.navigationItem.title = category
+                vc.searchItem = category
+                
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        
+        
+        
         output.logout
             .bind(with: self) { owner, result in
                 owner.logoutUser()

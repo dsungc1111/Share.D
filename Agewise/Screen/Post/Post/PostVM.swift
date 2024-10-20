@@ -25,7 +25,7 @@ final class PostVM: BaseViewModel {
     struct Input {
         let saveTap: ControlEvent<Void>
         let question: ControlProperty<String>
-        let category: Observable<String>
+//        let category: Observable<String>
         let productInfo: Observable<ProductDetail>
         let editOrWrite: Observable<Bool>
     }
@@ -52,17 +52,17 @@ final class PostVM: BaseViewModel {
         let result = input.question
             .map { $0.count != 0 }
         
-        let combined = Observable.combineLatest(input.productInfo, input.question, input.category)
+        let combined = Observable.combineLatest(input.productInfo, input.question)
         
         
         input.saveTap
             .withLatestFrom(combined)
-            .map { [weak self] result in
+            .map { result in
                 let product = result.0
                 let text = result.1
-                let category = result.2
+//                let category = result.2
                 
-                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: (self?.age ?? "") + " " + category + "선물용" , files: [product.image])
+                let save = PostQuery(title: product.title, price: Int(product.lprice) ?? 0, content: text, content1: product.mallName, content2: product.productId, product_id: "선물용" , files: [product.image])
                 return save
             }
             .flatMap { query in

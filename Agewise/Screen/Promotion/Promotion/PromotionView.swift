@@ -50,30 +50,20 @@ final class PromotionView: BaseView {
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: 0, bottom: sectionSpacing, right: 0)
         return layout
     }
+    
     private let recommendItemLabel = {
         let label = UILabel()
         label.text = "요즘 인기에요!"
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
+    
     private let moreBtn: UIButton = {
         let btn = UIButton()
 
-//        // UIButtonConfiguration 설정
-//        var config = UIButton.Configuration.plain()
-//
-//        // AttributedString 설정으로 밑줄 추가 및 폰트, 색상 적용
-//        var titleAttribute = AttributedString("더보기")
-//        titleAttribute.foregroundColor = .gray // 회색 글씨
-//        titleAttribute.font = UIFont.systemFont(ofSize: 12) // 크기 12 폰트
-//        titleAttribute.underlineStyle = .single // 밑줄 스타일 설정
-//
-//        config.attributedTitle = titleAttribute
         btn.setTitle("더보기", for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 12)
         btn.setTitleColor(.lightGray, for: .normal)
-
-//        btn.configuration = config
 
         return btn
     }()

@@ -13,14 +13,14 @@ final class PromotionVM: BaseViewModel {
     
     enum CategoryTitle: String, CaseIterable {
         
-        case ipad
-        case food
-        case clothes
-        case beauty
-        case travel
-        case candle
-        case starbucks
-        case holi
+        case birthday = "생일"
+        case food = "졸업식"
+        case lux = "럭셔리"
+        case test = "수능"
+        case special = "기념일"
+        case candle = "집들이"
+        case starbucks = "교환권"
+        case holi = "명절"
     }
     
     

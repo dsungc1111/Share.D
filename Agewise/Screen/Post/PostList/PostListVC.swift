@@ -53,7 +53,7 @@ final class PostListVC: BaseVC {
             .disposed(by: disposeBag)
         
         
-        let input = PostListVM.Input(segmentIndex: postListView.genderSegmentedControl.rx.selectedSegmentIndex, ageString: postListView.agePickerView.rx.modelSelected(String.self), loadMore: loadMoreTrigger)
+        let input = PostListVM.Input(segmentIndex: postListView.genderSegmentedControl.rx.selectedSegmentIndex, loadMore: loadMoreTrigger)
         
         let output = postListViewModel.transform(input: input)
  
@@ -79,18 +79,18 @@ final class PostListVC: BaseVC {
       
                 
         // 피커뷰 생성 코드
-        output.ageList
-            .bind(to: postListView.agePickerView.rx.itemTitles) { (row, element) in
-                return element
-            }
-            .disposed(by: disposeBag)
+//        output.ageList
+//            .bind(to: postListView.agePickerView.rx.itemTitles) { (row, element) in
+//                return element
+//            }
+//            .disposed(by: disposeBag)
         
         // 페이지네이션 방지
-        output.lastPage
-            .bind(with: self) { owner, result in
-                owner.view.makeToast(result, duration: 2.0, position: .bottom)
-            }
-            .disposed(by: disposeBag)
+//        output.lastPage
+//            .bind(with: self) { owner, result in
+//                owner.view.makeToast(result, duration: 2.0, position: .bottom)
+//            }
+//            .disposed(by: disposeBag)
         
         
         output.errorMessage
