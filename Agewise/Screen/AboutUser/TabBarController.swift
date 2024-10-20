@@ -21,13 +21,13 @@ final class TabBarController: UITabBarController {
         let promotionVC = UINavigationController(rootViewController: PromotionVC())
         let postListVC = UINavigationController(rootViewController: PostListVC())
         
-        settingVC.tabBarItem = UITabBarItem(title: "세팅", image: UIImage(systemName: "gearshape"), tag: 0)
+        settingVC.tabBarItem = UITabBarItem(title: "MY", image: UIImage(systemName: "person"), tag: 0)
         promotionVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 1)
         postListVC.tabBarItem = UITabBarItem(title: "커뮤니티", image: UIImage(systemName: "questionmark.bubble"), tag: 2)
         setViewControllers([postListVC, promotionVC, settingVC], animated: true)
         
-        self.tabBar.unselectedItemTintColor = .black
-        self.tabBar.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        self.tabBar.unselectedItemTintColor = .lightGray
+        self.tabBar.tintColor = .white
         self.selectedIndex = 1
     }
     
@@ -43,7 +43,7 @@ final class TabBarController: UITabBarController {
         )
         
         roundLayer.path = shapePath.cgPath
-        roundLayer.fillColor = UIColor(hexCode: "#f1ddfe", alpha: 1).cgColor
+        roundLayer.fillColor = UIColor.black.cgColor
         roundLayer.shadowColor = UIColor.black.cgColor
         roundLayer.shadowOffset = CGSize(width: 0, height: 5)
         roundLayer.shadowRadius = 10

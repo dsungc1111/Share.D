@@ -14,7 +14,7 @@ final class ListCategoryCollectionViewCell: BaseCollectionViewCell {
         let btn = UIButton()
         btn.titleLabel?.textAlignment = .center
         btn.isEnabled = false
-        btn.backgroundColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        btn.backgroundColor = .black
         btn.layer.cornerRadius = 30
         btn.clipsToBounds = true
         return btn

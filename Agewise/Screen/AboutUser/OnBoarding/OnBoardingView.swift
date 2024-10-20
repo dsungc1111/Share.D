@@ -19,7 +19,7 @@ final class OnBoardingView: BaseView {
         let label = UILabel()
         label.text = "Share.D"
         label.font = UIFont(name: "Copperplate", size: 50)
-        label.textColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
+        label.textColor = .black
         label.textAlignment = .center
         return label
     }()

@@ -45,35 +45,5 @@ final class PostNetworkManager {
             return Disposables.create()
         }
     }
-    
-//    func delete(api: PostRouter, completionHandler: @escaping (Result<Int, NetworkError>) -> Void) {
-//        
-//        let url = api.baseURL + api.path
-//        
-//        AF.request(url, method: api.method, encoding: URLEncoding(destination: .queryString), headers: HTTPHeaders(api.header))
-//            .validate(statusCode: 200..<300)
-//            .response { response in
-//                switch response.result {
-//                case .success(let value):
-//                    if let statusCode = response.response?.statusCode {
-//                        print(statusCode)
-//                        completionHandler(.success(statusCode))
-//                    } else {
-//                        completionHandler(.failure(.invalidURL))
-//                    }
-//                case .failure(let error):
-//                    print(error)
-//                    if let statusCode = response.response?.statusCode {
-//                        completionHandler(.failure(.unknownResponse))
-//                        
-//                    } else {
-//                        completionHandler(.failure(.unknownResponse))
-//                    }
-//                }
-//            }
-//    }
-  
-    
-    
 }
 

@@ -40,7 +40,7 @@ final class LoginVC: BaseVC {
         
         output.emailValid
             .bind(with: self) { owner, result in
-                owner.loginView.passwordTextField.layer.borderColor = result ? UIColor(hexCode: MainColor.main.rawValue).cgColor : UIColor.lightGray.cgColor
+                owner.loginView.passwordTextField.layer.borderColor = result ? UIColor.black.cgColor : UIColor.lightGray.cgColor
                 
             }
             .disposed(by: disposeBag)
@@ -48,7 +48,7 @@ final class LoginVC: BaseVC {
         output.pwValid
             .bind(with: self) { owner, result in
                 
-                let color = result ? UIColor(hexCode: MainColor.main.rawValue) : UIColor.lightGray
+                let color = result ? .black : UIColor.lightGray
                 
                 owner.loginView.signInButton.setTitleColor( color , for: .normal)
                 owner.loginView.signInButton.layer.borderColor = color.cgColor

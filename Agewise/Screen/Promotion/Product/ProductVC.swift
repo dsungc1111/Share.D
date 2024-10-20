@@ -53,11 +53,10 @@ final class ProductVC: BaseVC {
                 let frameHeight = self.productView.collectionView.frame.size.height
                 let yOffset = offset.y
                 let distanceToBottom = contentHeight - yOffset - frameHeight
-                // 스크롤이 끝에서 200pt 이내로 도달했을 때
                 return distanceToBottom < 200
             }
             .distinctUntilChanged()
-            .filter { $0 == true }  // 조건에 맞을 때만 호출
+            .filter { $0 == true }  
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 loadMoreTrigger.onNext(())

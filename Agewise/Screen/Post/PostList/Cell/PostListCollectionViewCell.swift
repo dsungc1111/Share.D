@@ -54,15 +54,15 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
     let commentButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "bubble.right"), for: .normal)
-        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
-        btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
+        btn.tintColor = .black
+        btn.setTitleColor(.black, for: .normal)
         return btn
     }()
     let likeButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "heart"), for: .normal)
-        btn.tintColor = UIColor(hexCode: MainColor.main.rawValue, alpha: 1)
-        btn.setTitleColor(UIColor(hexCode: MainColor.main.rawValue, alpha: 1), for: .normal)
+        btn.tintColor = .black
+        btn.setTitleColor(.black, for: .normal)
         return btn
     }()
    

@@ -28,7 +28,10 @@ final class EditUserVC: BaseVC, PHPickerViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+//        let random = Observable.create { number in
+//            number.onNext(Int.random(in: 0...50))
+//            return Disposables.create()
+//        }
     }
     
     override func bind() {

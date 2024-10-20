@@ -13,30 +13,37 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
     
     
     enum CategoryLogoImage: String, CaseIterable {
-        case teen
-        case worker
-        case main
-        case parent
-        case elderly1
-        case elderly2
+       
+        case birthday
+        case food
+        case lux
+        case test
+        case special
+        case candle
+        case starbucks
+        case holi
     }
     
     enum CategoryTitle: String, CaseIterable {
-        case teen = "10대"
-        case graduation = "20대"
-        case developer = "30대"
-        case parent = "40대"
-        case l = "50대"
-        case grand = "60대+"
+        
+        case birthday = "생일"
+        case food = "졸업식"
+        case lux = "럭셔리"
+        case test = "수능"
+        case special = "기념일"
+        case candle = "집들이"
+        case starbucks = "교환권"
+        case holi = "명절"
     }
     
-    let ageButton = {
+    let categoryBtn = {
         let btn = UIButton()
         btn.contentMode = .center
-        btn.isEnabled = false
+        btn.clipsToBounds = true
+        btn.layer.borderWidth = 0.5
         return btn
     }()
-    let ageLabel = {
+    let categoryLabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 12)
         label.textAlignment = .center
@@ -52,24 +59,57 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureHierarchy() {
-        contentView.addSubview(ageButton)
-        contentView.addSubview(ageLabel)
+        contentView.addSubview(categoryBtn)
+        contentView.addSubview(categoryLabel)
     }
     
     override func configureLayout() {
-        ageButton.snp.makeConstraints { make in
-            make.edges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+        categoryBtn.snp.makeConstraints { make in
+            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.centerX.equalTo(contentView.safeAreaLayoutGuide)
+            make.size.equalTo(60)
         }
-        ageLabel.snp.makeConstraints { make in
-            make.top.equalTo(ageButton.snp.bottom)
+        categoryBtn.layer.cornerRadius = 30
+        
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(categoryBtn.snp.bottom)
             make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide)
         }
     }
     
+    
     func cellConfiguration(item: Int) {
         
-        ageButton.setImage(UIImage(named: CategoryLogoImage.allCases[item].rawValue), for: .normal)
+        let image = UIImage(named: CategoryLogoImage.allCases[item].rawValue)
         
-        ageLabel.text = CategoryTitle.allCases[item].rawValue
+        categoryBtn.setImage(image, for: .normal)
+        
+        categoryLabel.text = CategoryTitle.allCases[item].rawValue
+    }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        }
+        
+        
+        let rect = CGRect(origin: .zero, size: newSize)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
     }
 }

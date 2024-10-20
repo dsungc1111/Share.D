@@ -19,18 +19,9 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
         image.layer.cornerRadius = 10
         return image
     }()
-    private let rankLabel = {
-        let label = UILabel()
-        label.backgroundColor = UIColor(hexCode: "#9986b3")
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont(name: "Copperplate-Bold", size: 25)
-        label.clipsToBounds = true
-        label.layer.cornerRadius = 10
-        return label
-    }()
     private let mallLabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 10)
         label.textColor = .lightGray
         return label
     }()
@@ -48,7 +39,7 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     
     override func configureHierarchy() {
         contentView.addSubview(productImage)
-        contentView.addSubview(rankLabel)
+        
         contentView.addSubview(mallLabel)
         contentView.addSubview(titleLabel)
         contentView.addSubview(priceLabel)
@@ -56,27 +47,22 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
     
     override func configureLayout() {
         productImage.snp.makeConstraints { make in
-            make.horizontalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(5)
-            make.height.equalTo(320)
-        }
-        rankLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
-            make.size.equalTo(40)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.top.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(180)
         }
         mallLabel.snp.makeConstraints { make in
             make.top.equalTo(productImage.snp.bottom).offset(5)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide)
         }
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(mallLabel.snp.bottom).offset(10)
-            make.horizontalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.horizontalEdges.leading.equalTo(contentView.safeAreaLayoutGuide)
             
         }
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide)
         }
         
         
@@ -87,9 +73,6 @@ final class AdCollectionViewCell: BaseCollectionViewCell {
         
         productImage.kf.setImage(with: image)
         
-        
-        
-        rankLabel.text = "\(item+1)"
         mallLabel.text = element.mallName
         
         titleLabel.text = element.title.removeHtmlTag

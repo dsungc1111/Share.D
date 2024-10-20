@@ -473,8 +473,8 @@
 			isa = PBXGroup;
 			children = (
 				8B3231D42C73277F0095DF0B /* PostView.swift */,
-				8B3231D62C735CB40095DF0B /* PostVM.swift */,
 				8B3231D22C73272E0095DF0B /* PostVC.swift */,
+				8B3231D62C735CB40095DF0B /* PostVM.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";

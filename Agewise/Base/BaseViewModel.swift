@@ -20,7 +20,7 @@ class BaseViewModel {
         case 419:
             return  "다시 실행해주세요"
         case 420 :
-            return "SesacKey를 확인하세요"
+            return "개발자 접근 Key를 확인하세요"
         default:
             return "다시 시도해주세요."
         }

@@ -11,26 +11,23 @@ import RxCocoa
 
 final class PromotionVM: BaseViewModel {
     
-    enum AgeTitle: String, CaseIterable {
-        case teen = "10대"
-        case graduation = "20대"
-        case developer = "30대"
-        case parent = "40대"
-        case parent50 = "50대"
-        case grand = "60대+"
+    enum CategoryTitle: String, CaseIterable {
+        
+        case ipad
+        case food
+        case clothes
+        case beauty
+        case travel
+        case candle
+        case starbucks
+        case holi
     }
     
-    enum productTitle: String, CaseIterable {
-        case woman = "Woman"
-        case man = "Man"
-        case kid = "Kids"
-        case birth = "Parent"
-        
-    }
+    
     
     struct Input {
         let adTrigger: Observable<Void>
-        let trendTap: ControlEvent<String>
+//        let trendTap: ControlEvent<String>
 //        let ageButtonTap: ControlEvent<Void>
 //        let timer: Observable<Int>
 //        let currentIndex: ControlEvent<[IndexPath]>
@@ -38,20 +35,19 @@ final class PromotionVM: BaseViewModel {
     
     struct Output {
         let adList: PublishSubject<[ProductDetail]>
-        let presentList: PublishSubject<[String]>
-        let trendTap: ControlEvent<String>
-//        let scrollIndexPath: PublishSubject<IndexPath>
+        let categoryList: PublishSubject<[String]>
+
         let logout: PublishSubject<String>
         let profileImage: PublishSubject<String>
     }
     private var currentIndex: Int = 0
-    private let disposeBag = DisposeBag()
     
+    private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         
         let adList = PublishSubject<[ProductDetail]>()
-        let presentList = PublishSubject<[String]>()
+        let categoryList = PublishSubject<[String]>()
 //        let scrollIndexPath = PublishSubject<IndexPath>()
         let logout = PublishSubject<String>()
         let profileImage = PublishSubject<String>()
@@ -67,13 +63,17 @@ final class PromotionVM: BaseViewModel {
                     profileImage.onNext(result.profileImage)
                 }
                 
+                let present = CategoryTitle.allCases.map { $0.rawValue }
+                
+                categoryList.onNext(present)
+                
             }
             .disposed(by: disposeBag)
         
         
         input.adTrigger
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .map { "요즘 인기 선물" }
+            .map { "집들이 선물" }
             .flatMap { value in
                 NetworkManager.shared.naverAPI(query: value, start: 1)
             }
@@ -81,19 +81,15 @@ final class PromotionVM: BaseViewModel {
                 
                 switch result {
                 case .success(let value):
-                    adList.onNext(value.items)
+                    let topTenItems = Array(value.items.prefix(6))
+                    adList.onNext(topTenItems)
                 case .failure(_):
                     print("네이버 실패")
                 }
-                
-                let present = productTitle.allCases.map { $0.rawValue }
-                
-                presentList.onNext(present)
-                
             }
             .disposed(by: disposeBag)
         
-        return Output(adList: adList, presentList: presentList, trendTap: input.trendTap, logout: logout, profileImage: profileImage)
+        return Output(adList: adList, categoryList: categoryList, logout: logout, profileImage: profileImage)
     }
     
 }

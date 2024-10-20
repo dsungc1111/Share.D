@@ -8,103 +8,94 @@
 import UIKit
 import SnapKit
 
+
 final class PromotionView: BaseView {
     
     let scrollView = UIScrollView()
     let contentView = UIView()
     
-    private let hotDealLabel = {
+    let searchBar = {
+        let bar = UISearchBar()
+        bar.placeholder = "상품을 검색하세요."
+        return bar
+    }()
+    
+    let promotionView = {
+        let btn = UIButton()
+        btn.layer.cornerRadius = 10
+        btn.backgroundColor = .black
+        btn.setImage(UIImage(named: "sale"), for: .normal)
+        btn.contentMode = .center
+        btn.layer.cornerRadius = 20
+        btn.clipsToBounds = true
+        return btn
+    }()
+    
+    private let recommendLabel = {
         let label = UILabel()
-        label.text = "카테고리"
-        label.textColor = UIColor(hexCode: MainColor.main.rawValue)
-        label.font = .boldSystemFont(ofSize: 35)
+        label.text = "Recommed For Present"
+        label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
-//    private let recommendLabel = {
-//        let label = UILabel()
-//        label.text = "Recommend"
-//        label.textColor = UIColor(hexCode: MainColor.main.rawValue)
-//        label.font = UIFont(name: "Copperplate-Bold", size: 35)
-//        return label
-//    }()
-    let adCollectionView = UICollectionView(frame: .zero, collectionViewLayout: adCollectionViewLayout())
-    private static func adCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = CarouselLayout()
-        let width = UIScreen.main.bounds.width
-        let itemWidth = width * 0.9
-        let itemHeight: CGFloat = 400
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
-        layout.minimumLineSpacing = 15
-        layout.sectionInset = UIEdgeInsets(top: 0, left: (width - itemWidth) / 2 - 50, bottom: 0, right: (width - itemWidth) / 2)
-        layout.sideItemScale = 0.8 // Customize this as needed
-        layout.sideItemAlpha = 0.8 // Customize this as needed
-//        layout.spacing = 5 // Customize this as needed
-        layout.isPagingEnabled = true // Adjust this as needed
+    
+    lazy var categoryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
+    private func collectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let sectionSpacing: CGFloat = 10
+        let cellSpacing: CGFloat = 10
+        layout.itemSize = CGSize(width: 80, height: 100)
+        layout.minimumInteritemSpacing = cellSpacing
+        layout.minimumLineSpacing = cellSpacing
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: 0, bottom: sectionSpacing, right: 0)
         return layout
     }
+    private let recommendItemLabel = {
+        let label = UILabel()
+        label.text = "요즘 인기에요!"
+        label.font = .boldSystemFont(ofSize: 20)
+        return label
+    }()
+    private let moreBtn: UIButton = {
+        let btn = UIButton()
+
+//        // UIButtonConfiguration 설정
+//        var config = UIButton.Configuration.plain()
+//
+//        // AttributedString 설정으로 밑줄 추가 및 폰트, 색상 적용
+//        var titleAttribute = AttributedString("더보기")
+//        titleAttribute.foregroundColor = .gray // 회색 글씨
+//        titleAttribute.font = UIFont.systemFont(ofSize: 12) // 크기 12 폰트
+//        titleAttribute.underlineStyle = .single // 밑줄 스타일 설정
+//
+//        config.attributedTitle = titleAttribute
+        btn.setTitle("더보기", for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 12)
+        btn.setTitleColor(.lightGray, for: .normal)
+
+//        btn.configuration = config
+
+        return btn
+    }()
     
-    let recommendCollectionView = UICollectionView(frame: .zero, collectionViewLayout: recommendCollectionViewLayout())
-    
-    private static func recommendCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = CarouselLayout()
-        let width = UIScreen.main.bounds.width
-        let itemWidth = width * 0.8
-        let itemHeight: CGFloat = 400
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
-//        layout.minimumLineSpacing = 15
-        layout.sectionInset = UIEdgeInsets(top: 0, left: (width - itemWidth) / 2, bottom: 0, right: (width - itemWidth) / 2)
-        layout.sideItemScale = 0.8
-        layout.sideItemAlpha = 0.8
-//        layout.spacing = 5
-        layout.isPagingEnabled = true
+    lazy var itemCollectionView = UICollectionView(frame: .zero, collectionViewLayout: itemCollectionViewLayout())
+    private func itemCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let sectionSpacing: CGFloat = 10
+        let cellSpacing: CGFloat = 10
+        let deviceWidth = UIScreen.main.bounds.width
+        layout.itemSize = CGSize(width: deviceWidth / 2 - 20 , height: 300)
+        layout.minimumInteritemSpacing = cellSpacing / 2
+        layout.minimumLineSpacing = cellSpacing / 2
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: 0, bottom: sectionSpacing, right: 0)
         return layout
     }
-    
-    private let searchView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(hexCode: "#F0A851", alpha: 1)
-        view.layer.cornerRadius = 20
-        return view
-    }()
-    private let searchViewImage = {
-        let view = UIImageView()
-        view.image = UIImage(named: "search")
-        view.contentMode = .scaleAspectFit
-        return view
-    }()
-    private let searchLabel = {
-        let label = UILabel()
-        label.text = "With Keyword"
-        label.font = .boldSystemFont(ofSize: 30)
-        return label
-    }()
-    private let guideLine = {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
-    }()
-    private let keywordLabel = {
-        let label = UILabel()
-        label.text = "키워드로 검색하기 ＞"
-        label.font = .boldSystemFont(ofSize: 15)
-        label.textColor = .white
-        return label
-    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        adCollectionView.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
-        adCollectionView.showsHorizontalScrollIndicator = false
-        adCollectionView.isPagingEnabled = false
-        
-        
-        recommendCollectionView.register(RecommendCollectionViewCell.self, forCellWithReuseIdentifier: RecommendCollectionViewCell.identifier)
-        recommendCollectionView.showsVerticalScrollIndicator = false
-        recommendCollectionView.isPagingEnabled = false
-        
+        categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
+        itemCollectionView.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
     }
     
     @available(*, unavailable)
@@ -113,17 +104,16 @@ final class PromotionView: BaseView {
     }
     
     override func configureHierarchy() {
+        
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-//        contentView.addSubview(recommendLabel)
-        contentView.addSubview(hotDealLabel)
-        contentView.addSubview(adCollectionView)
-        contentView.addSubview(recommendCollectionView)
-        contentView.addSubview(searchView)
-        contentView.addSubview(searchViewImage)
-        contentView.addSubview(searchLabel)
-        contentView.addSubview(guideLine)
-        contentView.addSubview(keywordLabel)
+        contentView.addSubview(searchBar)
+        contentView.addSubview(promotionView)
+        contentView.addSubview(recommendLabel)
+        contentView.addSubview(categoryCollectionView)
+        contentView.addSubview(recommendItemLabel)
+        contentView.addSubview(itemCollectionView)
+        contentView.addSubview(moreBtn)
     }
     
     override func configureLayout() {
@@ -134,51 +124,45 @@ final class PromotionView: BaseView {
             make.width.equalTo(scrollView.snp.width)
             make.verticalEdges.equalTo(scrollView)
         }
-        hotDealLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(20)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(30)
-            make.height.equalTo(35)
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(5)
+            make.height.equalTo(40)
         }
-        recommendCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(hotDealLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
-            make.height.equalTo(400)
+        promotionView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.height.equalTo(200)
         }
-//        adCollectionView.snp.makeConstraints { make in
-//            make.top.equalTo(recommendCollectionView.snp.bottom).offset(30)
-//            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-//            make.trailing.equalTo(contentView.safeAreaLayoutGuide)
-//            make.height.equalTo(400)
-//            make.bottom.equalTo(contentView.snp.bottom)
-//        }
-        searchView.snp.makeConstraints { make in
-            make.top.equalTo(recommendCollectionView.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(170)
-            make.bottom.equalTo(contentView.snp.bottom).inset(200)
+        recommendLabel.snp.makeConstraints { make in
+            make.top.equalTo(promotionView.snp.bottom).offset(25)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(30)
         }
-        searchViewImage.snp.makeConstraints { make in
-            make.top.equalTo(searchView.snp.top)
-            make.leading.equalTo(searchView.snp.leading).inset(20)
-            make.height.equalTo(100)
-            make.width.equalTo(120)
+        categoryCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(recommendLabel.snp.bottom).offset(5)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.height.equalTo(250)
         }
-        searchLabel.snp.makeConstraints { make in
-            make.top.equalTo(searchView.snp.top).inset(70)
-            make.leading.equalTo(searchView.snp.leading).inset(30)
+        categoryCollectionView.showsHorizontalScrollIndicator = false
+        recommendItemLabel.snp.makeConstraints { make in
+            
+            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(20)
         }
-        guideLine.snp.makeConstraints { make in
-            make.top.equalTo(searchLabel.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(searchView.snp.horizontalEdges).inset(20)
-            make.height.equalTo(1)
+        moreBtn.snp.makeConstraints { make in
+            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(20)
         }
-        keywordLabel.snp.makeConstraints { make in
-            make.top.equalTo(guideLine.snp.bottom).offset(10)
-            make.trailing.equalTo(searchView.snp.trailing).inset(20)
+        itemCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(recommendItemLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.height.equalTo(1600)
+            make.bottom.equalTo(contentView.snp.bottom).inset(20)
         }
+        
         scrollView.showsVerticalScrollIndicator = false
-       
     }
-    
-    
 }
