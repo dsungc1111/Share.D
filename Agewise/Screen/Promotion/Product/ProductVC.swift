@@ -27,25 +27,20 @@ final class ProductVC: BaseVC {
         super.viewDidLoad()
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
     
     override func bind() {
         
         let loadMoreTrigger = PublishSubject<Void>()
-        
-        // rx 사용했을 때 페이지네이션 UX 활용도 up
-//        productView.collectionView.rx.prefetchItems
-//            .bind(with: self, onNext: { owner, indexPaths in
-//                
-//                guard let lastVisibleIndexPath = owner.productView.collectionView.indexPathsForVisibleItems.last else { return }
-//                print("lastVisibleIndexPath = ", lastVisibleIndexPath.item)
-//                if lastVisibleIndexPath.item >= owner.productView.collectionView.numberOfItems(inSection: 0) - 4 {
-//                    loadMoreTrigger.onNext(())
-//                    
-//                    
-//                    print("아이템 넘버", owner.productView.collectionView.numberOfItems(inSection: 0))
-//                }
-//            })
-//            .disposed(by: disposeBag)
+
         productView.collectionView.rx.contentOffset
             .map { [weak self] offset -> Bool in
                 guard let self = self else { return false }
@@ -57,8 +52,7 @@ final class ProductVC: BaseVC {
             }
             .distinctUntilChanged()
             .filter { $0 == true }  
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
+            .subscribe(onNext: {  _ in
                 loadMoreTrigger.onNext(())
             })
             .disposed(by: disposeBag)
@@ -83,6 +77,5 @@ final class ProductVC: BaseVC {
         }
         .disposed(by: disposeBag)
     }
-    
     
 }

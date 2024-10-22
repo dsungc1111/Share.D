@@ -30,18 +30,15 @@ final class PromotionVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    }
-    override func configureNavigationBar() {
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         
     }
     
     override func bind() {
         
-        
-        let input = PromotionVM.Input(adTrigger: Observable.just(()))
-        
-        
+        let input = PromotionVM.Input(adTrigger: Observable.just(()), searchText: promotionView.searchBar.rx.text.orEmpty, searchButtonTap: promotionView.searchBar.rx.searchButtonClicked)
         let output = promotionViewModel.transform(input: input)
+        
         
         
         output.categoryList
@@ -58,26 +55,9 @@ final class PromotionVC: BaseVC {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        promotionView.categoryCollectionView.rx.modelSelected(String.self)
-            .bind(with: self) { owner, category in
-                
-                print(category)
-                
-                let vc = ProductVC()
-                vc.navigationItem.title = category
-                vc.searchItem = category
-                
-                owner.navigationController?.pushViewController(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-        
-        
-        
-        
         output.logout
             .bind(with: self) { owner, result in
+                print("로그인 만료임!!!!!")
                 owner.logoutUser()
             }
             .disposed(by: disposeBag)
@@ -91,6 +71,7 @@ final class PromotionVC: BaseVC {
                     APIKey.HTTPHeaderName.authorization.rawValue: UserDefaultManager.accessToken,
                     APIKey.HTTPHeaderName.sesacKey.rawValue: APIKey.DeveloperKey,
                 ]
+                
                 DispatchQueue.global().async {
                     AF.request(url, method: .get, headers: header)
                         .validate(statusCode: 200..<300)
@@ -127,14 +108,51 @@ final class PromotionVC: BaseVC {
                             }
                         }
                 }
-              
                 
             }
             .disposed(by: disposeBag)
         
+        output.searchText
+            .bind(with: self) { owner, searchText in
+                let vc = ProductVC()
+                vc.navigationItem.title = searchText
+                vc.searchItem = searchText
+                
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
         
+        promotionView.promotionView.rx.tap
+            .bind(with: self) { owner, _ in
+                let vc = ProductVC()
+                vc.navigationItem.title = "파격 특가"
+                vc.searchItem = "특가"
+                
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        promotionView.categoryCollectionView.rx.modelSelected(String.self)
+            .bind(with: self) { owner, category in
+                
+                let vc = ProductVC()
+                vc.navigationItem.title = category
+                vc.searchItem = category
+                
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        promotionView.moreBtn.rx.tap
+            .bind(with: self) { owner, _ in
+                let vc = ProductVC()
+                vc.navigationItem.title = "요즘 인기"
+                vc.searchItem = "집들이 선물"
+                
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
-    
     
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
@@ -189,19 +207,20 @@ final class PromotionVC: BaseVC {
             }
         }
     }
-
+    
     func configureNavigationBar(owner: UIViewController) {
+        
         
         fetchProfileImage(value: "profileImageURL")
             .observe(on: MainScheduler.instance)
-            .subscribe(onSuccess: { [weak self] data in
+            .subscribe(onSuccess: {  data in
                 if let profileImage = UIImage(data: data) {
-                    let resizedImage = self?.resizeImage(image: profileImage, targetSize: CGSize(width: 50, height: 50))
-                    let renderer = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50))
+                    
+                    let renderer = UIGraphicsImageRenderer(size: CGSize(width: 20, height: 20))
                     let roundedImage = renderer.image { _ in
-                        let path = UIBezierPath(ovalIn: CGRect(origin: .zero, size: CGSize(width: 50, height: 50)))
+                        let path = UIBezierPath(ovalIn: CGRect(origin: .zero, size: CGSize(width: 20, height: 20)))
                         path.addClip()
-                        resizedImage?.draw(in: CGRect(origin: .zero, size: CGSize(width: 50, height: 50)))
+                        profileImage.draw(in: CGRect(origin: .zero, size: CGSize(width: 20, height: 20)))
                     }
                     
                     let originalImage = roundedImage.withRenderingMode(.alwaysOriginal)
@@ -218,7 +237,7 @@ final class PromotionVC: BaseVC {
             })
             .disposed(by: disposeBag)
     }
-
+    
     
     
 }

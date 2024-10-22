@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class PostListCollectionViewCell : BaseCollectionViewCell {
+final class PostListCollectionViewCell: BaseCollectionViewCell {
 
     
     private let dateTool = ReuseDateformatter.shared
@@ -80,8 +80,8 @@ final class PostListCollectionViewCell : BaseCollectionViewCell {
         contentView.layer.cornerRadius = 10
         
         imageView.snp.makeConstraints { make in
-            make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide)
-            make.width.equalTo(180)
+            make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.width.equalTo(160)
         }
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)

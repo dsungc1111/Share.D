@@ -12,7 +12,7 @@ import RxCocoa
 final class PostListVM: BaseViewModel {
   
     struct Input {
-        let segmentIndex: ControlProperty<Int>
+        let listTrigger: Observable<Void>
         let loadMore: PublishSubject<Void>
     }
     
@@ -27,8 +27,6 @@ final class PostListVM: BaseViewModel {
     private var isLastPage = false
     private var nextCursor = BehaviorRelay(value: "")
     private let lastPage = PublishSubject<String>()
-    private var searchGenderText = ""
-    private var searchAgeText = "10대"
     private let errorMessage = PublishSubject<String>()
     
     
@@ -39,21 +37,11 @@ final class PostListVM: BaseViewModel {
         
         
         var data: [PostModelToWrite] = []
-        var query = GetPostQuery(next: "", limit: "4", product_id: "선물용")
+        let query = GetPostQuery(next: "", limit: "5", product_id: "선물용")
         
         
-        input.segmentIndex
-            .map { _ in
-//                if value == 0 {
-//                    self?.searchGenderText = "Man"
-//                } else {
-//                    self?.searchGenderText = "Woman"
-//                }
-//                query.product_id = (self?.searchAgeText ?? "") + " " + (self?.searchGenderText ?? "") + "선물용"
-//                
-                return query
-            }
-            .flatMap { query in
+        input.listTrigger
+            .flatMap {
                 PostNetworkManager.shared.postNetwork(api: .getPost(query: query), model: PostModelToView.self)
             }
             .bind(with: self, onNext: { owner, result in
@@ -61,7 +49,7 @@ final class PostListVM: BaseViewModel {
                     data = []
                     data.append(contentsOf: searchResult.data)
                     list.onNext(data)
-                    owner.nextCursorChange(cursor: searchResult.next_cursor ?? "")
+                    owner.nextCursorChange(cursor: searchResult.next_cursor)
                 }
             })
             .disposed(by: disposeBag)
@@ -72,7 +60,7 @@ final class PostListVM: BaseViewModel {
                 self?.isLastPage == false
             }
             .map { [weak self] _ in
-                GetPostQuery(next: self?.nextCursor.value ?? "", limit: "10", product_id: query.product_id)
+                GetPostQuery(next: self?.nextCursor.value ?? "", limit: "5", product_id: query.product_id)
             }
             .flatMap { query in
                 PostNetworkManager.shared.postNetwork(api: .getPost(query: query), model: PostModelToView.self)
@@ -81,7 +69,7 @@ final class PostListVM: BaseViewModel {
                 if let searchResult = result.data {
                     data.append(contentsOf: searchResult.data)
                     list.onNext(data)
-                    owner.nextCursorChange(cursor: searchResult.next_cursor ?? "")
+                    owner.nextCursorChange(cursor: searchResult.next_cursor)
                 }
             }
             .disposed(by: disposeBag)
@@ -101,7 +89,6 @@ extension PostListVM {
             isLastPage = false
         } else {
             isLastPage = true
-//            lastPage.onNext("마지막 페이지입니다.")
         }
     }
 }

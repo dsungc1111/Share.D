@@ -31,28 +31,40 @@ final class PostDetailVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.backgroundImage = UIImage()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
  
     override func configureNavigationBar() {
         
-        
+        navigationItem.title = "질문"
     }
     
     override func bind() {
         
-        let input = DetailPostVM.Input(trigger: Observable.just(element), likeTap: postDetailView.likeButton.rx.tap)
+        let input = DetailPostVM.Input(trigger: Observable.just(element), 
+                                       likeTap: postDetailView.likeButton.rx.tap
+        )
         
         let output = detailPostVM.transform(input: input)
         
         output.detailInfo
             .bind(with: self) { owner, result in
-                print("바뀌는데")
+                
                 owner.postDetailView.configurePostDetail(element: result)
                 owner.productPrice = result.price ?? 100
                 owner.model = result
             }
             .disposed(by: disposeBag)
         
-        // clean build cmd + shift + k
+        
         postDetailView.commentButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = CommentVC()

@@ -41,19 +41,37 @@ final class PostListVC: BaseVC {
     override func bind() {
         
         let loadMoreTrigger = PublishSubject<Void>()
-                
-        postListView.resultCollectionView.rx.prefetchItems
-            .bind(with: self, onNext: { owner, indexPaths in
-                
-                guard let lastVisibleIndexPath = owner.postListView.resultCollectionView.indexPathsForVisibleItems.last else { return }
-                if lastVisibleIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 2 {
-                    loadMoreTrigger.onNext(())
-                }
+        
+        postListView.resultCollectionView.rx.contentOffset
+            .map { [weak self] offset -> Bool in
+                guard let self = self else { return false }
+                let contentHeight = postListView.resultCollectionView.contentSize.height
+                let frameHeight = postListView.resultCollectionView.frame.size.height
+                let yOffset = offset.y
+                let distanceToBottom = contentHeight - yOffset - frameHeight
+                return distanceToBottom < 200
+            }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .subscribe(onNext: {  _ in
+
+                loadMoreTrigger.onNext(())
             })
             .disposed(by: disposeBag)
+                
+//        postListView.resultCollectionView.rx.prefetchItems
+//            .bind(with: self, onNext: { owner, indexPaths in
+//                
+//                guard let lastVisibleIndexPath = owner.postListView.resultCollectionView.indexPathsForVisibleItems.last else { return }
+//                if lastVisibleIndexPath.item >= owner.postListView.resultCollectionView.numberOfItems(inSection: 0) - 3 {
+//                    print("ㅇ러ㅏㅣㅇㄴㄹ니어리ㅏ어라ㅣㅇ너라ㅣㅇ널어리ㅏㄴ")
+//                    loadMoreTrigger.onNext(())
+//                }
+//            })
+//            .disposed(by: disposeBag)
         
         
-        let input = PostListVM.Input(segmentIndex: postListView.genderSegmentedControl.rx.selectedSegmentIndex, loadMore: loadMoreTrigger)
+        let input = PostListVM.Input(listTrigger: Observable.just(()), loadMore: loadMoreTrigger)
         
         let output = postListViewModel.transform(input: input)
  

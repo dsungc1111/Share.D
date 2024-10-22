@@ -33,7 +33,7 @@ final class PromotionView: BaseView {
     
     private let recommendLabel = {
         let label = UILabel()
-        label.text = "Recommed For Present"
+        label.text = "이런 선물은 어떠신가요?"
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
@@ -43,7 +43,7 @@ final class PromotionView: BaseView {
         let layout = UICollectionViewFlowLayout()
         let sectionSpacing: CGFloat = 10
         let cellSpacing: CGFloat = 10
-        layout.itemSize = CGSize(width: 80, height: 100)
+        layout.itemSize = CGSize(width: 70, height: 100)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.scrollDirection = .vertical
@@ -58,13 +58,11 @@ final class PromotionView: BaseView {
         return label
     }()
     
-    private let moreBtn: UIButton = {
+    let moreBtn: UIButton = {
         let btn = UIButton()
-
         btn.setTitle("더보기", for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 12)
         btn.setTitleColor(.lightGray, for: .normal)
-
         return btn
     }()
     
@@ -104,6 +102,7 @@ final class PromotionView: BaseView {
         contentView.addSubview(recommendItemLabel)
         contentView.addSubview(itemCollectionView)
         contentView.addSubview(moreBtn)
+        searchBar.backgroundImage = UIImage()
     }
     
     override func configureLayout() {
@@ -122,7 +121,7 @@ final class PromotionView: BaseView {
         promotionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(15)
-            make.height.equalTo(200)
+            make.height.equalTo(220)
         }
         recommendLabel.snp.makeConstraints { make in
             make.top.equalTo(promotionView.snp.bottom).offset(25)

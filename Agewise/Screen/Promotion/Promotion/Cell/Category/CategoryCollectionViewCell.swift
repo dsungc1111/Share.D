@@ -38,14 +38,12 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
     
     let categoryBtn = {
         let btn = UIButton()
-        btn.contentMode = .center
+        btn.contentMode = .scaleAspectFit
         btn.clipsToBounds = true
-        btn.layer.borderWidth = 0.5
         btn.isEnabled = false
-        
+        btn.backgroundColor = UIColor(hexCode: "#cadce7", alpha: 1)
         
         btn.setTitleColor(UIColor.black, for: .disabled)
-        btn.backgroundColor = UIColor.lightGray
         return btn
     }()
     let categoryLabel = {
@@ -72,9 +70,9 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
         categoryBtn.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide).inset(10)
             make.centerX.equalTo(contentView.safeAreaLayoutGuide)
-            make.size.equalTo(60)
+            make.size.equalTo(50)
         }
-        categoryBtn.layer.cornerRadius = 30
+        categoryBtn.layer.cornerRadius = 20
         
         categoryLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryBtn.snp.bottom)

@@ -12,12 +12,12 @@ final class PostListView: BaseView {
     
 //    let searchController = UISearchController(searchResultsController: nil)
     
-    let genderSegmentedControl: UISegmentedControl = {
-        let items = ["남성", "여성"]
-        let segmentedControl = UISegmentedControl(items: items)
-        segmentedControl.selectedSegmentIndex = 0
-        return segmentedControl
-    }()
+//    let genderSegmentedControl: UISegmentedControl = {
+//        let items = ["남성", "여성"]
+//        let segmentedControl = UISegmentedControl(items: items)
+//        segmentedControl.selectedSegmentIndex = 0
+//        return segmentedControl
+//    }()
 //    let agePickerView = UIPickerView()
     
     let resultCollectionView = UICollectionView(frame: .zero, collectionViewLayout: resultCollectionViewLayout())
@@ -27,7 +27,7 @@ final class PostListView: BaseView {
         let cellSpacing: CGFloat = 10
         let width = UIScreen.main.bounds.width
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: width - 20, height: 200)
+        layout.itemSize = CGSize(width: width - 20, height: 180)
         layout.minimumInteritemSpacing = cellSpacing
         layout.minimumLineSpacing = cellSpacing
         layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)
@@ -49,7 +49,7 @@ final class PostListView: BaseView {
     }
     
     override func configureHierarchy() {
-        addSubview(genderSegmentedControl)
+//        addSubview(genderSegmentedControl)
 //        addSubview(agePickerView)
         addSubview(resultCollectionView)
     }
@@ -57,11 +57,11 @@ final class PostListView: BaseView {
     
     override func configureLayout() {
         
-        genderSegmentedControl.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(40)
-        }
+//        genderSegmentedControl.snp.makeConstraints { make in
+//            make.top.equalTo(safeAreaLayoutGuide).inset(10)
+//            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+//            make.height.equalTo(40)
+//        }
 //        agePickerView.snp.makeConstraints { make in
 //            make.top.equalTo(genderSegmentedControl.snp.bottom).offset(10)
 //            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
@@ -69,10 +69,10 @@ final class PostListView: BaseView {
 //        }
         
         resultCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(genderSegmentedControl.snp.bottom).offset(10)
+            make.top.equalTo(safeAreaLayoutGuide).inset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
         }
-       
+        
     }
 }

@@ -16,7 +16,6 @@ class BaseView: UIView {
         backgroundColor = .white
         configureHierarchy()
         configureLayout()
-        
     }
     
     required init?(coder: NSCoder) {

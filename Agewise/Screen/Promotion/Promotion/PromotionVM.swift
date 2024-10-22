@@ -23,22 +23,19 @@ final class PromotionVM: BaseViewModel {
         case holi = "명절"
     }
     
-    
-    
     struct Input {
         let adTrigger: Observable<Void>
-//        let trendTap: ControlEvent<String>
-//        let ageButtonTap: ControlEvent<Void>
-//        let timer: Observable<Int>
-//        let currentIndex: ControlEvent<[IndexPath]>
+        let searchText: ControlProperty<String>
+        let searchButtonTap: ControlEvent<Void>
+
     }
     
     struct Output {
         let adList: PublishSubject<[ProductDetail]>
         let categoryList: PublishSubject<[String]>
-
         let logout: PublishSubject<String>
         let profileImage: PublishSubject<String>
+        let searchText: PublishSubject<String>
     }
     private var currentIndex: Int = 0
     
@@ -48,48 +45,59 @@ final class PromotionVM: BaseViewModel {
         
         let adList = PublishSubject<[ProductDetail]>()
         let categoryList = PublishSubject<[String]>()
-//        let scrollIndexPath = PublishSubject<IndexPath>()
+
         let logout = PublishSubject<String>()
         let profileImage = PublishSubject<String>()
-        //MARK: - About Token
+        let searchText = PublishSubject<String>()
         
-        input.adTrigger
-            .flatMap {
-                TokenNetworkManager.shared.tokenNetwork(api: .fetchProfile, model: ProfileModel.self)
-            }
-            .bind(with: self) { owner, result in
-                
-                if let result = result.data {
-                    profileImage.onNext(result.profileImage)
-                }
-                
-                let present = CategoryTitle.allCases.map { $0.rawValue }
-                
-                categoryList.onNext(present)
-                
-            }
-            .disposed(by: disposeBag)
         
         
         input.adTrigger
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .map { "집들이 선물" }
             .flatMap { value in
-                NetworkManager.shared.naverAPI(query: value, start: 1)
+                Single.zip(NetworkManager.shared.naverAPI(query: value, start: 1),
+                           TokenNetworkManager.shared.tokenNetwork(api: .fetchProfile, model: ProfileModel.self)
+                )
             }
             .bind(with: self) { owner, result in
                 
-                switch result {
+                let present = CategoryTitle.allCases.map { $0.rawValue }
+                categoryList.onNext(present)
+                
+                let (product, profile) = result
+                
+                if let result = profile.data {
+                    profileImage.onNext(result.profileImage)
+                }
+                
+                if profile.statuscode == 418 {
+                    logout.onNext("로그인 만료")
+                }
+                
+                
+                switch product {
                 case .success(let value):
                     let topTenItems = Array(value.items.prefix(6))
                     adList.onNext(topTenItems)
                 case .failure(_):
                     print("네이버 실패")
                 }
+               
             }
             .disposed(by: disposeBag)
+      
         
-        return Output(adList: adList, categoryList: categoryList, logout: logout, profileImage: profileImage)
+        input.searchButtonTap
+            .withLatestFrom(input.searchText)
+            .bind(with: self) { owner, text in
+                searchText.onNext(text)
+            }
+            .disposed(by: disposeBag)
+            
+        
+        
+        return Output(adList: adList, categoryList: categoryList, logout: logout, profileImage: profileImage, searchText: searchText)
     }
     
 }

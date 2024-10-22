@@ -16,7 +16,6 @@ class BaseVC: UIViewController {
         navigationController?.navigationBar.tintColor = .black
         bind()
         configureNavigationBar()
-        
     }
     
     func bind() { }
