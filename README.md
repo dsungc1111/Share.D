@@ -5,7 +5,7 @@
 
 
 <br> <br> 
-   ![poster](./ShareDPic.png)
+   ![poster](./shareD.png)
 
 <br> <br> 
 # 🙋‍♀️ 프로젝트 주요 기능 
