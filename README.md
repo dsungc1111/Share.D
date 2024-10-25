@@ -29,7 +29,7 @@
 
    
 # 🛠 프로젝트 기술스택
-- 아키텍처 및 디자인 패턴: MVVM, Singleton﹒Repository﹒Router﹒Input/Output 패턴
+- 아키텍처 및 디자인 패턴: MVVM-C, Repository﹒Router﹒Input/Output 패턴
 - 반응형 프로그래밍: RxSwift,RxCocoa
 - 네트워크 통신 및 API: Alamofire, WebView
 - UI 및 이미지 처리: UIKit, PhotosUI, Kingfisher, SnapKit
