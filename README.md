@@ -121,7 +121,7 @@ class BaseViewModel {
 <br>
 
 ### **문제 상황** - 토큰 갱신 실패
-- 로그인 시, 액세스 토큰 저장 방법 `UserDefault.accessToken = "token"`,   
+- 로그인 시, 액세스 토큰 저장 방법 `UserDefaultsManager.accessToken = "token"`,   
 - 토큰 갱신 시, 액세스 토큰 저장 방법(Key값은 동일) `UserDefaults.standard.setValue(token, forKey: "newToken")`
 - Key값만 같다면 값이 갱신될 것이라고 생각했지만, 갱신이 되지 않아 무한 리콜 발생   
 
